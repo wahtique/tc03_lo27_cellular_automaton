@@ -1,0 +1,60 @@
+Algorithms pertaining to this LO27 project
+Author : William Veal Phan (william.veal@utbm.fr)
+Creation date : 11/17:2016
+
+We define the type Matrix, and every types associated as follow :
+
+Let cellElement = colIndex x rowIndex x value x nextCol x nextRow with
+	colIndex : an integer indicating in which column of the Latrix this element is
+	rowIndex : an integer indicating in which row this element is located
+	value : the Boolean value contained in this element
+	nextCol : a pointer toward the next element on the row 
+	newtRow : a pointer toward the next element on this column
+
+Let rowElement = rowN x nextRow x prevRow x row with
+	rowN : an integer, the index of the row represented by this rowElement
+	nextRow : a pointer toward the next rowElement, or NULL if last row, in the Matrix
+	prevRow : a pointer toward the previous rowElement in the Matrix, or NULL if it's the first row
+	row : a pointer toward the first cellElement of the row
+
+Let colElement = colN x nextCol x prevCol x col with
+	colN : an integer, the index of the column represented by this colElement
+	nextCol : a pointer toward the next colElement in the Matrix, or NULL if it's the last column
+	prevCol : a pointer toward the previous colElement in the Matrix, or NULL if it's the first column
+	col : a pointer toward the first cellElement of the column
+
+Let Matrix = colCount x rowCount x cols x rows with
+	colcount : integer indicating the number of columns the Matrix contains
+	rowCount : integer indicating the number of rows the Matrix contains
+	cols : a pointer toward the first element of the list of colElement representing the columns of the Matrix
+	rows : a pointer toward the first element of the list of rowElement representing the rows of the Matrix
+
+Let arrayMatrix = mat x n x p with
+	mat : a two dimensional array of Booleans, with n rows indexed from 0 to n-1 and p columns indexed from 0 to p-1
+	n : integer
+	p : integer
+
+--- FUNCTIONS ---
+
+Let newMatrix : Boolean[][] -> Matrix a function creating a Matrix object from an array based representation.
+We pose :
+	A : an arrayMatrix, representing a matrix of booleans
+	M : the Matrix representation of A
+	temp : a temporaray pointer we use to link our cellElement while filling M
+	i,j : integers, incremental variables
+function newMatrix(A : arrayMatrix) : Matrix
+BEGIN
+	initialize(M) /* maloc in C */
+	rowCount(M) <- n
+	colCount(M) <- p
+	cols(M) <- NULL
+	rows(M) <- NULL
+	for i from 0 to n-1 do
+		rows(M) <- insertTailRow(rows(M), i)
+	done
+	for j from 0 to p-1 do
+		cols(M) <- insertTailCol(cols(M), j)
+	done
+
+
+END
