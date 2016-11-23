@@ -1,6 +1,6 @@
 Algorithms pertaining to this LO27 project
 Author : William Veal Phan (william.veal@utbm.fr)
-Creation date : 11/17:2016
+Creation date : 11/17/2016
 
 We define the type Matrix, and every types associated as follow :
 
