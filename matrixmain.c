@@ -8,7 +8,7 @@ Creation date : 11/23/16
 #include <matrix.h>
 
 
-int main
+int main()
 {
 	return O;
 }
