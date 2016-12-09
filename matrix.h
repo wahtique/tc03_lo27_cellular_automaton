@@ -24,4 +24,15 @@ typedef struct
 	rowElement* rows;
 }Matrix;
 
+typedef struct
+{
+	int* array;
+	int n,p;
 
+}arrayMatrix;
+
+Matrix newMatrix(arrayMatrix newMat);
+
+void printMatrix(Matrix m);
+
+BOOL isMatrixEmpty(Matrix m);

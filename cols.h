@@ -20,3 +20,14 @@ typedef struct colEl
 	struct ColEl* prevCol;
 	cellElement* col;
 }colElement;
+
+/*
+Function inserting an empty column at the end of a column list
+Arguments :
+arg col : the pointer column in which we will insert an empty column
+Result:
+a pointer toward this updated doubly linked list  
+*/
+colElement* insertTailCol(colElement* col);
+
+BOOL isColEmpty(colElement* col);
