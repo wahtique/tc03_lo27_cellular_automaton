@@ -42,12 +42,34 @@ colElement* insertCol(colElement* col, int index);
 return col;
 }
 
-colElement* removeColHead( colElement* col)
+Matrix* mulMatrix(Matrix* A, Matrix* B)
 {
-	colElement* tmp= col;
+	
+	rowElement* row = A->rows;
+	colElement* col = B->cols ;
+
+	points* newMat = (points*)malloc(sizeof(points));
+	points* newOne = (points*)malloc(sizeof(points));
+	if(A->colCount == B->rowCount )
+	{
+		newMat-> x = A->rowCount;
+		newMat-> y = B->colCount;
+		while( row!=NULL && col!=NULL &&  )
+	}
+	
+
+
+
 
 }
 
+/*colElement* removeColHead( colElement* col)
+{
+	colElement* tmpEle= col->nextCol;
+	colElement* tmpRow = 
+
+}
+*/
 /* ROWS */
 
 Bool isRowEmpty(rowElement* row) {
