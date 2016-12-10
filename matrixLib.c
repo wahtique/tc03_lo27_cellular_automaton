@@ -146,5 +146,18 @@ BOOL equalsMatrix(Matrix* A, Matrix* B)
 	}
 	/* finally, if we re still here, then we can say we cant prove the matrices ar not equals */
 	return TRUE;
+}
 
+Matrix* sumMatrix(Matrix A, Matrix B)
+{
+
+}
+
+Matrix* newMatrix(arrayMatrix* m)
+{
+	Matrix* newMat = (Matrix*)malloc(sizeof(Matrix));
+	newMat->colCount = m->p;
+	newMat->rowCount = m->n;
+	newMat->cols = NULL;
+	newMat->rows = NULL;
 }
