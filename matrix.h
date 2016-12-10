@@ -21,11 +21,9 @@ typedef struct cellEl
 	struct cellEl* nextRow;
 }cellElement;
 
-typedef struct pls
-{
+typedef struct pls{
 	int x,y;
-	struct pls* nextP;
-}points;
+	struct pls* nextP;}points;
 
 typedef points* listPoints;
 
@@ -85,5 +83,4 @@ typedef struct
 	colElement* cols;
 	rowElement* rows;
 }Matrix;
-
 #endif
