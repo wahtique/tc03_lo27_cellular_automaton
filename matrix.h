@@ -21,9 +21,10 @@ typedef struct cellEl
 	struct cellEl* nextRow;
 }cellElement;
 
-typedef struct 
+typedef struct pls
 {
 	int x,y;
+	struct pls* nextP;
 }points;
 
 typedef points* listPoints;
