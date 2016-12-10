@@ -12,25 +12,10 @@ Date : 09/12/16
 
 /* ROWS */
 
-/*
-Function inserting an empty column at the end of a rows list
-Arguments :
-arg rows : the pointer column in which we will insert an empty column
-Result:
-a pointer toward this updated doubly linked list  
-*/
-rowElement* insertTailRow(rowElement* row);
+
 
 /* COLS */
 
-/*
-Function inserting an empty column at the end of a column list
-Arguments :
-arg col : the pointer column in which we will insert an empty column
-Result:
-a pointer toward this updated doubly linked list  
-*/
-colElement* insertTailCol(colElement* col);
 
 BOOL isColEmpty(colElement* col);
 
