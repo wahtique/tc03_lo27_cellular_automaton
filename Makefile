@@ -9,7 +9,7 @@ INCLUDEDIR = -I. -I/usr/include
 #Library-related macros
 LIBTARGET2 = Matrix
 LIBTARGET = libMatrix.so
-LIBSOURCE = matrix
+LIBSOURCE = matrixLib matrix
 LIBSOURCECFILE = $(LIBSOURCE:=.c)
 LIBSOURCEOFILE = $(LIBSOURCE:=.o)
 

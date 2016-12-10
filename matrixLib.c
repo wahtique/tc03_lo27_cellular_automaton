@@ -11,7 +11,7 @@ Date : 09/12/16
 /* CELL */
 
 /* COLS */
-Bool isColumnEmpty(colElement* column) {
+BOOL isColumnEmpty(colElement* column) {
 	return(column==NULL || column->col==NULL);
 }
 
@@ -50,7 +50,7 @@ colElement* removeColHead( colElement* col)
 
 /* ROWS */
 
-Bool isRowEmpty(rowElement* row) {
+BOOL isRowEmpty(rowElement* row) {
 	return(row==NULL || row->Row==NULL);
 }
 
@@ -105,18 +105,46 @@ BOOL isMatrixSquare(Matrix* m)
 
 BOOL equalsMatrix(Matrix* A, Matrix* B)
 {
-	if (A->colCount != B->colCount || A->rowCount != B->rowCount)
+	colElement* colA,colB;
+	cellElement* cellA,cellB;
+
+	if (A->colCount != B->colCount || A->rowCount != B->rowCount || isMatrixEmpty(A) && NOT(isMatrixEmpty(B)) || isMatrixEmpty(B) && NOT(isMatrixEmpty(A))))
 	{
 		return FALSE;
 	}
 
+	if(isMatrixEmpty(A) && isMatrixEmpty(B))
+	{
+		return TRUE;
+	}
+
 	/*I then check each column and row; if the indexes are different then I know its false */
-	colElement* currColA = A->cols;
-	colElement* currColB = B->cols;
-	rowElement* currRowA = A->rows;
-	rowElement* currRowB = B->rows;
+	colA = A->cols;
+	colB = b->cols;
+	cellA = colA->col;
+	cellB = colB->col;
 
-	while currColA->nextCol != NULL &&  currColB->next
-
+	while (colA != NULL &&  colB != NULL) 
+	{
+		if (colA->colN != colB->colN)
+		{
+			return FALSE;
+		}
+		/*else we have the same columns and we check the cells of the columns*/
+		while(cellA != NULL && cellB != NULL)
+		{
+			if(cellA->rowIndex != cellB->rowIndex)
+			{
+				return FALSE;
+			}
+			cellA = cellA->nextCol;
+			cellB = cellB->nextCol;
+		}
+		/* if we are still there, then the two columns are equals and we move to the next */
+		colA = colA->nextCol;
+		colB = colB->nextCol;
+	}
+	/* finally, if we re still here, then we can say we cant prove the matrices ar not equals */
+	return TRUE;
 
 }
