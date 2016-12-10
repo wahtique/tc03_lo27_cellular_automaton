@@ -77,4 +77,6 @@ Apply the rule(s) specified to the Matrix specified.
 */
 Matrix* applyRules(Matrix* m, int rule, int times);
 
+Points* insertTailPoints( int rowindex,  int colIndex, Points* list);
+
 #endif
