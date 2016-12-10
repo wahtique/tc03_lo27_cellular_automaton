@@ -1,4 +1,5 @@
 /*
+<<<<<<< HEAD
 File containing the function and procedures for the manipulation of colElement.
 Author : Yann
 Creation date : 12/09/2016

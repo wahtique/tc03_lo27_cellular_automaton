@@ -22,3 +22,12 @@ typedef struct cell
 	struct cell* nextCol;
 	struct cell* nextRow;
 }cellElement;
+
+
+/*
+Insert a cell in a matrix at the given index
+Arguments :
+Result :
+*/
+
+void insertTailCell(arrayMatrix matA, Matrix matN, int i, int j);

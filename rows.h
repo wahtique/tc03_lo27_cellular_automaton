@@ -23,3 +23,11 @@ typedef struct rowEl
 
 
 
+/*
+Function inserting an empty column at the end of a rows list
+Arguments :
+arg rows : the pointer column in which we will insert an empty column
+Result:
+a pointer toward this updated doubly linked list  
+*/
+rowElement* insertTailRow(rowElement* row);

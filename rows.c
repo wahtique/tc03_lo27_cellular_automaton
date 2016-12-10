@@ -1,4 +1,5 @@
 /*
+<<<<<<< HEAD
 File containing the function and procedures for the manipulation of rowElement.
 Author : Yann
 Creation date : 12/10/2016
@@ -40,3 +41,12 @@ rowElement* insertRow(rowElement* row, int index);
 	} 
 return row;
 }
+=======
+C file containing the bodies of the functions manipulating the rowElement type
+Author : William
+Creattion date : 11/29/2016
+*/
+
+#include <rows.h>
+
+>>>>>>> 57be4ac426a807002ac7492d2360d95d88a16de7
