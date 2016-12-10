@@ -4,6 +4,9 @@ Author : William
 Creation date : 11/29/2016
 */
 
+#ifndef COLS_H_INCLUDED
+#define COLS_H_INCLUDED
+
 #include <cell.h>
 
 /*
@@ -31,3 +34,5 @@ a pointer toward this updated doubly linked list
 colElement* insertTailCol(colElement* col);
 
 BOOL isColEmpty(colElement* col);
+
+#endif

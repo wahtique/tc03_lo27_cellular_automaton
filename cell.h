@@ -4,6 +4,9 @@ Author : William
 Creation date : 11/29/2016
 */
 
+#ifndef CELL_H_INCLUDED
+#define CELL_H_INLCUDED
+
 #include <bool.h>
 
 /*
@@ -14,20 +17,12 @@ Cells of a Matrix
 	nextCol : a pointer toward the next element on the row 
 	newtRow : a pointer toward the next element on this column
 */
-typedef struct cell
+typedef struct cellEl
 {
 	int colIndex;
 	int rowIndex;
-	bool value;
-	struct cell* nextCol;
-	struct cell* nextRow;
+	struct cellEl* nextCol;
+	struct cellEl* nextRow;
 }cellElement;
 
-
-/*
-Insert a cell in a matrix at the given index
-Arguments :
-Result :
-*/
-
-void insertTailCell(arrayMatrix matA, Matrix matN, int i, int j);
+#endif

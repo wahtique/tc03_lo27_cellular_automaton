@@ -1,4 +1,5 @@
-/*File containing the C code for the project
+/*
+File containing the C code for the project
 Author : William 
 Creation date : 11/23/16
 */
@@ -8,7 +9,9 @@ Creation date : 11/23/16
 #include <matrix.h>
 
 
+/* PROTOTYPES OF FUNCTIONS PERTAINING TO GRAPHICAL INTERFACE */
+
 int main()
 {
-	return O;
+	return EXIT_SUCCESS;
 }

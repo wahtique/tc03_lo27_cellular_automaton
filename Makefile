@@ -2,20 +2,20 @@
 
 #my general makefile template
 CXX = gcc
-CFLAGS = -Wall -Werror -ansi -pedantic -fpic -g
+CFLAGS = -Wall -Werror -ansi -pedantic
 LIBSDIR = -L. -L/usr/lib
 INCLUDEDIR = -I. -I/usr/include
 
 #Library-related macros
-LIBTARGET2 = PointList
-LIBTARGET = libPointList.so
-LIBSOURCE = pointlist
+LIBTARGET2 = Matrix
+LIBTARGET = libMatrix.so
+LIBSOURCE = matrix
 LIBSOURCECFILE = $(LIBSOURCE:=.c)
 LIBSOURCEOFILE = $(LIBSOURCE:=.o)
 
 #Application-related macros
-TARGET = mypointlist.exe
-EXESOURCE = main
+TARGET = matrixmain
+EXESOURCE = matrixmain
 EXESOURCECFILE = $(EXESOURCE:=.c)
 EXESOURCEOFILE = $(EXESOURCE:=.o)
 

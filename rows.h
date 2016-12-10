@@ -4,6 +4,8 @@ Author : William
 Creation date : 11/29/2016
 */
 
+#ifndef ROWS_H_INCLUDED
+#define ROWS_H_INCLUDED
 #include <cell.h>
 
 /*
@@ -31,3 +33,4 @@ Result:
 a pointer toward this updated doubly linked list  
 */
 rowElement* insertTailRow(rowElement* row);
+#endif
