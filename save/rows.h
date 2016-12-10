@@ -6,6 +6,7 @@ Creation date : 11/29/2016
 
 #ifndef ROWS_H_INCLUDED
 #define ROWS_H_INCLUDED
+
 #include <cell.h>
 
 /*

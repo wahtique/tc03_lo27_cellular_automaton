@@ -6,7 +6,7 @@ Creation date : 11/23/16
 
 /* INCLUDES */
 
-#include <matrix.h>
+#include <matrixLib.h>
 
 
 /* PROTOTYPES OF FUNCTIONS PERTAINING TO GRAPHICAL INTERFACE */

@@ -1,5 +1,4 @@
 /*
-<<<<<<< HEAD
 File containing the function and procedures for the manipulation of rowElement.
 Author : Yann
 Creation date : 12/10/2016
