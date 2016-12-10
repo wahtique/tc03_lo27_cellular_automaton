@@ -7,9 +7,8 @@ LIBSDIR = -L. -L/usr/lib
 INCLUDEDIR = -I. -I/usr/include
 
 #Library-related macros
-LIBTARGET2 = Matrix
 LIBTARGET = libMatrix.so
-LIBSOURCE = matrixLib matrix
+LIBSOURCE = matrixLib
 LIBSOURCECFILE = $(LIBSOURCE:=.c)
 LIBSOURCEOFILE = $(LIBSOURCE:=.o)
 
@@ -25,12 +24,12 @@ EXESOURCEOFILE = $(EXESOURCE:=.o)
 #Running the program
 run: $(TARGET)
 	@echo "\n Executing the executable " $(TARGET)
-	sh exportLD.sh $(TARGET)
+	./$(TARGET)
 
 #Generating the executable
 $(TARGET): $(EXESOURCEOFILE) $(LIBTARGET)
 	@echo "\n Generating the executable " $@
-	$(CXX) $(EXESOURCEOFILE) -l$(LIBTARGET2) -lm $(LIBSDIR) -o $(TARGET)
+	$(CXX) $(EXESOURCEOFILE) -lm $(LIBSDIR) -o $(TARGET)
 
 #Generating the library binary code
 $(LIBTARGET): $(LIBSOURCEOFILE)
