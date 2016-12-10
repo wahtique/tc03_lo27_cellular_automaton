@@ -7,11 +7,14 @@ Creation date : 11/23/16
 /* INCLUDES */
 
 #include <matrixLib.h>
+#include <stdio.h>
+#include <stdlib.h>
 
 
 /* PROTOTYPES OF FUNCTIONS PERTAINING TO GRAPHICAL INTERFACE */
 
 int main()
 {
-	return EXIT_SUCCESS;
+	printf("Hello world !");
+	return 0;
 }

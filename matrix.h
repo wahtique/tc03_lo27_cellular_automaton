@@ -7,8 +7,6 @@ Creation date : 11/23/16
 #ifndef MATRIX_H_INCLUDED
 #define MATRIX_H_INCLUDED
 
-#include <stdio.h>
-#include <stdlib.h> 
 
 #define TRUE 1
 #define FALSE 0
@@ -57,7 +55,7 @@ typedef struct colEl
 {
 	int colN;
 	struct colEl* nextCol;
-	struct ColEl* prevCol;
+	struct colEl* prevCol;
 	cellElement* col;
 }colElement;
 
@@ -87,6 +85,4 @@ typedef struct
 	colElement* cols;
 	rowElement* rows;
 }Matrix;
-
-
 #endif

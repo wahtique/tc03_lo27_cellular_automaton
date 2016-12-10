@@ -15,22 +15,23 @@ BOOL isColumnEmpty(colElement* column) {
 	return(column==NULL || column->col==NULL);
 }
 
-colElement* insertCol(colElement* col, int index);
+colElement* insertCol(colElement* col, int index)
 {
 	colElement* newel = (colElement*)malloc(sizeof(colElement));
 	colElement* tmp = col;
-	if (tmp>index)
+	if (tmp->colN>index)
+
 	{
-		newel->colN= index;
+		newel->colN = index;
 		newel->nextCol = tmp;
 		tmp->prevCol = newel;
 	}else{
 
-		while(index<tmp)
+		while(index<tmp->colN)
 		{
 			tmp=col->nextCol;
 		}
-		if (index=!tmp)
+		if (index!=tmp->colN)
 		{
 			newel->colN= index;
 			tmp->nextCol->prevCol = newel;
@@ -81,6 +82,7 @@ Matrix* mulMatrix(Matrix* A, Matrix* B)
 
 }
 
+
 /*colElement* removeColHead( colElement* col)
 {
 	colElement* tmpEle= col->nextCol;
@@ -90,28 +92,28 @@ Matrix* mulMatrix(Matrix* A, Matrix* B)
 */
 /* ROWS */
 
-BOOL isRowEmpty(rowElement* row) {
-	return(row==NULL || row->Row==NULL);
+BOOL isRowEmpty(rowElement* row){
+	return(row==NULL || row->row==NULL);
 }
 
-rowElement* insertRow(rowElement* row, int index);
+rowElement* insertRow(rowElement* row, int index)
 {
 	rowElement* newel = (rowElement*)malloc(sizeof(rowElement));
-	rowElement* tmp= row;
-	if (tmp>index)
+	rowElement* tmp = row;
+	if (tmp->rowN>index)
 	{
-		newel->RowN= index;
+		newel->rowN= index;
 		newel->nextRow = tmp;
 		tmp->prevRow = newel;
 	}else{
 
-		while(index<tmp)
+		while(index<tmp->rowN)
 		{
 			tmp=row->nextRow;
 		}
-		if (index=!tmp)
+		if (index != tmp->rowN)
 		{
-			newel->RowN= index;
+			newel->rowN= index;
 			tmp->nextRow->prevRow = newel;
 			newel->nextRow = tmp->nextRow;
 			newel->prevRow = tmp;
@@ -145,10 +147,12 @@ BOOL isMatrixSquare(Matrix* m)
 
 BOOL equalsMatrix(Matrix* A, Matrix* B)
 {
-	colElement* colA,colB;
-	cellElement* cellA,cellB;
+	colElement* colA;
+	colElement* colB;
+	cellElement* cellA; 
+	cellElement* cellB;
 
-	if (A->colCount != B->colCount || A->rowCount != B->rowCount || isMatrixEmpty(A) && NOT(isMatrixEmpty(B)) || isMatrixEmpty(B) && NOT(isMatrixEmpty(A))))
+	if (A->colCount != B->colCount || A->rowCount != B->rowCount || (isMatrixEmpty(A) && (isMatrixEmpty(B)==0)) || (isMatrixEmpty(B) && (isMatrixEmpty(A)==0)))
 	{
 		return FALSE;
 	}
@@ -160,7 +164,7 @@ BOOL equalsMatrix(Matrix* A, Matrix* B)
 
 	/*I then check each column and row; if the indexes are different then I know its false */
 	colA = A->cols;
-	colB = b->cols;
+	colB = B->cols;
 	cellA = colA->col;
 	cellB = colB->col;
 
@@ -186,5 +190,22 @@ BOOL equalsMatrix(Matrix* A, Matrix* B)
 	}
 	/* finally, if we re still here, then we can say we cant prove the matrices ar not equals */
 	return TRUE;
+}
+
+/*
+Matrix* sumMatrix(Matrix A, Matrix B)
+{
 
 }
+*/
+
+/*
+Matrix* newMatrix(arrayMatrix* m)
+{
+	Matrix* newMat = (Matrix*)malloc(sizeof(Matrix));
+	newMat->colCount = m->p;
+	newMat->rowCount = m->n;
+	newMat->cols = NULL;
+	newMat->rows = NULL;
+}
+*/
