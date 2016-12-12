@@ -57,39 +57,58 @@ Matrix* mulMatrix(Matrix* A, Matrix* B)
 	{
 		newMat-> x = A->rowCount; /* Definition to the size of the new matrix*/
 		newMat-> y = B->colCount;
-		while()
-
-		while( rowCell!=NULL && colCell!=NULL && rowCell->colIndex == colCell->rowIndex ) /* For 1 lines et 1 columm*/
+		while(row!= NULL)
 		{
-			if (rowCell->colIndex == colCell->rowIndex)
+			while(col!= NULL)
 			{
-				newOne = insertTailPoints(rowCell->colIndex,  colCell->rowIndex, newOne);
+				while( rowCell!=NULL && colCell!=NULL && rowCell->colIndex == colCell->rowIndex ) /* For 1 lines et 1 columm*/
+				{
+					if (rowCell->colIndex == colCell->rowIndex)
+					{
+						newOne = insertTailPoints(rowCell->colIndex,  colCell->rowIndex, newMat);
+					}
+					if (rowCell->rowIndex > colCell->colIndex)
+					{
+						colCell = colCell-> nextCol;
+					} else {
+						rowCell = rowCell-> nextRow;
+					}
+				}
+			col = col->nextCol;	
 			}
-			if (rowCell->rowIndex > colCell->colIndex)
-			{
-				colCell = colCell-> nextCol;
-			} else {
-				rowCell = rowCell-> nextRow;
-			}
-
 		}
-			
+		row = row->nextRow;
 	}
+return newMat;	
+
+}
 	
 
-
-
-
-}
-
-
-/*colElement* removeColHead( colElement* col)
+colElement* removeColHead( Matrix* m, index)
 {
-	colElement* tmpEle= col->nextCol;
-	colElement* tmpRow = 
+	cellElement* tmpEle= m->rows->row;
+	rowElement* tmpRow = m->rows;
+	cellElement* cellRemove = m->rows->row;
+	while(tmpRow!=NULL)
+	{
+		tmpEle= tmpRow->row;
+		cellRemove = tmpEle;
+		while(tmpEle!=NULL || tmpEle->nextCol->colIndex =! index )
+		{
+			tmpEle = tmpEle->nextCol; 
+		}
+		if (tmpEle->nextCol->colIndex =! index)
+		{
+			cellRemove= tmpEle->nextCol;
+			tmpEle->nextCol = tmpEle->nextCol ->nextCol
+			free(cellRemove);
+		}
+	}
 
 }
-*/
+
+
+
 /* ROWS */
 
 BOOL isRowEmpty(rowElement* row){
