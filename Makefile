@@ -1,5 +1,3 @@
-#HAVE TO MODIFY IT TO ADPT TO OUR PROJECT
-
 #my general makefile template
 CXX = gcc
 CFLAGS = -Wall -Werror -ansi -pedantic
