@@ -21,11 +21,13 @@ typedef struct cellEl
 	struct cellEl* nextRow;
 }cellElement;
 
-typedef struct pls{
+typedef struct pls 
+{
 	int x,y;
-	struct pls* nextP;}points;
+	struct pls* nextP; 
+}Points;
 
-typedef points* listPoints;
+typedef Points* listPoints;
 
 /*
 A doubly chained list containing the rows of a Matrix

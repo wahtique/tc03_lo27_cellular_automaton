@@ -12,7 +12,8 @@ Date : 09/12/16
 /* CELL */
 
 /* COLS */
-BOOL isColumnEmpty(colElement* column) {
+BOOL isColumnEmpty(colElement* column) 
+{
 	return(column==NULL || column->col==NULL);
 }
 
@@ -44,48 +45,10 @@ colElement* insertCol(colElement* col, int index)
 return col;
 }
 
-Matrix* mulMatrix(Matrix* A, Matrix* B)
-{
-	
-	rowElement* row = A->rows;
-	colElement* col = B->cols ;
-	cellElement* rowCell = A->rows->row;
-	cellElement* colCell = A->cols->col;
 
-	points* newMat = (points*)malloc(sizeof(points));
-	points* newOne = (points*)malloc(sizeof(points));
-	if(A->colCount == B->rowCount )
-	{
-		newMat-> x = A->rowCount; /* Definition to the size of the new matrix*/
-		newMat-> y = B->colCount;
-		while(row!= NULL)
-		{
-			while(col!= NULL)
-			{
-				while( rowCell!=NULL && colCell!=NULL && rowCell->colIndex == colCell->rowIndex ) /* For 1 lines et 1 columm*/
-				{
-					if (rowCell->colIndex == colCell->rowIndex)
-					{
-						newOne = insertTailPoints(rowCell->colIndex,  colCell->rowIndex, newMat);
-					}
-					if (rowCell->rowIndex > colCell->colIndex)
-					{
-						colCell = colCell-> nextCol;
-					} else {
-						rowCell = rowCell-> nextRow;
-					}
-				}
-			col = col->nextCol;	
-			}
-		}
-		row = row->nextRow;
-	}
-return newMat;	
-
-}
 	
 
-colElement* removeColHead( Matrix* m, index)
+colElement* removeCol( Matrix* m, int index)
 {
 	cellElement* tmpEle= m->rows->row;
 	rowElement* tmpRow = m->rows;
@@ -94,14 +57,14 @@ colElement* removeColHead( Matrix* m, index)
 	{
 		tmpEle= tmpRow->row;
 		cellRemove = tmpEle;
-		while(tmpEle!=NULL || tmpEle->nextCol->colIndex =! index )
+		while(tmpEle!=NULL || tmpEle->nextCol->colIndex <= index )
 		{
 			tmpEle = tmpEle->nextCol; 
 		}
-		if (tmpEle->nextCol->colIndex =! index)
+		if (tmpEle->nextCol->colIndex == index)
 		{
 			cellRemove= tmpEle->nextCol;
-			tmpEle->nextCol = tmpEle->nextCol ->nextCol
+			tmpEle->nextCol = tmpEle->nextCol ->nextCol;
 			free(cellRemove);
 		}
 	}
@@ -112,7 +75,8 @@ colElement* removeColHead( Matrix* m, index)
 
 /* ROWS */
 
-BOOL isRowEmpty(rowElement* row){
+BOOL isRowEmpty(rowElement* row)
+{
 	return(row==NULL || row->row==NULL);
 }
 
@@ -144,6 +108,30 @@ return row;
 }
 
 
+rowElement* removeRow( Matrix* m, int index)
+{
+	cellElement* tmpEle= m->cols->col;
+	colElement* tmpCol = m->cols;
+	cellElement* cellRemove = m->cols->col;
+	while(tmpCol!=NULL)
+	{
+		tmpEle= tmpCol->col;
+		cellRemove = tmpEle;
+		while(tmpEle!=NULL || tmpEle->nextRow->rowIndex <= index )
+		{
+			tmpEle = tmpEle->nextRow; 
+		}
+		if (tmpEle->nextRow->RowIndex == index)
+		{
+			cellRemove= tmpEle->nextRow;
+			tmpEle->nextRow = tmpEle->nextRow ->nextRow;
+			free(cellRemove);
+		}
+	}
+
+}
+
+
 /* MATRIX */
 
 BOOL isMatrixEmpty(Matrix* m)
@@ -163,6 +151,15 @@ BOOL isMatrixSquare(Matrix* m)
 		return TRUE;
 	}
 	return (m->colCount == m->rowCount);
+}
+
+BOOL isMatrixSameSize(Matrix* a, Matrix* b)
+{
+	if (a==NULL || b==NULL)
+	{
+		return FALSE;
+	}
+	return (a->colCount == b->colCount &&  a->rowCount == b->rowCount );
 }
 
 BOOL equalsMatrix(Matrix* A, Matrix* B)
@@ -212,13 +209,101 @@ BOOL equalsMatrix(Matrix* A, Matrix* B)
 	return TRUE;
 }
 
-/*
-Matrix* sumMatrix(Matrix A, Matrix B)
+
+Matrix* sumMatrix(Matrix* a, Matrix* b)
 {
+	if (isMatrixSameSize(a,b)!= TRUE)
+	{
+		return NULL;
+	}else{
+		rowElement* rowa = a->rows;
+		cellElement* cella = a->rows->row;
+		rowElement* rowb = b->rows;
+		cellElement* cellb = b->rows->row;
+
+		Points* newMat = (Points*)malloc(sizeof(Points));
+		newMat-> x = a->rowCount; /* Definition to the size of the new matrix*/
+		newMat-> y = b->colCount;
+			
+		while(rowa!= NULL && rowb != NULL)
+			{
+				if(rowa->rowN == rowb->rowN)
+				{
+				while(cella->nextCol != NULL && cellb->nextCol != NULL)
+			{
+				if (cella->colIndex >= cellb->colIndex)
+				{
+					newMat=insertTailPoints(cellb->colIndex, cellb->rowIndex, newMat);
+					cellb = cellb->nextCol;
+				} else{
+					if (cella->colIndex >= cellb->colIndex)
+					{
+						newMat = insertTailPoints(cellb->colIndex, cellb->rowIndex, newMat);
+						cellb = cellb->nextCol;
+						cella = cella-> nextCol;
+					} else{
+						insertTailPoints(cella->colIndex, cella->rowIndex, newMat);
+						cella = cella->nextCol;
+					}
+				}
+			}
+			rowa = rowa->nextRow;
+			rowb = rowb->nextRow;
+			}
+			else{
+				if(rowa->rowN < rowb->rowN)
+				{
+					rowa->nextRow;
+				}else{
+					rowb->nextRow;
+				}
+
+			}
+		
+		}
+
+	}
+}
+
+
+Matrix* mulMatrix(Matrix* A, Matrix* B)
+{
+	
+	rowElement* row = A->rows;
+	colElement* col = B->cols ;
+	cellElement* rowCell = A->rows->row;
+	cellElement* colCell = A->cols->col;
+
+	Points* newMat = (Points*)malloc(sizeof(Points));
+	if(A->colCount == B->rowCount )
+	{
+		newMat-> x = A->rowCount; /* Definition to the size of the new matrix*/
+		newMat-> y = B->colCount;
+		while(row!= NULL)
+		{
+			while(col!= NULL)
+			{
+				while( rowCell!=NULL && colCell!=NULL && rowCell->colIndex == colCell->rowIndex ) /* For 1 lines et 1 columm*/
+				{
+					if (rowCell->colIndex == colCell->rowIndex)
+					{
+						newMat = insertTailPoints(rowCell->colIndex,  colCell->rowIndex, newMat);
+					}
+					if (rowCell->rowIndex > colCell->colIndex)
+					{
+						colCell = colCell-> nextCol;
+					} else {
+						rowCell = rowCell-> nextRow;
+					}
+				}
+			col = col->nextCol;	
+			}
+		}
+		row = row->nextRow;
+	}
+return newMat;	
 
 }
-*/
-
 
 Matrix* newMatrix(arrayMatrix* m)
 {
@@ -253,4 +338,20 @@ Matrix* newMatrix(arrayMatrix* m)
 		/* if I have create a new column and or row */
 
 	}
+}
+
+/* Points */
+Points* insertTailPoints(int x,  int y, Points* newMat)
+{
+	Points* p = newMat;
+	Points* newElement = (Points*)malloc(sizeof(Points));
+	newElement->x = x;
+	newElement->y = y;
+	newElement->nextP = NUll;
+	while(p->nextP != NULL )
+	{
+		p=p->nextP;
+	}
+	p->nextP = newElement;
+	return newMat;
 }

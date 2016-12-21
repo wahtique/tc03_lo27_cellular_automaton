@@ -11,13 +11,23 @@ Date : 09/12/16
 /* CELL */
 
 /* ROWS */
+BOOL isRowEmpty(rowElement* row);
 
+rowElement* insertRow(rowElement* row, int index);
+
+rowElement* removeRow( Matrix* m, int index);
 
 
 /* COLS */
 
 
 BOOL isColEmpty(colElement* col);
+
+colElement* removeCol( Matrix* m, int index);
+
+colElement* insertCol(colElement* col, int index);
+
+
 
 
 /* MATRIX */
@@ -51,6 +61,8 @@ Function sayin if a matrix is square
 */
 BOOL isMatrixSquare(Matrix* m);
 
+BOOL equalsMatrix(Matrix* A, Matrix* B);
+
 /*
 Function saying if two matrices are equals
 @arg A : pointer to the first Matrix
@@ -61,11 +73,11 @@ BOOL equalsMatrix(Matrix* A, Matrix* B);
 
 /*
 A function computing the sum of two Matrix
-@arg A : pointer to the first Matrix
-@arg B : pointer to the second Matrix
+@arg a : pointer to the first Matrix
+@arg b : pointer to the second Matrix
 @return : a pointer to a new Matrix
 */
-Matrix* sumMatrix(Matrix A, Matrix B);
+Matrix* sumMatrix(Matrix* a, Matrix* b);
 
 /*
 THE function ( I heard they didnt have it in LO21. This is unfair. UNFAIR.)
