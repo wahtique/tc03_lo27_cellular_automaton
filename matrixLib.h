@@ -8,7 +8,8 @@ Date : 09/12/16
 #define MATRIXLIB_H_INCLUDED
 
 #include <matrix.h>
-/* CELL */
+
+/* CELLS */
 
 /* ROWS */
 
@@ -75,7 +76,7 @@ Apply the rule(s) specified to the Matrix specified.
 @arg times : the number of times we want to apply it
 @return : a pointer toward a the new Matrix created.
 */
-Matrix* applyRules(Matrix* m, int rule, int times);
+void applyRules(Matrix* m, int rule, int times);
 
 Points* insertTailPoints( int rowindex,  int colIndex, Points* list);
 
