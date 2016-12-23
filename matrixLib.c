@@ -4,14 +4,15 @@ Author : William & Yann
 Date : 09/12/16
 */
 
-/* INCLUDES */
+/* ----------------------------- INCLUDES ----------------------------- */
 #include <stdio.h>
 #include <stdlib.h> 
 #include <matrixLib.h>
 
-/* CELL */
+/* ----------------------------- CELLS ----------------------------- */
 
-/* COLS */
+/* ----------------------------- COLS ----------------------------- */
+
 BOOL isColumnEmpty(colElement* column) 
 {
 	return(column==NULL || column->col==NULL);
@@ -76,7 +77,7 @@ Matrix* removeCol( Matrix* m, int index)
 
 
 
-/* ROWS */
+/* ----------------------------- ROWS ----------------------------- */
 
 BOOL isRowEmpty(rowElement* row)
 {
@@ -139,7 +140,7 @@ rowElement* removeRow( Matrix* m, int index)
 }
 
 
-/* MATRIX */
+/* ----------------------------- MATRIX ----------------------------- */
 
 BOOL isMatrixEmpty(Matrix* m)
 {
@@ -353,7 +354,8 @@ Matrix* newMatrix(arrayMatrix* m)
 	}
 }
 
-/* Points */
+/* ----------------------------- Points ----------------------------- */
+
 Points* insertTailPoints(int x,  int y, Points* newMat)
 {
 	Points* p = newMat;

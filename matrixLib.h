@@ -9,9 +9,9 @@ Date : 09/12/16
 
 #include <matrix.h>
 
-/* CELLS */
+/* ----------------------------- CELLS ----------------------------- */
 
-/* ROWS */
+/* ----------------------------- ROWS ----------------------------- */
 
 /*
 Function to test if a given Row is Empty
@@ -40,7 +40,7 @@ Function to remove a given row
 Matrix* removeRow( Matrix* m, int index);
 
 
-/* COLS */
+/* ----------------------------- COLS ----------------------------- */
 
 /*
 Function to test if a given Columm is Empty
@@ -70,7 +70,7 @@ Matrix* insertCol(Matrix* m, int index)
 
 
 
-/* MATRIX */
+/* ----------------------------- MATRIX ----------------------------- */
 
 /*
 Function creating a new Matrix from its arrayMatrix representation
@@ -119,16 +119,24 @@ A function computing the sum of two Matrix
 Matrix* sumMatrix(Matrix* a, Matrix* b);
 
 /*
+Function multiplaying two matrices. 
+@arg A : pointer to the first matrix.
+@arg B : pointer to the second matrix. Must have a number of rows equal to the number of columns of A.
+@return : a pointer toward a new Matrix A x B. Have the same number of rows as A and the same number of columns as B.
+*/
+Matrix* mulMatrix(Matrix* A, Matrix* B);
+
+/*
 THE function ( I heard they didnt have it in LO21. This is unfair. UNFAIR.)
 Apply the rule(s) specified to the Matrix specified.
-@arg M : a pointer toward the Matrix on whoch we want to operate
+@arg M : a pointer toward the Matrix on which we want to operate
 @arg rule : the rule we want to apply, must be between 1 ( do nothing ) and 511 ( every rules )
 @arg times : the number of times we want to apply it
-@return : a pointer toward a the new Matrix created.
+@return : nothing. The matrix M is modified during the iteration
 */
 void applyRules(Matrix* m, int rule, int times);
 
-
+/* ----------------------------- Points -----------------------------*/
 
 /*
 A function to add a new cell with a value of 1 to a array representation
