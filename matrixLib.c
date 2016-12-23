@@ -351,8 +351,11 @@ return newMatrix(newel);
 Matrix* newMatrix(arrayMatrix* m)
 {
 	Points* pt = m->list; /* the Points pointer toward the Points I am going to insert */
+	Points* ptToFree = NULL;
 	colElement* currCol = NULL;
 	rowElement* currRow = NULL;  
+	cellElement* newCell = NULL;
+	cellElement* currCell = NULL;
 
 	Matrix* newMat = (Matrix*)malloc(sizeof(Matrix)); /* I malloc my new Matrix and initialize everything*/
 	newMat->colCount = m->p; 
@@ -387,18 +390,109 @@ Matrix* newMatrix(arrayMatrix* m)
 			currCol = newMat->cols;
 			while(currCol->colN != pt->x) /* if the column I'm looking for is the first, I will not do anything. */
 			{
-				currCol=currCol ->nextCol;
+				currCol=currCol->nextCol;
 			} 
 		}
 
 		/*I now insert a new element in this list*/
+		newCell = (cellElement*)malloc(sizeof(cellElement)); /* I create a new element and I assign newCell (the pointer) to this cell */
+		newCell->colIndex = pt->x;
+		newCell->rowIndex = pt->y;
+
+		/* either the col is empty, or it's not */
+		if(currCol->col == NULL) /* then my newCell will be the only cell */
+		{
+			currCol->col = newCell;
+			newCell->nextCol = NULL;
+		}
+		else /* not empty then */
+		{
+			/* either first, last, or in between */
+			currCell = currCol->col;
+			if(currCell->rowIndex > newCell->colIndex) /* my newCell is the first */
+			{
+				newCell->nextCol = currCell;
+				currCol->col = newCell;
+			}
+			else
+			{
+				while(currCell->nextCol != NULL && currCell->nextCol->rowIndex < newCell->rowIndex) /* I get the one right before newCell in the col */
+				{
+					currCell=currCell->nextCol;
+				}
+				/* currCell is right before newCell */
+				if(currCell->nextCol == NULL) /* last element in the col */
+				{
+					newCell->nextCol = NULL;
+					currCell->nextCol = newCell;
+				}
+				else
+				{
+					newCell->nextCol = currCell->nextCol;
+					currCell->nextCol = newCell; 
+				}
+			}
+		}
 
 		/* now that I have my new element in its column, I have to inser it in its row.
 		I will first look for its row in the same way as the colunmn */
-		while()
+		while(currRow != NULL && currRow->rowN < newCell->rowIndex)
+		{
+			currRow=currRow->nextRow;
+		}
+		/* If the row doesnt exist, I create it */
+		if(currRow == NULL || currRow->rowN > newCell->rowIndex)
+		{
+			newMat =insertRow(newMat, newCell->rowIndex);
+			currRow=newMat->rows;
+			while(currRow->rowN != newCell->rowIndex)
+			{
+				currRow=currRow->nextRow;
+			}
+		}
+		/* now currRow is pointing toward my the right row, and newCell is pointing toward the cellElement I want to insert in this row */
+		currCell = currRow->row;
+		if(currCell == NULL) /* if the row is empty */
+		{
+			currRow->row = newCell;
+			newCell->nextRow = NULL;
+		}
+		else/* if the row isnt empty, I will have currCell pointing toward the cell right before the newCell  */
+		{
+			if(currCell->rowIndex > newCell->colIndex) /* this means my newCell is the new first element on the row*/
+			{
+				newCell->nextRow = currCell;
+				currRow->row = newCell;
+			}
+			else /* either the last or in the middle */
+			{
+				while(currCell->nextRow != NULL && currCell->nextRow->colIndex < newCell->colIndex)
+				/* this way we stop at the one right before where I should have my newCell */
+				{
+					currCell=currCell->nextRow;
+				}
+				/* currCell is now pointing toward the cell right before newCell */
+				if(currCell->nextRow == NULL) /* if I stopped at the last cell in the row*/
+				{
+					currCell->nextRow = newCell;
+					newCell->nextRow = NULL;
+				}
+				else /* now I'm sure I will have to deal with having my newCell between two cells */
+				{
+					newCell->nextRow = currCell->nextRow;
+					currCell->nextRow = newCell;
+				}
+			}
 
-
-	}
+		}
+		/* here my newCell is well included in the newMat 
+		I can now advance to the next one and free the Points I just used*/
+		ptToFree = pt;
+		pt = pt->nextP;
+		free(ptToFree);
+	}	
+	/* I now have included all the Points in my list in newMat */
+	return newMat;
 }
 
 /* ----------------------------- Points ----------------------------- */
