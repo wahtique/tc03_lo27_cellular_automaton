@@ -56,7 +56,8 @@ Function to remove a given columm in a Matrix
 @return : the mdodify matrix.
 */
 
-Matrix* removeCol(Matrix* m, int index);
+
+Matrix* removeCol( Matrix* m, int index);
 
 /*
 Function to add a new columm in a Matrix

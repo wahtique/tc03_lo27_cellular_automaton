@@ -23,61 +23,80 @@ Matrix* insertCol(Matrix* m, int index)
 	colElement* newel = (colElement*)malloc(sizeof(colElement)); /* we define a new columm element for add it to the matrix and a pointers to a columm */
 	colElement* tmp = m->cols;
 
-	/* we search the position of the new columm with 3 cases : the new element is the first, in the middle of the matrix or the last */
-	if (tmp->colN > index) 
+	if(tmp == NULL)
 	{
-		/*in this case, the first element has an index greater than the index of the new element. The new element is the new first. */
-		
-		/* we assign the index to the new element*/
+		/*in this case, there are no element, the new element is the new first. */
 		newel->colN = index;
-		/* his next is the former first */
-		newel->nextCol = tmp;
-		/*the former first's previous is now the new first*/
-		tmp->prevCol = newel;
+
 		/*the new first element of the list of cols is now the newel*/
 		m->cols = newel;
+
 		/*we make sure the previous element of the first is NULL*/
-		newel->previousCol = NULL;
+		newel->prevCol = NULL;
+
+		/*we make sure the next element of the first is NULL*/
+		newel->nextCol = NULL;
+
+
 		/*we do the same for the col of the newel*/
 		newel->col = NULL;
 
-	}
-	else /* which means newel will not be the new first */
-	{
+	}else{
+		/* we search the position of the new columm with 3 cases : the new element is the first, in the middle of the matrix or the last */
+		if (tmp->colN > index) 
+		{
+			/*in this case, the first element has an index greater than the index of the new element. The new element is the new first. */
+			
+			/* we assign the index to the new element*/
+			newel->colN = index;
+			/* his next is the former first */
+			newel->nextCol = tmp;
+			/*the former first's previous is now the new first*/
+			tmp->prevCol = newel;
+			/*the new first element of the list of cols is now the newel*/
+			m->cols = newel;
+			/*we make sure the previous element of the first is NULL*/
+			newel->prevCol = NULL;
+			/*we do the same for the col of the newel*/
+			newel->col = NULL;
 
-		while(tmp->nextCol != NULL && index < tmp->colN) /* while we are not at the end and we are sure we are still not after where the new element should be*/
-		{
-			tmp=tmp->nextCol; /* we advance to the next */
 		}
-		/* now, either we are at the end of the list or we have tmp pointing toward an element whose next have an index greater than the one we want to insert */
-		if (index != tmp->colN) /* if the element doesnt yet exist. If it does, we do nothing */
+		else /* which means newel will not be the new first */
 		{
-			if (tmp->nextCol == NULL) /* if we are pointing toward the current last element*/
+
+			while(tmp->nextCol != NULL && index < tmp->colN) /* while we are not at the end and we are sure we are still not after where the new element should be*/
 			{
-				newel->colN = index;
-				newel->nextCol = NULL; /* since it's the new last element */
-				newel->prevCol = tmp; /* same, new last. the old last become the penultimate element */
-				newel->col = NULL; /* always better to initialise at NULL*/
-				tmp->nextCol = newel; /* we update the formet last element*/
+				tmp=tmp->nextCol; /* we advance to the next */
 			}
-			else /* this means we have to insert newel between 2 other elements */
+			/* now, either we are at the end of the list or we have tmp pointing toward an element whose next have an index greater than the one we want to insert */
+			if (index != tmp->colN) /* if the element doesnt yet exist. If it does, we do nothing */
 			{
-				
-				/*we start by updating the newel*/
-				newel->colN= index;
-				newel->nextCol = tmp->nextCol;
-				newel->prevCol = tmp;
-				newel->col = NULL;
-				/*we now update the element pointed by tmp */
-				tmp->nextCol = newel;
-				/*we finally update the element following newel */
-				newel->nextCol->prevCol = newel;
-			}
-		}
+				if (tmp->nextCol == NULL) /* if we are pointing toward the current last element*/
+				{
+					newel->colN = index;
+					newel->nextCol = NULL; /* since it's the new last element */
+					newel->prevCol = tmp; /* same, new last. the old last become the penultimate element */
+					newel->col = NULL; /* always better to initialise at NULL*/
+					tmp->nextCol = newel; /* we update the formet last element*/
+				}
+				else /* this means we have to insert newel between 2 other elements */
+				{
+					
+					/*we start by updating the newel*/
+					newel->colN= index;
+					newel->nextCol = tmp->nextCol;
+					newel->prevCol = tmp;
+					newel->col = NULL;
+					/*we now update the element pointed by tmp */
+					tmp->nextCol = newel;
+					/*we finally update the element following newel */
+					newel->nextCol->prevCol = newel;
+				}
+			}	
+		} 
 	}
 	return m; 
-}
-
+}	
 
 Matrix* removeCol( Matrix* m, int index)
 {
@@ -115,30 +134,82 @@ BOOL isRowEmpty(rowElement* row)
 
 Matrix* insertRow(Matrix* m, int index)
 {
-	rowElement* newel = (rowElement*)malloc(sizeof(rowElement));
+	rowElement* newel = (rowElement*)malloc(sizeof(rowElement)); /* we define a new row element for add it to the matrix and a pointers to a row */
 	rowElement* tmp = m->rows;
-	if (tmp->rowN>index)
-	{
-		newel->rowN= index;
-		newel->nextRow = tmp;
-		tmp->prevRow = newel;
-	}else{
 
-		while(index<tmp->rowN)
+	if(tmp == NULL)
+	{
+		/*in this case, there are no element, the new element is the new first. */
+		newel->rowN = index;
+
+		/*the new first element of the list of cols is now the newel*/
+		m->rows = newel;
+
+		/*we make sure the previous element of the first is NULL*/
+		newel->prevRow = NULL;
+
+		/*we make sure the next element of the first is NULL*/
+		newel->nextRow = NULL;
+
+
+		/*we do the same for the col of the newel*/
+		newel->row = NULL;
+
+		}else{
+		/* we search the position of the new row with 3 cases : the new element is the first, in the middle of the matrix or the last */
+		if (tmp->rowN > index) 
 		{
-			tmp=tmp->nextRow;
+			/*in this case, the first element has an index greater than the index of the new element. The new element is the new first. */
+		
+			/* we assign the index to the new element*/
+			newel->rowN = index;
+			/* his next is the former first */
+			newel->nextRow = tmp;
+			/*the former first's previous is now the new first*/
+			tmp->prevRow = newel;
+			/*the new first element of the list of cols is now the newel*/
+			m->rows = newel;
+			/*we make sure the previous element of the first is NULL*/
+			newel->prevRow = NULL;
+			/*we do the same for the col of the newel*/
+			newel->row = NULL;
+
 		}
-		if (index != tmp->rowN)
+		else /* which means newel will not be the new first */
 		{
-			newel->rowN= index;
-			tmp->nextRow->prevRow = newel;
-			newel->nextRow = tmp->nextRow;
-			newel->prevRow = tmp;
-			tmp->nextRow =	newel;
+
+			while(tmp->nextRow != NULL && index < tmp->rowN) /* while we are not at the end and we are sure we are still not after where the new element should be*/
+			{
+				tmp=tmp->nextRow; /* we advance to the next */
+			}
+			/* now, either we are at the end of the list or we have tmp pointing toward an element whose next have an index greater than the one we want to insert */
+			if (index != tmp->rowN) /* if the element doesnt yet exist. If it does, we do nothing */
+			{
+				if (tmp->nextRow == NULL) /* if we are pointing toward the current last element*/
+				{
+					newel->rowN = index;
+					newel->nextRow = NULL; /* since it's the new last element */
+					newel->prevRow = tmp; /* same, new last. the old last become the penultimate element */
+					newel->row = NULL; /* always better to initialise at NULL*/
+					tmp->nextRow = newel; /* we update the formet last element*/
+				}
+				else /* this means we have to insert newel between 2 other elements */
+				{
+					
+					/*we start by updating the newel*/
+					newel->rowN= index;
+					newel->nextRow = tmp->nextCol;
+					newel->prevRow = tmp;
+					newel->row = NULL;
+					/*we now update the element pointed by tmp */
+					tmp->nextRow = newel;
+					/*we finally update the element following newel */
+					newel->nextRow->prevRow = newel;
+				}
+			}
 		}
-	} 
-m->rowCount = m->rowCount +1; 
-return m;
+	}	
+	return m; 
 }
 
 
@@ -155,7 +226,7 @@ Matrix* removeRow(Matrix* m, int index)
 		{
 			tmpEle = tmpEle->nextRow; 
 		}
-		if (tmpEle->nextRow->rowN == index)
+		if (tmpEle->nextRow->rowIndex == index)
 		{
 			cellRemove= tmpEle->nextRow;
 			tmpEle->nextRow = tmpEle->nextRow ->nextRow;
@@ -261,8 +332,8 @@ Matrix* sumMatrix(Matrix* a, Matrix* b)
 		Points* newMat = (Points*)malloc(sizeof(Points));
 		arrayMatrix* newel = (arrayMatrix*)malloc(sizeof(arrayMatrix));
 
-		newel->n = A->rowCount; /* Definition to the size of the new matrix*/
-		newel-> = B->colCount;
+		newel->n = a->rowCount; /* Definition to the size of the new matrix*/
+		newel-> = b->colCount;
 			
 		while(rowa!= NULL && rowb != NULL)
 			{
@@ -493,6 +564,29 @@ Matrix* newMatrix(arrayMatrix* m)
 	}	
 	/* I now have included all the Points in my list in newMat */
 	return newMat;
+}
+
+
+Matrix* andColSequenceOnMatrix(Matrix* m)
+{
+	if (isMatrixEmpty(m)!= TRUE)
+	 {
+	 	colElement* fcol = m->cols;
+	 	colElement* scol = m->cols->nextCol;
+	 	cellElement* fcell = fcol->col;
+	 	cellElement* scell = scol->col;
+
+	 	while(scol->nextCol != NULL)
+	 	{
+	 		if (scol->colN == fcol->colN + 1)
+	 		{
+	 			fcell = fcol->col;
+	 			scell =	scol->col;
+	 			while(scell->nextRow != NULL && fcell->nextRow != NULL)
+	 				
+	 		}
+	 	}
+	 } 
 }
 
 /* ----------------------------- Points ----------------------------- */
