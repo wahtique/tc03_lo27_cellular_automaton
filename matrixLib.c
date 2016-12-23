@@ -350,35 +350,53 @@ return newMatrix(newel);
 
 Matrix* newMatrix(arrayMatrix* m)
 {
-	points* pt = NULL; /* the point pointer toward the point I am going to insert */
-	colElement* currCol;
-	rowElement* currRow;  
+	Points* pt = m->list; /* the Points pointer toward the Points I am going to insert */
+	colElement* currCol = NULL;
+	rowElement* currRow = NULL;  
 
-	Matrix* newMat = (Matrix*)malloc(sizeof(Matrix));
-	newMat->colCount = m->p;
+	Matrix* newMat = (Matrix*)malloc(sizeof(Matrix)); /* I malloc my new Matrix and initialize everything*/
+	newMat->colCount = m->p; 
 	newMat->rowCount = m->n;
 	newMat->cols = NULL;
 	newMat->rows = NULL;
 
 	/*I insert the cell elements defined by ths listPoints in m*/
 
-	pt = m->list;
-
-	if (pt == NULL)
+	if (pt == NULL) /* which means y list is empty. No one in the list. No ones in the Matrix*/
 	{
-		return newMat; /* no ones in this Matrix, then I return an empty Matrix */
+		return newMat; /* no ones in this Matrix, then I return an empty Matrix. */
 	}
 
-
-
-	while(pt != NULL)
+	while(pt != NULL) /* I will then advance in the list */
 	{
+
+		/* my currCol and CurrRow initialized at the begining of the lists */
 		currCol = newMat->cols;
 		currRow = newMat->rows;
-		/* I find the right column*/
+		/* I find the right column */
+		while(currCol !=NULL && currCol->colN < pt->x)
+		{
+			currCol = currCol->nextCol;
+		}
+		/*now either currCol == x, and in this cas I'm happy, or the column x doesnt exist. 
+		In this case, I will create it and update my currCol pointer */
+		if(currCol == NULL || currCol->colN > pt->x)
+		{
+			newMat=insertCol(newMat, pt->x); /* I create the missing column */
+			/* I point toward the said column */
+			currCol = newMat->cols;
+			while(currCol->colN != pt->x) /* if the column I'm looking for is the first, I will not do anything. */
+			{
+				currCol=currCol ->nextCol;
+			} 
+		}
 
-		while(curr)
-		/* if I have create a new column and or row */
+		/*I now insert a new element in this list*/
+
+		/* now that I have my new element in its column, I have to inser it in its row.
+		I will first look for its row in the same way as the colunmn */
+		while()
+
 
 	}
 }
