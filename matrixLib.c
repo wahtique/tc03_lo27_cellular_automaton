@@ -21,34 +21,63 @@ BOOL isColumnEmpty(colElement* column)
 Matrix* insertCol(Matrix* m, int index)
 {
 	colElement* newel = (colElement*)malloc(sizeof(colElement)); /* we define a new columm element for add it to the matrix and a pointers to a columm */
-	colElement* tmp = m->col;
+	colElement* tmp = m->cols;
 
-	if (tmp->colN>index) /* we search the position of th new columm with 3 case: the new element is the first, in the middle of the matrix or the last */
+	/* we search the position of the new columm with 3 cases : the new element is the first, in the middle of the matrix or the last */
+	if (tmp->colN > index) 
 	{
+		/*in this case, the first element has an index greater than the index of the new element. The new element is the new first. */
+		
+		/* we assign the index to the new element*/
 		newel->colN = index;
+		/* his next is the former first */
 		newel->nextCol = tmp;
+		/*the former first's previous is now the new first*/
 		tmp->prevCol = newel;
-	}else{
+		/*the new first element of the list of cols is now the newel*/
+		m->cols = newel;
+		/*we make sure the previous element of the first is NULL*/
+		newel->previousCol = NULL;
+		/*we do the same for the col of the newel*/
+		newel->col = NULL;
 
-		while(index<tmp->colN)
+	}
+	else /* which means newel will not be the new first */
+	{
+
+		while(tmp->nextCol != NULL && index < tmp->colN) /* while we are not at the end and we are sure we are still not after where the new element should be*/
 		{
-			tmp=col->nextCol;
+			tmp=tmp->nextCol; /* we advance to the next */
 		}
-		if (index!=tmp->colN)
+		/* now, either we are at the end of the list or we have tmp pointing toward an element whose next have an index greater than the one we want to insert */
+		if (index != tmp->colN) /* if the element doesnt yet exist. If it does, we do nothing */
 		{
-			newel->colN= index;
-			tmp->nextCol->prevCol = newel;
-			newel->nextCol = tmp->nextCol;
-			newel->prevCol = tmp;
-			tmp->nextCol =	newel;
+			if (tmp->nextCol == NULL) /* if we are pointing toward the current last element*/
+			{
+				newel->colN = index;
+				newel->nextCol = NULL; /* since it's the new last element */
+				newel->prevCol = tmp; /* same, new last. the old last become the penultimate element */
+				newel->col = NULL; /* always better to initialise at NULL*/
+				tmp->nextCol = newel; /* we update the formet last element*/
+			}
+			else /* this means we have to insert newel between 2 other elements */
+			{
+				
+				/*we start by updating the newel*/
+				newel->colN= index;
+				newel->nextCol = tmp->nextCol;
+				newel->prevCol = tmp;
+				newel->col = NULL;
+				/*we now update the element pointed by tmp */
+				tmp->nextCol = newel;
+				/*we finally update the element following newel */
+				newel->nextCol->prevCol = newel;
+			}
 		}
 	}
-	m->colCount = m->colCount + 1;
-return m; 
+	return m; 
 }
 
-
-	
 
 Matrix* removeCol( Matrix* m, int index)
 {
@@ -87,7 +116,7 @@ BOOL isRowEmpty(rowElement* row)
 Matrix* insertRow(Matrix* m, int index)
 {
 	rowElement* newel = (rowElement*)malloc(sizeof(rowElement));
-	rowElement* tmp = m->row;
+	rowElement* tmp = m->rows;
 	if (tmp->rowN>index)
 	{
 		newel->rowN= index;
@@ -97,7 +126,7 @@ Matrix* insertRow(Matrix* m, int index)
 
 		while(index<tmp->rowN)
 		{
-			tmp=row->nextRow;
+			tmp=tmp->nextRow;
 		}
 		if (index != tmp->rowN)
 		{
@@ -113,14 +142,14 @@ return m;
 }
 
 
-rowElement* removeRow( Matrix* m, int index)
+Matrix* removeRow(Matrix* m, int index)
 {
 	cellElement* tmpEle= m->cols->col;
 	colElement* tmpCol = m->cols;
 	cellElement* cellRemove = m->cols->col;
 	while(tmpCol!=NULL)
 	{
-		tmpEle= tmpCol->col;
+		tmpEle = tmpCol->col;
 		cellRemove = tmpEle;
 		while(tmpEle!=NULL || tmpEle->nextRow->rowN <= index )
 		{
@@ -356,7 +385,7 @@ Matrix* newMatrix(arrayMatrix* m)
 
 /* ----------------------------- Points ----------------------------- */
 
-Points* insertTailPoints(int x,  int y, Points* newMat)
+Points* insertTailPoints(int x, int y, Points* newMat)
 {
 	Points* p = newMat;
 	Points* newElement = (Points*)malloc(sizeof(Points));

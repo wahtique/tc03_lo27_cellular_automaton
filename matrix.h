@@ -79,7 +79,7 @@ typedef struct colEl
 /*
 Our array based matrix representation.
 	list : a linked list ( pointer toward the first element ) of the coordinates of the ones in our matrix
-	n : number of rows in the mqtrix
+	n : number of rows in the matrix
 	p : number of columns in the matrix
 */
 typedef struct 

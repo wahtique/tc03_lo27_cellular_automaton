@@ -22,7 +22,7 @@ Function to test if a given Row is Empty
 BOOL isRowEmpty(rowElement* row);
 
 /*
-Function to add a new row
+Function to add a new row in a Matrix
 @arg m : the matrix who receive the new row
 @arg index: the index of the new row
 @return : the mdodify matrix.
@@ -31,7 +31,7 @@ Function to add a new row
 Matrix* insertRow(Matrix* m, int index);
 
 /*
-Function to remove a given row
+Function to remove a given row in a Matrix
 @arg m : the matrix who the row will be remove
 @arg index: the index of the row
 @return : the mdodify matrix.
@@ -50,22 +50,22 @@ Function to test if a given Columm is Empty
 BOOL isColEmpty(colElement* col);
 
 /*
-Function to remove a given columm
+Function to remove a given columm in a Matrix
 @arg m : the matrix who the columm will be remove
 @arg index: the index of the columm
 @return : the mdodify matrix.
 */
 
-Matrix* removeCol( Matrix* m, int index)
+Matrix* removeCol(Matrix* m, int index);
 
 /*
-Function to add a new columm
+Function to add a new columm in a Matrix
 @arg m : the matrix who receive the new columm
 @arg index: the index of the new columm
 @return : the mdodify matrix.
 */
 
-Matrix* insertCol(Matrix* m, int index)
+Matrix* insertCol(Matrix* m, int index);
 
 
 
