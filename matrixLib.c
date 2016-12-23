@@ -17,12 +17,12 @@ BOOL isColumnEmpty(colElement* column)
 	return(column==NULL || column->col==NULL);
 }
 
-colElement* insertCol(colElement* col, int index)
+Matrix* insertCol(Matrix* m, int index)
 {
-	colElement* newel = (colElement*)malloc(sizeof(colElement));
-	colElement* tmp = col;
-	if (tmp->colN>index)
+	colElement* newel = (colElement*)malloc(sizeof(colElement)); /* we define a new columm element for add it to the matrix and a pointers to a columm */
+	colElement* tmp = m->col;
 
+	if (tmp->colN>index) /* we search the position of th new columm with 3 case: the new element is the first, in the middle of the matrix or the last */
 	{
 		newel->colN = index;
 		newel->nextCol = tmp;
@@ -41,14 +41,15 @@ colElement* insertCol(colElement* col, int index)
 			newel->prevCol = tmp;
 			tmp->nextCol =	newel;
 		}
-	} 
-return col;
+	}
+	m->colCount = m->colCount + 1;
+return m; 
 }
 
 
 	
 
-colElement* removeCol( Matrix* m, int index)
+Matrix* removeCol( Matrix* m, int index)
 {
 	cellElement* tmpEle= m->rows->row;
 	rowElement* tmpRow = m->rows;
@@ -66,6 +67,8 @@ colElement* removeCol( Matrix* m, int index)
 			cellRemove= tmpEle->nextCol;
 			tmpEle->nextCol = tmpEle->nextCol ->nextCol;
 			free(cellRemove);
+			m->colCount = m->colCount - 1;
+			return m;
 		}
 	}
 
@@ -80,10 +83,10 @@ BOOL isRowEmpty(rowElement* row)
 	return(row==NULL || row->row==NULL);
 }
 
-rowElement* insertRow(rowElement* row, int index)
+Matrix* insertRow(Matrix* m, int index)
 {
 	rowElement* newel = (rowElement*)malloc(sizeof(rowElement));
-	rowElement* tmp = row;
+	rowElement* tmp = m->row;
 	if (tmp->rowN>index)
 	{
 		newel->rowN= index;
@@ -104,7 +107,8 @@ rowElement* insertRow(rowElement* row, int index)
 			tmp->nextRow =	newel;
 		}
 	} 
-return row;
+m->rowCount = m->rowCount +1; 
+return m;
 }
 
 
@@ -117,15 +121,18 @@ rowElement* removeRow( Matrix* m, int index)
 	{
 		tmpEle= tmpCol->col;
 		cellRemove = tmpEle;
-		while(tmpEle!=NULL || tmpEle->nextRow->rowIndex <= index )
+		while(tmpEle!=NULL || tmpEle->nextRow->rowN <= index )
 		{
 			tmpEle = tmpEle->nextRow; 
 		}
-		if (tmpEle->nextRow->RowIndex == index)
+		if (tmpEle->nextRow->rowN == index)
 		{
 			cellRemove= tmpEle->nextRow;
 			tmpEle->nextRow = tmpEle->nextRow ->nextRow;
 			free(cellRemove);
+			m->rowCount = m->rowCount -1; 
+			return m;
+
 		}
 	}
 
@@ -222,8 +229,10 @@ Matrix* sumMatrix(Matrix* a, Matrix* b)
 		cellElement* cellb = b->rows->row;
 
 		Points* newMat = (Points*)malloc(sizeof(Points));
-		newMat-> x = a->rowCount; /* Definition to the size of the new matrix*/
-		newMat-> y = b->colCount;
+		arrayMatrix* newel = (arrayMatrix*)malloc(sizeof(arrayMatrix));
+
+		newel->n = A->rowCount; /* Definition to the size of the new matrix*/
+		newel-> = B->colCount;
 			
 		while(rowa!= NULL && rowb != NULL)
 			{
@@ -263,6 +272,8 @@ Matrix* sumMatrix(Matrix* a, Matrix* b)
 		}
 
 	}
+	newel->list = newMat;
+	return newMatrix(newel);
 }
 
 
@@ -275,10 +286,11 @@ Matrix* mulMatrix(Matrix* A, Matrix* B)
 	cellElement* colCell = A->cols->col;
 
 	Points* newMat = (Points*)malloc(sizeof(Points));
+	arrayMatrix* newel = (arrayMatrix*)malloc(sizeof(arrayMatrix));
 	if(A->colCount == B->rowCount )
 	{
-		newMat-> x = A->rowCount; /* Definition to the size of the new matrix*/
-		newMat-> y = B->colCount;
+		newel->n = A->rowCount; /* Definition to the size of the new matrix*/
+		newel-> = B->colCount;
 		while(row!= NULL)
 		{
 			while(col!= NULL)
@@ -301,7 +313,8 @@ Matrix* mulMatrix(Matrix* A, Matrix* B)
 		}
 		row = row->nextRow;
 	}
-return newMat;	
+	newel->list = newMat;
+return newMatrix(newel);	
 
 }
 
@@ -347,7 +360,7 @@ Points* insertTailPoints(int x,  int y, Points* newMat)
 	Points* newElement = (Points*)malloc(sizeof(Points));
 	newElement->x = x;
 	newElement->y = y;
-	newElement->nextP = NUll;
+	newElement->nextP = NULL;
 	while(p->nextP != NULL )
 	{
 		p=p->nextP;

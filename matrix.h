@@ -7,12 +7,19 @@ Creation date : 11/23/16
 #ifndef MATRIX_H_INCLUDED
 #define MATRIX_H_INCLUDED
 
-
+/* May be useless. Maybe not.*/
 #define TRUE 1
 #define FALSE 0
 
 typedef int BOOL;
 
+/*
+a cell element of a Matrix. We got rid of the value, since the existence of an element is equivalent to a TRUE
+	colIndex : the index of the column containing the element
+	rowIndex : the index of the row in which the element is contained
+	nextCol : pointer to the next element in the column
+	nextRow : pointer to the next element in the row
+*/
 typedef struct cellEl
 {
 	int colIndex;
@@ -21,12 +28,22 @@ typedef struct cellEl
 	struct cellEl* nextRow;
 }cellElement;
 
-typedef struct pls 
+
+/*
+A point element in a list of points. It correspond to the TRUEs in an array representation of a boolean matrix.
+	x : the column index
+	y : the row index
+	nextP : a pointer toward the next points in the list of points
+*/
+typedef struct pls
 {
 	int x,y;
-	struct pls* nextP; 
+	struct pls* nextP;
 }Points;
 
+/*
+a list if points, defined as a pointer toward the first element
+*/
 typedef Points* listPoints;
 
 /*
@@ -85,4 +102,5 @@ typedef struct
 	colElement* cols;
 	rowElement* rows;
 }Matrix;
+
 #endif

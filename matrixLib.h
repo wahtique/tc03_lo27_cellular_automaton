@@ -8,24 +8,64 @@ Date : 09/12/16
 #define MATRIXLIB_H_INCLUDED
 
 #include <matrix.h>
-/* CELL */
+
+/* CELLS */
 
 /* ROWS */
+
+/*
+Function to test if a given Row is Empty
+@arg row : the row element of the matrix
+@return : a boolean true if the row is Empty.
+*/
+
 BOOL isRowEmpty(rowElement* row);
 
-rowElement* insertRow(rowElement* row, int index);
+/*
+Function to add a new row
+@arg m : the matrix who receive the new row
+@arg index: the index of the new row
+@return : the mdodify matrix.
+*/
 
-rowElement* removeRow( Matrix* m, int index);
+Matrix* insertRow(Matrix* m, int index);
+
+/*
+Function to remove a given row
+@arg m : the matrix who the row will be remove
+@arg index: the index of the row
+@return : the mdodify matrix.
+*/
+
+Matrix* removeRow( Matrix* m, int index);
 
 
 /* COLS */
 
-
+/*
+Function to test if a given Columm is Empty
+@arg col : the Columm element of the matrix
+@return : a boolean, true if the columm is Empty.
+*/
 BOOL isColEmpty(colElement* col);
 
-colElement* removeCol( Matrix* m, int index);
+/*
+Function to remove a given columm
+@arg m : the matrix who the columm will be remove
+@arg index: the index of the columm
+@return : the mdodify matrix.
+*/
 
-colElement* insertCol(colElement* col, int index);
+Matrix* removeCol( Matrix* m, int index)
+
+/*
+Function to add a new columm
+@arg m : the matrix who receive the new columm
+@arg index: the index of the new columm
+@return : the mdodify matrix.
+*/
+
+Matrix* insertCol(Matrix* m, int index)
 
 
 
@@ -61,7 +101,6 @@ Function sayin if a matrix is square
 */
 BOOL isMatrixSquare(Matrix* m);
 
-BOOL equalsMatrix(Matrix* A, Matrix* B);
 
 /*
 Function saying if two matrices are equals
@@ -87,8 +126,16 @@ Apply the rule(s) specified to the Matrix specified.
 @arg times : the number of times we want to apply it
 @return : a pointer toward a the new Matrix created.
 */
-Matrix* applyRules(Matrix* m, int rule, int times);
+void applyRules(Matrix* m, int rule, int times);
 
+
+
+/*
+A function to add a new cell with a value of 1 to a array representation
+@arg rowindex : the row index of the new cell
+@arg colindex : the columm index of the new cell
+@return : a array reprsentation of the new matrix
+*/
 Points* insertTailPoints( int rowindex,  int colIndex, Points* list);
 
 #endif
