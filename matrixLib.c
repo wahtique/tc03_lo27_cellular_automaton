@@ -41,7 +41,9 @@ Matrix* insertCol(Matrix* m, int index)
 		/*we do the same for the col of the newel*/
 		newel->col = NULL;
 
-	}else{
+	}
+	else
+	{
 		/* we search the position of the new columm with 3 cases : the new element is the first, in the middle of the matrix or the last */
 		if (tmp->colN > index) 
 		{
@@ -98,7 +100,9 @@ Matrix* insertCol(Matrix* m, int index)
 	return m; 
 }	
 
-Matrix* removeCol( Matrix* m, int index)
+
+//a refaire
+Matrix* removeCol(Matrix* m, int index)
 {
 	cellElement* tmpEle= m->rows->row; 
 	rowElement* tmpRow = m->rows;
@@ -107,7 +111,7 @@ Matrix* removeCol( Matrix* m, int index)
 	{
 		tmpEle= tmpRow->row;
 		cellRemove = tmpEle;
-		while(tmpEle!=NULL || tmpEle->nextCol->colIndex <= index )
+		while(tmpEle!=NULL || tmpEle->nextCol->colIndex < index )
 		{
 			tmpEle = tmpEle->nextCol; 
 		}
@@ -212,7 +216,7 @@ Matrix* insertRow(Matrix* m, int index)
 	return m; 
 }
 
-
+//a refaire
 Matrix* removeRow(Matrix* m, int index)
 {
 	cellElement* tmpEle= m->cols->col;
@@ -249,7 +253,7 @@ BOOL isMatrixEmpty(Matrix* m)
 		return TRUE;
 	}
 
-	return (m->colCount < 1 && m->rowCount < 1 );
+	return (m->colCount < 1 || m->rowCount < 1 );
 }
 
 BOOL isMatrixSquare(Matrix* m)
@@ -263,19 +267,23 @@ BOOL isMatrixSquare(Matrix* m)
 
 BOOL isMatrixSameSize(Matrix* a, Matrix* b)
 {
+	if(a==NULL && b==NULL)
+	{
+		return TRUE; /* two empty matrices have the same size */
+	}
 	if (a==NULL || b==NULL)
 	{
-		return FALSE;
+		return FALSE; /* I am sure both of them arent null at the same time */
 	}
 	return (a->colCount == b->colCount &&  a->rowCount == b->rowCount );
 }
 
 BOOL equalsMatrix(Matrix* A, Matrix* B)
 {
-	colElement* colA;
-	colElement* colB;
-	cellElement* cellA; 
-	cellElement* cellB;
+	colElement* colA=NULL;
+	colElement* colB=NULL;
+	cellElement* cellA=NULL; 
+	cellElement* cellB=NULL;
 
 	if (A->colCount != B->colCount || A->rowCount != B->rowCount || (isMatrixEmpty(A) && (isMatrixEmpty(B)==0)) || (isMatrixEmpty(B) && (isMatrixEmpty(A)==0)))
 	{
@@ -290,8 +298,7 @@ BOOL equalsMatrix(Matrix* A, Matrix* B)
 	/*I then check each column and row; if the indexes are different then I know its false */
 	colA = A->cols;
 	colB = B->cols;
-	cellA = colA->col;
-	cellB = colB->col;
+
 
 	while (colA != NULL &&  colB != NULL) 
 	{
@@ -300,6 +307,8 @@ BOOL equalsMatrix(Matrix* A, Matrix* B)
 			return FALSE;
 		}
 		/*else we have the same columns and we check the cells of the columns*/
+		cellA = colA->col;
+		cellB = colB->col;
 		while(cellA != NULL && cellB != NULL)
 		{
 			if(cellA->rowIndex != cellB->rowIndex)
@@ -320,10 +329,12 @@ BOOL equalsMatrix(Matrix* A, Matrix* B)
 
 Matrix* sumMatrix(Matrix* a, Matrix* b)
 {
-	if (isMatrixSameSize(a,b)!= TRUE)
+	if (isMatrixSameSize(a,b) != TRUE)
 	{
-		return NULL;
-	}else{
+		return NULL; /* error, we cant operate on the matrices */
+	}
+	else
+	{
 		rowElement* rowa = a->rows;
 		cellElement* cella = a->rows->row;
 		rowElement* rowb = b->rows;
@@ -332,44 +343,51 @@ Matrix* sumMatrix(Matrix* a, Matrix* b)
 		Points* newMat = (Points*)malloc(sizeof(Points));
 		arrayMatrix* newel = (arrayMatrix*)malloc(sizeof(arrayMatrix));
 
-		newel->n = a->rowCount; /* Definition to the size of the new matrix*/
-		newel-> = b->colCount;
+		newel->n = a->rowCount; /* Definition of the size of the new matrix*/
+		newel->p = b->colCount;
 			
 		while(rowa!= NULL && rowb != NULL)
+		{
+			if(rowa->rowN == rowb->rowN)
 			{
-				if(rowa->rowN == rowb->rowN)
-				{
 				while(cella->nextCol != NULL && cellb->nextCol != NULL)
-			{
-				if (cella->colIndex >= cellb->colIndex)
 				{
-					newMat=insertTailPoints(cellb->colIndex, cellb->rowIndex, newMat);
-					cellb = cellb->nextCol;
-				} else{
 					if (cella->colIndex >= cellb->colIndex)
 					{
-						newMat = insertTailPoints(cellb->colIndex, cellb->rowIndex, newMat);
+						newMat=insertTailPoints(cellb->colIndex, cellb->rowIndex, newMat);
 						cellb = cellb->nextCol;
-						cella = cella-> nextCol;
-					} else{
-						insertTailPoints(cella->colIndex, cella->rowIndex, newMat);
-						cella = cella->nextCol;
 					}
-				}
+					else
+					{
+						if (cella->colIndex >= cellb->colIndex)
+						{
+							newMat = insertTailPoints(cellb->colIndex, cellb->rowIndex, newMat);
+							cellb = cellb->nextCol;
+							cella = cella-> nextCol;
+						} 
+						else
+						{
+							insertTailPoints(cella->colIndex, cella->rowIndex, newMat);
+							cella = cella->nextCol;
+						}
+					}
+				}	
+				rowa = rowa->nextRow;
+				rowb = rowb->nextRow;
 			}
-			rowa = rowa->nextRow;
-			rowb = rowb->nextRow;
-			}
-			else{
+			else
+			{
 				if(rowa->rowN < rowb->rowN)
 				{
 					rowa->nextRow;
-				}else{
+				}
+				else
+				{
 					rowb->nextRow;
 				}
 
 			}
-		
+	
 		}
 
 	}
@@ -384,19 +402,19 @@ Matrix* mulMatrix(Matrix* A, Matrix* B)
 	rowElement* row = A->rows;
 	colElement* col = B->cols ;
 	cellElement* rowCell = A->rows->row;
-	cellElement* colCell = A->cols->col;
+	cellElement* colCell = B->cols->col;
 
 	Points* newMat = (Points*)malloc(sizeof(Points));
 	arrayMatrix* newel = (arrayMatrix*)malloc(sizeof(arrayMatrix));
 	if(A->colCount == B->rowCount )
 	{
-		newel->n = A->rowCount; /* Definition to the size of the new matrix*/
-		newel->n = B->colCount;
+		newel->n = A->rowCount; /* Definition of the size of the new Matrix*/
+		newel->p = B->colCount;
 		while(row!= NULL)
 		{
 			while(col!= NULL)
 			{
-				while( rowCell!=NULL && colCell!=NULL && rowCell->colIndex == colCell->rowIndex ) /* For 1 lines et 1 columm*/
+				while( rowCell!=NULL && colCell!=NULL && rowCell->colIndex == colCell->rowIndex ) /* For 1 row and 1 columm*/
 				{
 					if (rowCell->colIndex == colCell->rowIndex)
 					{
