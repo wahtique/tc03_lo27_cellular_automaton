@@ -137,6 +137,10 @@ Apply the rule(s) specified to the Matrix specified.
 */
 void applyRules(Matrix* m, int rule, int times);
 
+Matrix* andColSequenceOnMatrix(Matrix* m);
+
+Matrix* orColSequenceOnMatrix(Matrix* m);
+
 /* ----------------------------- Points -----------------------------*/
 
 /*
