@@ -444,7 +444,7 @@ Matrix* newMatrix(arrayMatrix* m)
 	Points* ptToFree = NULL; /* a pointer I use to free my Points list element by element */
 	colElement* currCol = NULL; /* a pointer used to identify the current column I am working on, ie the one in which I am inserting a new cell */
 	rowElement* currRow = NULL;  /* same but with row */
-	cellElement* newCell = NULL; /* pointer to the new cell I am inserting in the Matrix*/
+	cellElement* newCell = NULL; /* pointer to the new cell I am inserting in the Matrix */
 	cellElement* currCell = NULL; /* a pointer I use to move in the Matrix */
 
 	Matrix* newMat = (Matrix*)malloc(sizeof(Matrix)); /* I malloc my new Matrix and initialize everything*/
@@ -588,48 +588,60 @@ Matrix* newMatrix(arrayMatrix* m)
 
 Matrix* andColSequenceOnMatrix(Matrix* m)
 {
-	arrayMatrix* newMat = (arrayMatrix*)malloc(sizeof(arrayMatrix)); /* we initialize a array of the new matrix*/
-	if (isMatrixEmpty(m)!= TRUE) /* If the matrix is Empty we do nothing*/
+	arrayMatrix* newMat = (arrayMatrix*)malloc(sizeof(arrayMatrix)); /* we initialize a new arrayMatrix */
+	if (isMatrixEmpty(m) != TRUE) /* If the matrix is Empty we do nothing*/
 	{
-	 	colElement* fcol = m->cols; /*we initialize a pointeur to the first columm*/
-	 	colElement* scol = m->cols->nextCol; /*we initialize a pointeur to the second columm*/
-	 	cellElement* fcell = fcol->col; /*we initialize a pointeur to the first cell of the first columm*/
-	 	cellElement* scell = scol->col; /*we initialize a pointeur to the first cell of the second columm*/
-	 	newMat->n = m->rowCount;
-	 	newMat->p = m->colCount -1; 
-	 	while(scol->nextCol != NULL) /* we test all of the columm*/
-	 	{
-	 		if (scol->colN == fcol->colN + 1) /* we test if the columm n+1 exist*/
-	 		{
-	 			fcell = fcol->col; /* we give the value of the first cell of the first columm*/ 
-	 			scell =	scol->col; /* we give the value of the first cell of the second columm*/ 
-	 			while(scell->nextRow != NULL || fcell->nextRow != NULL) /* for each cell of the two columm we apply the bolean operation*/ 
-	 			{
-	 				while(fcell->rowIndex == scell->rowIndex) /* we the if the condition is true*/
-	 				{
-	 					newMat->list = insertTailPoints(fcell->rowIndex, fcell->colIndex , newMat->list); /* we add this coordanate to the new matrix*/
-	 					fcell = fcell->nextRow; /* we incremante the two case*/
-	 					scell =	scell->nextRow;
-	 				}
-	 				while(fcell->rowIndex < scell->rowIndex)
-	 				{
-	 					fcell = fcell->nextRow;
-	 				}
-	 				while(fcell->rowIndex > scell->rowIndex)
-	 				{
-	 					scell =	scell->nextRow;
-	 				}
-	 			}
-	 			fcol = scol; /* we incremante the two columm */
-	 			scol = scol->nextCol;	
-	 		}
-	 	}	 
+	 	
+		if(m->cols != NULL && m->cols->nextCol != NULL) /* if there are at least 2 columns in our Matrix */
+		{
+			colElement* fcol = m->cols; /*we initialize a pointer to the first columm*/
+		 	colElement* scol = m->cols->nextCol; /*we initialize a pointer to the second columm*/
+		 	cellElement* fcell = fcol->col; /*we initialize a pointer to the first cell of the first columm*/
+		 	cellElement* scell = scol->col; /*we initialize a pointer to the first cell of the second columm*/
+		 	newMat->n = m->rowCount;
+		 	newMat->p = m->colCount -1; 
+		 	while(scol != NULL) /* we iterate until the last column*/
+		 	{
+		 		if (scol->colN == fcol->colN + 1) /* if scol and fcol are neighbours = if all our AND wont give us zeros*/
+		 		{
+		 			fcell = fcol->col; /* we set fcell as the first cell of fcol*/ 
+		 			scell =	scol->col; /* we set scell as the fist element of scol*/
+
+		 			while(scell != NULL && fcell != NULL) /* for each cell of the two columm we apply the boolean operation*/ 
+		 			{
+		 				if(fcell->rowIndex == scell->rowIndex) /* if AND gives us a TRUE*/
+		 				{
+		 					newMat->list = insertTailPoints(fcell->rowIndex, fcell->colIndex , newMat->list); /* we add this coordanate to the new matrix*/
+		 					fcell = fcell->nextCol; /* we increment both of them */
+		 					scell =	scell->nextCol;
+		 				}
+		 				else /* if theyre not equals then we have to increment the one which is most behind */
+		 				{
+		 					/* if fcell is the one most behind or if scell is already at the end of the column */
+		 					if(fcell->rowIndex < scell->rowIndex)
+		 					{
+		 						fcell = fcell->nextCol; 
+		 					}
+		 					else
+		 					{
+		 						if(scell->rowIndex < fcell->rowIndex) /* not sure if this condition is necessary */
+		 						{
+		 							scell = scell->nextCol;
+		 						}
+		 					}
+		 				}
+		 			}/* if one of the cells is pointing to NULL then we know we are done with the columns anyway */
+		 			fcol = scol; /* we increment the two columms */
+		 			scol = scol->nextCol; /* and now, if scol is NULL then we stop */
+		 		}
+		 	}	 
+		}
 	}
-	else
+	else /* if the matrix is empty */
 	{
 	 	newMat-> n = 0;
 	 	newMat-> p = 0;
-	 	newMat-> list =NULL;
+	 	newMat-> list = NULL;
 	}
 	return newMatrix(newMat); 
 }
