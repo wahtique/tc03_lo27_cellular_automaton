@@ -141,6 +141,10 @@ Matrix* andColSequenceOnMatrix(Matrix* m);
 
 Matrix* orColSequenceOnMatrix(Matrix* m);
 
+Matrix* andRowSequenceOnMatrix(Matrix* m);
+
+Matrix* orRowSequenceOnMatrix(Matrix* m);
+
 /* ----------------------------- Points -----------------------------*/
 
 /*
