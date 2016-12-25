@@ -423,7 +423,9 @@ Matrix* mulMatrix(Matrix* A, Matrix* B)
 					if (rowCell->rowIndex > colCell->colIndex)
 					{
 						colCell = colCell-> nextCol;
-					} else {
+					} 
+					else 
+					{
 						rowCell = rowCell-> nextRow;
 					}
 				}
@@ -589,8 +591,7 @@ Matrix* andColSequenceOnMatrix(Matrix* m)
 {
 	arrayMatrix* newMat = (arrayMatrix*)malloc(sizeof(arrayMatrix)); /* we initialize a array of the new matrix*/
 	if (isMatrixEmpty(m)!= TRUE) /* If the matrix is Empty we do nothing*/
-	 {
-
+	{
 	 	colElement* fcol = m->cols; /*we initialize a pointeur to the first columm*/
 	 	colElement* scol = m->cols->nextCol; /*we initialize a pointeur to the second columm*/
 	 	cellElement* fcell = fcol->col; /*we initialize a pointeur to the first cell of the first columm*/
@@ -620,15 +621,17 @@ Matrix* andColSequenceOnMatrix(Matrix* m)
 	 					scell =	scell->nextRow;
 	 				}
 	 			}
-	 	fcol = scol; /* we incremante the two columm */
-	 	scol = scol->nextCol;	
-	 	}
-	 } 
-	}else{
+	 			fcol = scol; /* we incremante the two columm */
+	 			scol = scol->nextCol;	
+	 		}
+	 	}	 
+	}
+	else
+	{
 	 	newMat-> n = 0;
 	 	newMat-> p = 0;
 	 	newMat-> list =NULL;
-	 }
+	}
 	return newMatrix(newMat); 
 }
 
@@ -636,7 +639,7 @@ Matrix* orColSequenceOnMatrix(Matrix* m)
 {
 	arrayMatrix* newMat = (arrayMatrix*)malloc(sizeof(arrayMatrix)); /* we initialize a array of the new matrix*/
 	if (isMatrixEmpty(m)!= TRUE) /* If the matrix is Empty we do nothing*/
-	 {
+	{
 	 	colElement* fcol = m->cols; /*we initialize a pointeur to the first columm*/
 	 	colElement* scol = m->cols->nextCol; /*we initialize a pointeur to the second columm*/
 	 	cellElement* fcell = fcol->col; /*we initialize a pointeur to the first cell of the first columm*/
@@ -679,23 +682,24 @@ Matrix* orColSequenceOnMatrix(Matrix* m)
 	 				scell = scell->nextRow;
 	 			}
 	 		}
-	 	fcol = scol; /* we incremante the two columm */
-	 	scol = scol->nextCol;	
+	 		fcol = scol; /* we incremante the two columm */
+	 		scol = scol->nextCol;	
 	 	}
-	 }else{
+	}
+	else
+	{
 	 	newMat-> n = 0;
 	 	newMat-> p = 0;
 	 	newMat-> list =NULL;
-	 }
-	 return newMatrix(newMat); 
+	}
+	return newMatrix(newMat); 
 }
 
 Matrix* andRowSequenceOnMatrix(Matrix* m)
 {
 	arrayMatrix* newMat = (arrayMatrix*)malloc(sizeof(arrayMatrix)); /* we initialize a array of the new matrix*/
 	if (isMatrixEmpty(m)!= TRUE) /* If the matrix is Empty we do nothing*/
-	 {
-
+	{
 	 	rowElement* frow = m->rows; /*we initialize a pointeur to the first columm*/
 	 	rowElement* srow = m->rows->nextRow; /*we initialize a pointeur to the second columm*/
 	 	cellElement* fcell = frow->row; /*we initialize a pointeur to the first cell of the first columm*/
@@ -725,15 +729,17 @@ Matrix* andRowSequenceOnMatrix(Matrix* m)
 	 					scell =	scell->nextCol;
 	 				}
 	 			}
-	 	frow = srow; /* we incremante the two columm */
-	 	srow = srow->nextRow;	
-	 	}
-	 } 
-	}else{
+	 		frow = srow; /* we incremante the two columm */
+	 		srow = srow->nextRow;	
+	 		}
+		} 
+	}
+	else
+	{
 	 	newMat-> n = 0;
 	 	newMat-> p = 0;
 	 	newMat-> list =NULL;
-	 }
+	}
 	return newMatrix(newMat); 
 }
 
@@ -741,7 +747,7 @@ Matrix* orRowSequenceOnMatrix(Matrix* m)
 {
 	arrayMatrix* newMat = (arrayMatrix*)malloc(sizeof(arrayMatrix)); /* we initialize a array of the new matrix*/
 	if (isMatrixEmpty(m)!= TRUE) /* If the matrix is Empty we do nothing*/
-	 {
+	{
 	 	rowElement* frow = m->rows; /*we initialize a pointeur to the first rowumm*/
 	 	rowElement* srow = m->rows->nextRow; /*we initialize a pointeur to the second rowumm*/
 	 	cellElement* fcell = frow->row; /*we initialize a pointeur to the first cell of the first rowumm*/
@@ -784,15 +790,17 @@ Matrix* orRowSequenceOnMatrix(Matrix* m)
 	 				scell = scell->nextRow;
 	 			}
 	 		}
-	 	frow = srow; /* we incremante the two columm */
-	 	srow = srow->nextRow;	
+	 		frow = srow; /* we incremante the two columm */
+	 		srow = srow->nextRow;	
 	 	}
-	 }else{
+	}
+	else
+	{
 	 	newMat-> n = 0;
 	 	newMat-> p = 0;
 	 	newMat-> list =NULL;
-	 }
-	 return newMatrix(newMat); 
+	}
+	return newMatrix(newMat); 
 }
 
 /* ----------------------------- Points ----------------------------- */

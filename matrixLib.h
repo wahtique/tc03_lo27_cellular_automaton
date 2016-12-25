@@ -133,7 +133,7 @@ Apply the rule(s) specified to the Matrix specified.
 @arg M : a pointer toward the Matrix on which we want to operate
 @arg rule : the rule we want to apply, must be between 1 ( do nothing ) and 511 ( every rules )
 @arg times : the number of times we want to apply it
-@return : nothing. The matrix M is modified during the iteration
+@return : a pointer toward the new Matrix obtained
 */
 Matrix* applyRules(Matrix* m, int rule, int times);
 
