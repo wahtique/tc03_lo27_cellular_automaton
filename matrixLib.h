@@ -128,16 +128,6 @@ Function multiplaying two matrices.
 Matrix* mulMatrix(Matrix* A, Matrix* B);
 
 /*
-THE function ( I heard they didnt have it in LO21. This is unfair. UNFAIR.)
-Apply the rule(s) specified to the Matrix specified.
-@arg M : a pointer toward the Matrix on which we want to operate
-@arg rule : the rule we want to apply, must be between 1 ( do nothing ) and 511 ( every rules )
-@arg times : the number of times we want to apply it
-@return : a pointer toward the new Matrix obtained
-*/
-Matrix* applyRules(Matrix* m, int rule, int times);
-
-/*
 Function applying an AND operation on the columns of a Matrix, two by two
 @arg m : a pointer to the Matrix we will transform, with p columns
 @return : a pointer to the new Matrix created, with p-1 columns
@@ -164,6 +154,73 @@ Function applying an AND operation on the rows of a Matrix, two by two
 @return : a pointer to the new Matrix created, with n-1 cols
 */
 Matrix* orRowSequenceOnMatrix(Matrix* m);
+
+/* ----------------------------- APPLYRULE ---------------------------- */
+
+/*
+THE function ( I heard they didnt have it in LO21. This is unfair. UNFAIR.)
+Apply the rule(s) specified to the Matrix specified.
+@arg M : a pointer toward the Matrix on which we want to operate
+@arg rule : the rule we want to apply, must be between 1 ( do nothing ) and 511 ( every rules )
+@arg times : the number of times we want to apply it
+@return : a pointer toward the new Matrix obtained
+*/
+Matrix* applyRules(Matrix* m, int rule, int times);
+
+/*
+Translation of a Matrix to the right
+@arg m : pointer toward the Matrix we want translate to the right
+@return : nothing, m is modified during the iteration
+*/
+void transRight(Matrix* m);
+
+/*
+Translate the Matrix to the left
+@arg m : pointer to the Matrix on which we operate
+@return : nothing, m is modified during the iteration
+*/
+void transLeft(Matrix* m);
+
+/*
+Translate the Matrix upward
+@arg m : pointer to the Matrix on which we operate
+@return : nothing, m is modified during the iteration
+*/
+void transUp(Matrix* m);
+
+/*
+Translate the Matrix downward
+@arg m : pointer to the Matrix on which we operate
+@return : nothing, m is modified during the iteration
+*/
+void transDown(Matrix* m);
+
+/*
+Funtion saying if the cell specified is a 1 or not, ie if the cellElement exists in the Matrix
+@arg m : pointer toward the Matrix in which we want to check a cell
+@arg cellRow : rowIndex of the cell we want to know the existence of
+@arg cellCol : colIndex of the cell we want to know the existence of
+@return : TRUE if th cell exist, FALSE otherwise
+*/
+BOOL isCellTrue(Matrix* m, int cellRow, int cellCol);
+
+/*
+Function decomposing a complex rule into an array giving the elementary rules which compose it.
+It gives us the cells we need to consider to to our XOR operations
+@arg rule : the complex rule we will decompose
+@return : a static array A of 9 Booleans, which tells us, for i from 0 to 8, if the cell identified as 2^i is to be considered for the XOR 
+*/
+BOOL* decomposeRule(int rule);
+
+/*
+Function saying if, given a Matrix, if the cell specified will gives a TRUE after applying the rule identified by the array toOperate
+@arg m : pointer toward the Matrix in which we are operation
+@arg cellRow : the rowIndex of the cell we are working with
+@arg cellCol : the colIndex of the cell we are working with
+@arg toOperate : a static array of 9 Booleans identifiying the rule we are using
+@return : a boolean, TRUE if the use of the rule on the cell will give a TRUE, FALSE otherwise
+*/
+BOOL applyRuleToCell(Matrix* m, int cellRow, int cellCol, BOOL* toOperate);
 
 /* ----------------------------- Points -----------------------------*/
 
