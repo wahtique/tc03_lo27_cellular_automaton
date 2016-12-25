@@ -222,7 +222,14 @@ Function saying if, given a Matrix, if the cell specified will gives a TRUE afte
 */
 BOOL applyRuleToCell(Matrix* m, int cellRow, int cellCol, BOOL* toOperate);
 
-/* ----------------------------- Points -----------------------------*/
+/* ----------------------------- arrayMatrix -----------------------------*/
+
+/*
+A function turning a two dimensional array into an arrayMatrix
+@arg array : a two dimensional array of booleans
+@return : a pointer toward an arrayMatrix
+*/
+arrayMatrix* arrayMatrixFrom2DArray(BOOL** array);
 
 /*
 A function to add a new cell with a value of 1 to a array representation
