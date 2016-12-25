@@ -606,7 +606,7 @@ Matrix* andColSequenceOnMatrix(Matrix* m)
 	 	scol = scol->nextCol;	
 	 	}
 	 }
-	 return newMat(newMatrix); 
+	 return newMatrix(newMatrix); 
 }
 
 Matrix* orColSequenceOnMatrix(Matrix* m)
@@ -661,7 +661,7 @@ Matrix* orColSequenceOnMatrix(Matrix* m)
 	 	scol = scol->nextCol;	
 	 	}
 	 }
-	 return newMat(newMatrix); 
+	 return newMatrix(newMatrix); 
 }
 
 
