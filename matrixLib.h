@@ -135,14 +135,34 @@ Apply the rule(s) specified to the Matrix specified.
 @arg times : the number of times we want to apply it
 @return : nothing. The matrix M is modified during the iteration
 */
-void applyRules(Matrix* m, int rule, int times);
+Matrix* applyRules(Matrix* m, int rule, int times);
 
+/*
+Function applying an AND operation on the columns of a Matrix, two by two
+@arg m : a pointer to the Matrix we will transform, with p columns
+@return : a pointer to the new Matrix created, with p-1 columns
+*/
 Matrix* andColSequenceOnMatrix(Matrix* m);
 
+/*
+Function applying an OR operation on the columns of a Matrix, two by two
+@arg m : a pointer to the Matrix we will transform, with p columns
+@return : a pointer to the new Matrix created, with p-1 columns
+*/
 Matrix* orColSequenceOnMatrix(Matrix* m);
 
+/*
+Function applying an AND operation on the rows of a Matrix, two by two
+@arg m : a pointer to the Matrix we will transform, with n rows
+@return : a pointer to the new Matrix created, with n-1 rows
+*/
 Matrix* andRowSequenceOnMatrix(Matrix* m);
 
+/*
+Function applying an AND operation on the rows of a Matrix, two by two
+@arg m : a pointer to the Matrix we will transform, with n cols
+@return : a pointer to the new Matrix created, with n-1 cols
+*/
 Matrix* orRowSequenceOnMatrix(Matrix* m);
 
 /* ----------------------------- Points -----------------------------*/
