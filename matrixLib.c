@@ -636,12 +636,18 @@ Matrix* andColSequenceOnMatrix(Matrix* m)
 		 		}
 		 	}	 
 		}
+		else /* if my Matrix isnt empty but theres only at most one column containing TRUEs*/
+		{
+			newMat->n = m->rowCount;
+			newMat->p = m->colCount;
+			newMat->list = NULL;
+		}
 	}
 	else /* if the matrix is empty */
 	{
-	 	newMat-> n = 0;
-	 	newMat-> p = 0;
-	 	newMat-> list = NULL;
+	 	newMat->n = 0;
+	 	newMat->p = 0;
+	 	newMat->list = NULL;
 	}
 	return newMatrix(newMat); 
 }
