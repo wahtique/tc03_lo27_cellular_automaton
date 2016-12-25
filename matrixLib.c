@@ -40,7 +40,6 @@ Matrix* insertCol(Matrix* m, int index)
 
 		/*we do the same for the col of the newel*/
 		newel->col = NULL;
-
 	}
 	else
 	{
@@ -442,11 +441,11 @@ return newMatrix(newel);
 Matrix* newMatrix(arrayMatrix* m)
 {
 	Points* pt = m->list; /* the Points pointer toward the Points I am going to insert */
-	Points* ptToFree = NULL;
-	colElement* currCol = NULL;
-	rowElement* currRow = NULL;  
-	cellElement* newCell = NULL;
-	cellElement* currCell = NULL;
+	Points* ptToFree = NULL; /* a pointer I use to free my Points list element by element */
+	colElement* currCol = NULL; /* a pointer used to identify the current column I am working on, ie the one in which I am inserting a new cell */
+	rowElement* currRow = NULL;  /* same but with row */
+	cellElement* newCell = NULL; /* pointer to the new cell I am inserting in the Matrix*/
+	cellElement* currCell = NULL; /* a pointer I use to move in the Matrix */
 
 	Matrix* newMat = (Matrix*)malloc(sizeof(Matrix)); /* I malloc my new Matrix and initialize everything*/
 	newMat->colCount = m->p; 
@@ -454,7 +453,7 @@ Matrix* newMatrix(arrayMatrix* m)
 	newMat->cols = NULL;
 	newMat->rows = NULL;
 
-	/*I insert the cell elements defined by ths listPoints in m*/
+	/* I insert the cell elements defined by ths listPoints in m */
 
 	if (pt == NULL) /* which means y list is empty. No one in the list. No ones in the Matrix*/
 	{
