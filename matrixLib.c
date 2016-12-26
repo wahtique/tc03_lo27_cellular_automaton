@@ -100,31 +100,7 @@ Matrix* insertCol(Matrix* m, int index)
 }	
 
 
-/*a refaire
-Matrix* removeCol(Matrix* m, int index)
-{
-	cellElement* tmpEle= m->rows->row; 
-	rowElement* tmpRow = m->rows;
-	cellElement* cellRemove = m->rows->row;
-	while(tmpRow!=NULL)
-	{
-		tmpEle= tmpRow->row;
-		cellRemove = tmpEle;
-		while(tmpEle!=NULL || tmpEle->nextCol->colIndex < index )
-		{
-			tmpEle = tmpEle->nextCol; 
-		}
-		if (tmpEle->nextCol->colIndex == index)
-		{
-			cellRemove= tmpEle->nextCol;
-			tmpEle->nextCol = tmpEle->nextCol ->nextCol;
-			free(cellRemove);
-			m->colCount = m->colCount - 1;
-		}
-	}
-	return m;
-
-}*/
+/*a refaire*/
 
 
 
@@ -215,7 +191,7 @@ Matrix* insertRow(Matrix* m, int index)
 	return m; 
 }
 
-
+/* à check*/
 Matrix* removeRow(Matrix* m, int index)
 {
 	if (isMatrixEmpty(m)!= TRUE && index < m->rowCount) /* we test if the row can be remove */
@@ -227,7 +203,7 @@ Matrix* removeRow(Matrix* m, int index)
 		}
 		if (rrow->nextRow == index) /* test if the row exist*/
 		{
-			if(isRowEmpty(rrow)=! TRUE)
+			if(isRowEmpty(rrow)=! TRUE) /* test if there are one case or more*/
 			{
 				cellElement* tmpEle= m->cols->col;	
 				colElement* tmpCol = m->cols;
@@ -245,10 +221,14 @@ Matrix* removeRow(Matrix* m, int index)
 						cellRemove= tmpEle->nextRow;
 						tmpEle->nextRow = tmpEle->nextRow ->nextRow;
 						free(cellRemove);
+						if (tmpCol->cols == NULL) /* if we remove the last case of a columm we remove the empty columm.*/
+						{
+							removeCol(m, tmpCol->colN)
+						}
 					}
 				}
 			}
-			if (rrow->prevRow == NULL)
+			if (rrow->prevRow == NULL) /*We modify the pointer of previous et next element*/
 			{
 				rrow->nextRow->prevRow = NULL;
 				m->rows = rrow->nextRow;
@@ -257,9 +237,15 @@ Matrix* removeRow(Matrix* m, int index)
 				{
 					rrow->prevRow->nextRow = NULL;
 				}else{
-						/* bricoler les ponts gerer si on remove toute la colonne, gerer si 1er de la liste*/
+					rrow->nextRow->prevRow = rrow->nextRow;
+					rrow->prevRow->nextRow = rrow->prevRow;
 				}
 			}
+			rrow->prevRow =NULL; /* free the row*/
+			rrow->nextRow = NULL;
+			rrow->rows = NULL;
+			rrow->rowN = NULL;
+			free(rrow);
 		}
 return m;
 }
@@ -673,7 +659,7 @@ Matrix* andColSequenceOnMatrix(Matrix* m)
 	}
 	return newMatrix(newMat); 
 }
-
+/* à check*/
 Matrix* orColSequenceOnMatrix(Matrix* m)
 {
 	arrayMatrix* newMat = (arrayMatrix*)malloc(sizeof(arrayMatrix)); /* we initialize a array of the new matrix*/
