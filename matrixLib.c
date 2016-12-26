@@ -215,32 +215,54 @@ Matrix* insertRow(Matrix* m, int index)
 	return m; 
 }
 
-/*a refaire
+
 Matrix* removeRow(Matrix* m, int index)
 {
-	cellElement* tmpEle= m->cols->col;
-	colElement* tmpCol = m->cols;
-	cellElement* cellRemove = m->cols->col;
-	while(tmpCol!=NULL)
+	if (isMatrixEmpty(m)!= TRUE && index < m->rowCount) /* we test if the row can be remove */
 	{
-		tmpEle = tmpCol->col;
-		cellRemove = tmpEle;
-		while(tmpEle!=NULL || tmpEle->nextRow->rowN <= index )
+		rowElement* rrow = m->rows;
+		while(rrow->rowN <=index)
 		{
-			tmpEle = tmpEle->nextRow; 
+			rrow = rrow->nextRow;
 		}
-		if (tmpEle->nextRow->rowIndex == index)
+		if (rrow->nextRow == index) /* test if the row exist*/
 		{
-			cellRemove= tmpEle->nextRow;
-			tmpEle->nextRow = tmpEle->nextRow ->nextRow;
-			free(cellRemove);
-			m->rowCount = m->rowCount -1; 
-			return m;
-
+			if(isRowEmpty(rrow)=! TRUE)
+			{
+				cellElement* tmpEle= m->cols->col;	
+				colElement* tmpCol = m->cols;
+				cellElement* cellRemove = m->cols->col;
+				while(tmpCol!=NULL) /* we free each case of the row without break the structure*/
+				{
+					tmpEle = tmpCol->col;
+					cellRemove = tmpEle;
+					while(tmpEle!=NULL || tmpEle->nextRow->rowN <= index )
+					{
+						tmpEle = tmpEle->nextRow; 
+					}
+					if (tmpEle->nextRow->rowIndex == index)
+					{
+						cellRemove= tmpEle->nextRow;
+						tmpEle->nextRow = tmpEle->nextRow ->nextRow;
+						free(cellRemove);
+					}
+				}
+			}
+			if (rrow->prevRow == NULL)
+			{
+				rrow->nextRow->prevRow = NULL;
+				m->rows = rrow->nextRow;
+			}else{
+				if (rrow->nextRow == NULL)
+				{
+					rrow->prevRow->nextRow = NULL;
+				}else{
+						/* bricoler les ponts gerer si on remove toute la colonne, gerer si 1er de la liste*/
+				}
+			}
 		}
-	}
-
-}*/
+return m;
+}
 
 
 /* ----------------------------- MATRIX ----------------------------- */
@@ -663,42 +685,50 @@ Matrix* orColSequenceOnMatrix(Matrix* m)
 	 	cellElement* scell = scol->col; /*we initialize a pointeur to the first cell of the second columm*/
 	 	newMat->n = m->rowCount;
 	 	newMat->p = m->colCount -1; 
-	 	while(scol->nextCol != NULL) /* we test all of the columm*/
+	 	while(scol != NULL) /* we test all of the columm*/
 	 	{
 	 		if (scol->colN == fcol->colN + 1) /* we test if the columm n+1 exist*/
 	 		{
 	 			fcell = fcol->col; /* we give the value of the first cell of the first columm*/ 
 	 			scell =	scol->col; /* we give the value of the first cell of the second columm*/ 
-	 			while(scell != NULL && fcell != NULL) /* for each cell of the two columm we apply the bolean operation*/ 
+	 			while(scell != NULL || fcell != NULL) /* for each cell of the two columm we apply the bolean operation*/ 
 	 			{
-	 				while(fcell->rowIndex == scell->rowIndex) /* we the if the condition is true*/
+	 				if (fcell->rowIndex == scell->rowIndex) /* we the if the condition is true*/
 	 				{
 	 					newMat->list = insertTailPoints(fcell->rowIndex, fcell->colIndex , newMat->list); /* we add this coordanate to the new matrix*/
-	 					fcell = fcell->nextRow; /* we incremante the two case*/
-	 					scell =	scell->nextRow;
-	 				}
-	 				while(fcell->rowIndex < scell->rowIndex)
-	 				{
-	 					newMat->list = insertTailPoints(fcell->rowIndex, fcell->colIndex , newMat->list);
-	 					fcell = fcell->nextRow;
-	 				}
-	 				while(fcell->rowIndex > scell->rowIndex)
-	 				{
-	 					newMat->list = insertTailPoints(fcell->rowIndex, fcell->colIndex , newMat->list);
-	 					scell =	scell->nextRow;
+	 					fcell = fcell->nextCol; /* we incremante the two case*/
+	 					scell =	scell->nextCol;
+	 				}else{	
+	 					if(fcell->rowIndex < scell->rowIndex) /* if the the condition is not true we add and incremante the most little between the two columm*/
+	 					{
+	 						newMat->list = insertTailPoints(fcell->rowIndex, fcell->colIndex , newMat->list);
+	 						fcell = fcell->nextCol;
+	 					}else{
+	 						if(fcell->rowIndex > scell->rowIndex)
+	 						{
+	 							newMat->list = insertTailPoints(scell->rowIndex, scell->colIndex , newMat->list);
+	 							scell =	scell->nextCol;
+	 						}
+	 					}
 	 				}
 	 			}
-	 			while(fcell != NULL )
+	 			while(fcell != NULL) /* in the case where the first columm is longer to the second we continue to incrementa all of thier case*/
 	 			{
 	 				newMat->list = insertTailPoints(fcell->rowIndex, fcell->colIndex , newMat->list);
-	 				fcell = fcell->nextRow;
+	 				fcell = fcell->nextCol;
 	 			}
-	 			while(fcell != NULL )
+	 			while(scell != NULL) /* if the second is longer to the first*/
 	 			{
-	 				newMat->list = insertTailPoints(scell->rowIndex, scell->colIndex-1 , newMat->list);
-	 				scell = scell->nextRow;
+	 				newMat->list = insertTailPoints(scell->rowIndex, scell->colIndex , newMat->list);
+	 				scell = scell->nextCol;
 	 			}
-	 		}
+	 		}else{
+	 				while(fcell != NULL ) /* if the second columm is not the next of the first wa add at the new matrix all the case of this columm*/
+	 				{
+	 					newMat->list = insertTailPoints(fcell->rowIndex, fcell->colIndex , newMat->list);
+	 					fcell = fcell->nextCol;
+	 				}
+	 			}
 	 		fcol = scol; /* we incremante the two columm */
 	 		scol = scol->nextCol;	
 	 	}
