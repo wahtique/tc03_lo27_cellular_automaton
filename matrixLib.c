@@ -191,7 +191,7 @@ Matrix* insertRow(Matrix* m, int index)
 	return m; 
 }
 
-/* à check*/
+/* ----------------------------------------------------------------------------------------------------------------------à check*/
 Matrix* removeRow(Matrix* m, int index)
 {
 	if (isMatrixEmpty(m)!= TRUE && index < m->rowCount) /* we test if the row can be remove */
@@ -201,18 +201,18 @@ Matrix* removeRow(Matrix* m, int index)
 		{
 			rrow = rrow->nextRow;
 		}
-		if (rrow->nextRow == index) /* test if the row exist*/
+		if (rrow->nextRow->rowN == index) /* test if the row exist*/
 		{
-			if(isRowEmpty(rrow)=! TRUE) /* test if there are one case or more*/
+			if(isRowEmpty(rrow) != TRUE) /* test if there are one case or more*/
 			{
 				cellElement* tmpEle= m->cols->col;	
 				colElement* tmpCol = m->cols;
 				cellElement* cellRemove = m->cols->col;
-				while(tmpCol!=NULL) /* we free each case of the row without break the structure*/
+				while(tmpCol != NULL) /* we free each case of the row without break the structure*/
 				{
 					tmpEle = tmpCol->col;
 					cellRemove = tmpEle;
-					while(tmpEle!=NULL || tmpEle->nextRow->rowN <= index )
+					while(tmpEle != NULL || tmpEle->nextRow->rowIndex <= index )
 					{
 						tmpEle = tmpEle->nextRow; 
 					}
@@ -221,9 +221,9 @@ Matrix* removeRow(Matrix* m, int index)
 						cellRemove= tmpEle->nextRow;
 						tmpEle->nextRow = tmpEle->nextRow ->nextRow;
 						free(cellRemove);
-						if (tmpCol->cols == NULL) /* if we remove the last case of a columm we remove the empty columm.*/
+						if (tmpCol->col == NULL) /* if we remove the last case of a columm we remove the empty columm.*/
 						{
-							removeCol(m, tmpCol->colN)
+							removeCol(m, tmpCol->colN);
 						}
 					}
 				}
@@ -243,10 +243,10 @@ Matrix* removeRow(Matrix* m, int index)
 			}
 			rrow->prevRow =NULL; /* free the row*/
 			rrow->nextRow = NULL;
-			rrow->rows = NULL;
-			rrow->rowN = NULL;
+			rrow->row = NULL;
 			free(rrow);
 		}
+	}
 return m;
 }
 
