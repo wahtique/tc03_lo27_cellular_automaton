@@ -820,6 +820,123 @@ Matrix* orRowSequenceOnMatrix(Matrix* m)
 	return newMatrix(newMat); 
 }
 
+/* ----------------------------- applyrule ----------------------------- */
+
+
+void transRight(Matrix* m)
+{
+	colElement* currCol = m->cols;
+	cellElement* currCell = NULL;
+	if(isMatrixEmpty(m) == FALSE)
+	{
+		while(currCol != NULL)
+		{
+			if(currCol->colN == m->colCount) /* if we are pointing to the last column (the rightest) which is also the rightest possible */
+			{
+				m = removeCol(m, currCol->colN);
+			}
+			else 
+			{
+				currCol->colN += 1;
+				currCell = currCol->col;
+				while(currCell != NULL)
+				{
+					currCell->colIndex += 1; 
+					currCell = currCell->nextCol;
+				}
+				currCol = currCol->nextCol;
+			}
+		}
+	}
+}
+
+
+void transLeft(Matrix* m)
+{
+	colElement* currCol = m->cols;
+	cellElement* currCell = NULL;
+	if(isMatrixEmpty(m) == FALSE)
+	{
+		while(currCol != NULL)
+		{
+			if(currCol->colN == 1)
+			{
+				currCol = currCol->nextCol;
+				m = removeCol(m, 1);
+			}
+			else
+			{
+				currCol->colN += -1;
+				currCell = currCol->col;
+				while(currCell !=NULL)
+				{
+					currCell->colIndex += -1;
+					currCell = currCell->nextCol;
+				}
+				currCol = currCol->nextCol;
+			}
+		}
+	}
+}
+
+void transUp(Matrix* m)
+{
+	rowElement* currRow = m->rows;
+	cellElement* currCell = NULL;
+	if(isMatrixEmpty(m) == FALSE)
+	{
+		while(currRow != NULL)
+		{
+			if(currRow->rowN == 1)
+			{
+				currRow = currRow->nextRow;
+				m = removeRow(m, 1);
+			}
+			else
+			{
+				currRow->rowN += -1;
+				currCell = currRow->row;
+				while(currCell !=NULL)
+				{
+					currCell->rowIndex += -1;
+					currCell = currCell->nextRow;
+				}
+				currRow = currRow->nextRow;
+			}
+		}
+	}
+}
+
+void transDown(Matrix* m)
+{
+	colElement* currRow = m->rows;
+	cellElement* currCell = NULL;
+	if(isMatrixEmpty(m) == FALSE)
+	{
+		while(currRow != NULL)
+		{
+			if(currRow->rowN == m->rowCount)
+			{
+				m = removeRow(m, currRow->rowN);
+			}
+			else 
+			{
+				currRow->rowN += 1;
+				currCell = currRow->row;
+				while(currCell != NULL)
+				{
+					currCell->rowIndex += 1; 
+					currCell = currCell->nextRow;
+				}
+				currRow = currRow->nextRow;
+			}
+		}
+	}
+}
+
+
+
+
 /* ----------------------------- Points ----------------------------- */
 
 Points* insertTailPoints(int x, int y, Points* newMat)
