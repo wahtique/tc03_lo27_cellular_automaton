@@ -8,6 +8,7 @@ Date : 09/12/16
 #include <stdio.h>
 #include <stdlib.h> 
 #include <matrixLib.h>
+#include <math.h>
 
 /* ----------------------------- CELLS ----------------------------- */
 
@@ -925,7 +926,7 @@ void transUp(Matrix* m)
 
 void transDown(Matrix* m)
 {
-	colElement* currRow = m->rows;
+	rowElement* currRow = m->rows;
 	cellElement* currCell = NULL;
 	if(isMatrixEmpty(m) == FALSE)
 	{
@@ -959,12 +960,12 @@ BOOL isCellTrue(Matrix* m, int cellRow, int cellCol)
 	{
 		return FALSE;
 	}
-	if(cellRow > m->rowCount || cellrow > m->colCount) /* if the cell is outside the Matrix */
+	if(cellRow > m->rowCount || cellRow > m->colCount) /* if the cell is outside the Matrix */
 	{
 		return FALSE;
 	}
-	colElement = m->cols;
-	while(currCol != NULL && currCol < cellCol)
+	currCol = m->cols;
+	while(currCol != NULL && currCol->colN < cellCol)
 	{
 		currCol = currCol->nextCol;
 	}
@@ -977,14 +978,26 @@ BOOL isCellTrue(Matrix* m, int cellRow, int cellCol)
 	{
 		currCell = currCell->nextCol;
 	}
-	if(currCell == NULL || currCell->rowN > cellRow) /* if the cell doesnt exist */
+	if(currCell == NULL || currCell->rowIndex > cellRow) /* if the cell doesnt exist */
 	{
 		return FALSE;
 	}
 	return TRUE; /* here we are sure currCell has the same colIndex and rowIndex that the one we are looking for */
 }
 
+BOOL* decomposeRule(int rule)
+{
+	static BOOL decompose[8];
+	int i;
 
+	for(i=8;i>=0;--i)
+	{
+		decompose[i] = rule / (int)pow(2,i);
+		rule = rule % (int)pow(2,i); 
+	}
+
+	return decompose;
+}
 /* ----------------------------- Points ----------------------------- */
 
 Points* insertTailPoints(int x, int y, Points* newMat)
