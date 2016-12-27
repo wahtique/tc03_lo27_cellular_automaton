@@ -950,7 +950,39 @@ void transDown(Matrix* m)
 	}
 }
 
+BOOL isCellTrue(Matrix* m, int cellRow, int cellCol)
+{
+	colElement* currCol = NULL;
+	cellElement* currCell = NULL;
 
+	if(isMatrixEmpty(m))
+	{
+		return FALSE;
+	}
+	if(cellRow > m->rowCount || cellrow > m->colCount) /* if the cell is outside the Matrix */
+	{
+		return FALSE;
+	}
+	colElement = m->cols;
+	while(currCol != NULL && currCol < cellCol)
+	{
+		currCol = currCol->nextCol;
+	}
+	if(currCol == NULL || currCol->colN > cellCol) /* if the column in which the cell should be doesnt exits */
+	{
+		return FALSE;
+	}
+	currCell = currCol->col;
+	while(currCell != NULL && currCell->rowIndex < cellRow) 
+	{
+		currCell = currCell->nextCol;
+	}
+	if(currCell == NULL || currCell->rowN > cellRow) /* if the cell doesnt exist */
+	{
+		return FALSE;
+	}
+	return TRUE; /* here we are sure currCell has the same colIndex and rowIndex that the one we are looking for */
+}
 
 
 /* ----------------------------- Points ----------------------------- */
