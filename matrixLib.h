@@ -81,6 +81,13 @@ Function creating a new Matrix from its arrayMatrix representation
 Matrix* newMatrix(arrayMatrix* m);
 
 /*
+Free a Matrix
+@arg m : a pointer toward the Matrix we wanna free
+@result : nothing
+*/
+void freeMatrix(Matrix* m);
+
+/*
 Function displaying a Matrix given as argument
 @arg m : pointer to the matrix de display
 @return : nothing
@@ -207,20 +214,27 @@ BOOL isCellTrue(Matrix* m, int cellRow, int cellCol);
 /*
 Function decomposing a complex rule into an array giving the elementary rules which compose it.
 It gives us the cells we need to consider to to our XOR operations
-@arg rule : the complex rule we will decompose
-@return : a static array A of 9 Booleans, which tells us, for i from 0 to 8, if the cell identified as 2^i is to be considered for the XOR 
+@arg rule : the complex rule we will decompose. We consider rule is always a valid rule.
+@return : a static array of 9 Booleans, which tells us, for i from 0 to 8, if the cell identified as 2^i is to be considered for the XOR 
 */
 BOOL* decomposeRule(int rule);
+
+/* xor boolean operator. Because I'm paranoid
+@arg a : a boolean
+@arg b : another boolean
+@result : a xor b 
+*/
+BOOL xor(BOOL a, BOOL b);
 
 /*
 Function saying if, given a Matrix, if the cell specified will gives a TRUE after applying the rule identified by the array toOperate
 @arg m : pointer toward the Matrix in which we are operation
 @arg cellRow : the rowIndex of the cell we are working with
 @arg cellCol : the colIndex of the cell we are working with
-@arg toOperate : a static array of 9 Booleans identifiying the rule we are using
+@arg dRule : a static array of 9 Booleans identifiying the rule we are using
 @return : a boolean, TRUE if the use of the rule on the cell will give a TRUE, FALSE otherwise
 */
-BOOL applyRuleToCell(Matrix* m, int cellRow, int cellCol, BOOL* toOperate);
+BOOL applyRuleToCell(Matrix* m, int cellRow, int cellCol, BOOL* dRule);
 
 /* ----------------------------- arrayMatrix -----------------------------*/
 
