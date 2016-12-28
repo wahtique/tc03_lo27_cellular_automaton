@@ -827,14 +827,151 @@ Matrix* orColSequenceOnMatrix(Matrix* m)
 	return newMatrix(newMat);
 }
 
-/*Matrix* andRowSequenceOnMatrix(Matrix* m)
+Matrix* andRowSequenceOnMatrix(Matrix* m)
 {
-}
+	arrayMatrix* newMat = (arrayMatrix*)malloc(sizeof(arrayMatrix)); /* we initialize a new arrayMatrix */
+	if (isMatrixEmpty(m) != TRUE) /* If the matrix is Empty we do nothing*/
+	{
+	 	
+		if(m->rows != NULL && m->rows->nextRow != NULL) /* if there are at least 2 rowumns in our Matrix */
+		{
+			rowElement* frow = m->rows; /*we initialize a pointer to the first rowumm*/
+		 	rowElement* srow = m->rows->nextRow; /*we initialize a pointer to the second rowumm*/
+		 	cellElement* fcell = frow->row; /*we initialize a pointer to the first cell of the first rowumm*/
+		 	cellElement* scell = srow->row; /*we initialize a pointer to the first cell of the second rowumm*/
+		 	newMat->n = m->rowCount;
+		 	newMat->p = m->rowCount -1; 
+		 	while(srow != NULL) /* we iterate until the last rowumn*/
+		 	{
+		 		if (srow->rowN == frow->rowN + 1) /* if srow and frow are neighbours = if all our AND wont give us zeros*/
+		 		{
+		 			fcell = frow->row; /* we set fcell as the first cell of frow*/ 
+		 			scell =	srow->row; /* we set scell as the fist element of srow*/
 
+		 			while(scell != NULL && fcell != NULL) /* for each cell of the two rowumm we apply the boolean operation*/ 
+		 			{
+		 				if(fcell->rowIndex == scell->rowIndex) /* if AND gives us a TRUE*/
+		 				{
+		 					newMat->list = insertTailPoints(fcell->rowIndex, fcell->colIndex , newMat->list); /* we add this coordanate to the new matrix*/
+		 					fcell = fcell->nextRow; /* we increment both of them */
+		 					scell =	scell->nextRow;
+		 				}
+		 				else /* if theyre not equals then we have to increment the one which is most behind */
+		 				{
+		 					/* if fcell is the one most behind or if scell is already at the end of the rowumn */
+		 					if(fcell->rowIndex < scell->rowIndex)
+		 					{
+		 						fcell = fcell->nextRow; 
+		 					}
+		 					else
+		 					{
+		 						if(scell->rowIndex < fcell->rowIndex) /* not sure if this condition is necessary */
+		 						{
+		 							scell = scell->nextRow;
+		 						}
+		 					}
+		 				}
+		 			}/* if one of the cells is pointing to NULL then we know we are done with the rowumns anyway */
+		 			frow = srow; /* we increment the two rowumms */
+		 			srow = srow->nextRow; /* and now, if srow is NULL then we stop */
+		 		}
+		 	}	 
+		}
+		else /* if my Matrix isnt empty but theres only at most one rowumn containing TRUEs*/
+		{
+			newMat->n = m->rowCount;
+			newMat->p = m->rowCount;
+			newMat->list = NULL;
+		}
+	}
+	else /* if the matrix is empty */
+	{
+	 	newMat->n = 0;
+	 	newMat->p = 0;
+	 	newMat->list = NULL;
+	}
+	return newMatrix(newMat); 
+}
+/* à check*/
 Matrix* orRowSequenceOnMatrix(Matrix* m)
 {
-}*/
+	arrayMatrix* newMat = (arrayMatrix*)malloc(sizeof(arrayMatrix)); /* we initialize a array of the new matrix*/
+	if (isMatrixEmpty(m)!= TRUE) /* If the matrix is Empty we do nothing*/
+	{
+		if(m->rows != NULL && m->rows->nextRow != NULL) /* if there are at least 2 rowumns in our Matrix */
+		{
+			rowElement* frow = m->rows; /*we initialize a pointer to the first rowumm*/
+		 	rowElement* srow = m->rows->nextRow; /*we initialize a pointer to the second rowumm*/
+		 	cellElement* fcell = frow->row; /*we initialize a pointer to the first cell of the first rowumm*/
+		 	cellElement* scell = srow->row; /*we initialize a pointer to the first cell of the second rowumm*/
+		 	newMat->n = m->rowCount;
+		 	newMat->p = m->rowCount -1; 
+		 	while(srow != NULL) /* we iterate until the last rowumn*/
+		 	{
+		 		if (srow->rowN == frow->rowN + 1) /* we test if the rowumm n+1 exist*/
+	 			{
+	 				fcell = frow->row; /* we give the value of the first cell of the first rowumm*/ 
+	 				scell =	srow->row; /* we give the value of the first cell of the second rowumm*/ 
+	 				while(scell != NULL && fcell != NULL) /* for each cell of the two rowumm we apply the bolean operation*/ 
+	 				{
+	 					if (fcell->rowIndex == scell->rowIndex) /* we the if the condition is true*/
+	 					{
+	 						newMat->list = insertTailPoints(fcell->rowIndex, fcell->colIndex , newMat->list); /* we add this coordanate to the new matrix*/
+	 						fcell = fcell->nextRow; /* we incremante the two case*/
+	 						scell =	scell->nextRow;
+	 					}else{	
+	 						if(fcell->rowIndex < scell->rowIndex) /* if the the condition is not true we add and incremante the most little between the two rowumm*/
+	 						{
+	 							newMat->list = insertTailPoints(fcell->rowIndex, fcell->colIndex , newMat->list);
+	 							fcell = fcell->nextRow;
+	 						}else{
+								if(fcell->rowIndex > scell->rowIndex)
+	 							{
+	 								newMat->list = insertTailPoints(scell->rowIndex, scell->colIndex , newMat->list);
+	 								scell =	scell->nextRow;
+	 							}
+	 						}
+	 					}
+	 				}
+	 			while(fcell != NULL) /* in the case where the first rowumm is longer to the second we continue to incrementa all of thier case*/
+	 			{
+	 				newMat->list = insertTailPoints(fcell->rowIndex, fcell->colIndex , newMat->list);
+	 				fcell = fcell->nextRow;
+	 			}
+	 			while(scell != NULL) /* if the second is longer to the first*/
+	 			{
+	 				newMat->list = insertTailPoints(scell->rowIndex, scell->colIndex , newMat->list);
+	 				scell = scell->nextRow;
+	 			}
+	 		}else{
+	 				while(fcell != NULL ) /* if the second rowumm is not the next of the first wa add at the new matrix all the case of this rowumm*/
+	 				{
+	 					newMat->list = insertTailPoints(fcell->rowIndex, fcell->colIndex , newMat->list);
+	 					fcell = fcell->nextRow;
+	 				}
+	 			}
+	 		frow = srow; /* we incremante the two rowumm */
+	 		srow = srow->nextRow;	
+		 	}
+		}else{
+			if (m->rows != NULL)
+			{
+				cellElement* tmp = m->rows->row;
+				while( tmp != NULL)
+				{
+					newMat->list = insertTailPoints(tmp->rowIndex, tmp->colIndex , newMat->list);
+	 				tmp = tmp->nextRow;
+				}
+			}
+		}
+	}else{
+		newMat->n = 0;
+		newMat->p = 0;
+		newMat->list = NULL;
+	}
 
+	return newMatrix(newMat);
+}
 
 void freeMatrix(Matrix* m)
 {
