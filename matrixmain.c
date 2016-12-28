@@ -15,6 +15,7 @@ Creation date : 11/23/16
 
 int main()
 {
-	printf("Hello world !");
-	return 0;
+printf("hello world\n");
+
+return 0;
 }
