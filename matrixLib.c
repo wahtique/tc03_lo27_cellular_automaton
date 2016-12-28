@@ -211,10 +211,10 @@ Matrix* removeRow(Matrix* m, int index)
 				cellElement* cellRemove = m->cols->col;
 				if(rrow == m->rows) /* we test if the row at remove is the first row*/
 				{
-					while(tmpCol !=NULL) /* fro ech case of the first row:*/
+					while(tmpCol !=NULL) /* for each case of the first row:*/
 					{
 						cellRemove = tmpCol->col;
-						tmpCol->col = cellRemove->nextRow;
+						tmpCol->col = cellRemove->nextCol;
 						free(cellRemove); /* remove the good case*/
 						if (tmpCol->col == NULL) /* if we remove the last case of a columm we remove the empty columm.*/
 						{
@@ -236,10 +236,13 @@ Matrix* removeRow(Matrix* m, int index)
 							cellRemove= tmpEle->nextRow; /* we make a pointer to the good case*/
 							tmpEle->nextRow = tmpEle->nextRow ->nextRow; /* we recreate the link between the element of the structure*/
 							free(cellRemove); /* remove the good case*/
-							if (tmpCol->col == NULL) /* if we remove the last case of a columm we remove the empty columm.*/
+							tmpCol = tmpCol->nextCol;
+							if (tmpCol->prevCol->col == NULL) /* if we remove the last case of a columm we remove the empty columm.*/
 							{
-								removeCol(m, tmpCol->colN);
+								removeCol(m, tmpCol->prevCol->colN);
 							}
+						}else{
+							tmpCol = tmpCol->nextCol;
 						}
 					}
 				}
@@ -257,9 +260,6 @@ Matrix* removeRow(Matrix* m, int index)
 					rrow->prevRow->nextRow = rrow->prevRow;
 				}
 			}
-			rrow->prevRow =NULL; /* free the row*/
-			rrow->nextRow = NULL;
-			rrow->row = NULL;
 			free(rrow);
 		}
 	}
@@ -682,9 +682,16 @@ Matrix* orColSequenceOnMatrix(Matrix* m)
 	if (isMatrixEmpty(m)!= TRUE) /* If the matrix is Empty we do nothing*/
 	{
 	 	colElement* fcol = m->cols; /*we initialize a pointeur to the first columm*/
-	 	colElement* scol = m->cols->nextCol; /*we initialize a pointeur to the second columm*/
+	 	colElement* scol = m->cols;
 	 	cellElement* fcell = fcol->col; /*we initialize a pointeur to the first cell of the first columm*/
-	 	cellElement* scell = scol->col; /*we initialize a pointeur to the first cell of the second columm*/
+	 	cellElement* scell = scol->col; /*we initialize a pointeur to the first cell of the second columm but it's a wrong value */
+	 	if (fcol->nextCol != NULL)
+	 	{
+			scol = m->cols->nextCol; /*we initialize a pointeur to the second columm*/
+			scell = scol->col; /*we give the true value to the first cell of the second columm*/
+	 	}else{
+	 		scol = NULL;
+	 	}
 	 	newMat->n = m->rowCount;
 	 	newMat->p = m->colCount -1; 
 	 	while(scol != NULL) /* we test all of the columm*/
@@ -693,7 +700,7 @@ Matrix* orColSequenceOnMatrix(Matrix* m)
 	 		{
 	 			fcell = fcol->col; /* we give the value of the first cell of the first columm*/ 
 	 			scell =	scol->col; /* we give the value of the first cell of the second columm*/ 
-	 			while(scell != NULL || fcell != NULL) /* for each cell of the two columm we apply the bolean operation*/ 
+	 			while(scell != NULL && fcell != NULL) /* for each cell of the two columm we apply the bolean operation*/ 
 	 			{
 	 				if (fcell->rowIndex == scell->rowIndex) /* we the if the condition is true*/
 	 				{
