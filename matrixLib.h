@@ -253,4 +253,13 @@ A function to add a new cell with a value of 1 to a array representation
 */
 Points* insertTailPoints( int rowindex,  int colIndex, Points* list);
 
+/*
+Tells us if a list of Points contains the Points (x,y)
+@arg xval : x value we are looking for
+@arg yval : y value we are looking for
+@arg list : the list of Points in which we are looking
+@return : TRUE if it contains it, FALSE otherwise
+*/
+BOOL containsPoints(int xval, int yval, Points* list);
+
 #endif

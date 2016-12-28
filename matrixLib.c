@@ -1021,8 +1021,16 @@ BOOL xor(BOOL a, BOOL b)
 
 BOOL applyRuleToCell(Matrix* m, int cellRow, int cellCol, BOOL* dRule)
 {
-	BOOL result = FALSE; /* I initialise my result at FALSE. It shouldn't change the ooverall result*/
-	/* and now I will hard code every cases */
+	BOOL result = FALSE;
+
+	/* if I try to apply a rule to a cell outside the bound of the Matrix */
+	if(cellRow < 1 || cellCol < 1 || cellCol > m->colCount || cellRow > m->rowCount)
+	{
+		return result;
+	}
+
+	/* If my cell does exist, I will hard code every cases */
+	/* reminder : if the cell given to isCellTrue is outside th Matrix, it will return FALSE. */
 	if(dRule[0] == TRUE)
 	{
 		result = xor(result,isCellTrue(m,cellRow,cellCol));
@@ -1073,6 +1081,109 @@ BOOL applyRuleToCell(Matrix* m, int cellRow, int cellCol, BOOL* dRule)
 
 Matrix* applyRules(Matrix* m, int rule, int times)
 {
+	
+	if(isMatrixEmpty(m) == FALSE || rule < 2 || rule > 507) /* if it's empty we do nothing. if the rule doesnt exist we do nothing either. Rule 1 do nothing.*/
+	{
+		int i,k,l;
+		BOOL* dRule;
+		rowElement* currRow = NULL;
+		cellElement* currCell = NULL; /* the pointer we will use to travel in the Matrix */
+		Points* listTrues = NULL; /* our new list of points. Only a pointer for now */
+		arrayMatrix* newMat = NULL;
+		Matrix* tempMat = m;
+		for(i=1;i<=times;++i) /* we apply the rule times times */
+		{
+			switch(rule)
+			{	
+				/* we start with cases corresponding to elementary rules */
+				case 2 :
+					transRight(m);
+					break;
+				case 4 :
+					transRight(m);
+					transDown(m);
+					break;
+				case 8 :
+					transDown(m);
+					break;
+				case 16:
+					transLeft(m);
+					transDown(m);
+					break;
+				case 32 :
+					transLeft(m);
+					break;
+				case 64 :
+					transLeft(m);
+					break;
+				case 128 :
+					transUp(m);
+					break;
+				case 256 :
+					transUp(m);
+					transRight(m);
+					break;			
+				/* the default case means we are using a complex rule */
+				default :	
+					dRule = decomposeRule(rule); /* we decompose our complex rule */
+					currRow = m->rows; /* initiate a row pointer to the first row */
+					newMat = (arrayMatrix*)malloc(sizeof(arrayMatrix));
+					newMat->n = m->rowCount;
+					newMat->p = m->colCount;
+					tempMat = m; /* to be on the safe side of things */
+
+					while(currRow != NULL)
+					{
+						currCell = currRow->row; /* we begin our traversal of the row */
+						while(currCell != NULL)
+						{
+							/* we now apply the rule to each and everycell of the row */
+							/* if the rule return TRUE then we add the point to the list */
+							if(applyRuleToCell(m,currCell->rowIndex, currCell->colIndex,dRule))
+							{
+								listTrues = insertTailPoints(currCell->colIndex, currCell->rowIndex, listTrues);
+							}
+
+							/* now comes the tricky part : 
+							we know : a TRUE in a cell in the output iff there was at least one TRUE in the vicinity of this cell in the input.
+							Thus, we will check every 8 cells in the vicinity of our current cell.
+							If it's a TRUE, we wont test it since it will be done later with currCell.
+							If it's a FALSE, then we can test it. */
+
+							for(k=-1;k<2;++k) /* for the row before thru right after */
+							{
+								for(l=-1;l<2;++l) /* column -1 to column +1 */
+								{
+									if(isCellTrue(m,currCell->rowIndex + k,currCell->colIndex + l) == FALSE)
+									{
+										if(applyRuleToCell(m,currCell->rowIndex + k,currCell->colIndex + l, dRule))
+										{
+											/* if the rule check on this cell gives us TRUE we check if the list already contains this cell before adding it */
+											if(containsPoints(currCell->colIndex + l, currCell->rowIndex + k, listTrues) == FALSE)
+											{
+												/* if it doesnt contains it we add it */
+												listTrues = insertTailPoints(currCell->colIndex + l, currCell->rowIndex + k, listTrues);
+											}
+										}
+									}
+								}
+							}
+
+							/* now that we have tested this cell and its vicinity, we can now move to the next */
+							currCell = currCell->nextRow;
+						}
+						/* and once at the end of the row we go to the next */
+						currRow = currRow->nextRow;
+					}
+					/* now that we have a coplete list, we will complet our new arrayMatrix */
+					newMat->list = listTrues;
+					/* and to be homogenous with the behaviour of the reste of the function, we will update the input Matrix
+					by freeing it and creating a new one */
+					freeMatrix(tempMat);
+					m = newMatrix(newMat);
+			}/* end of the switch */
+		}/* end of the for on times */
+	}
 	return m;
 }
 /* ----------------------------- Points ----------------------------- */
@@ -1080,14 +1191,47 @@ Matrix* applyRules(Matrix* m, int rule, int times)
 Points* insertTailPoints(int x, int y, Points* newMat)
 {
 	Points* p = newMat;
+	/*  we create the new element we will insert at the end*/ 
 	Points* newElement = (Points*)malloc(sizeof(Points));
 	newElement->x = x;
 	newElement->y = y;
 	newElement->nextP = NULL;
+
+	if(p == NULL) /* if we are goint to insert the first element*/
+	{
+		return newElement;
+	}
+
 	while(p->nextP != NULL )
 	{
 		p=p->nextP;
 	}
+
 	p->nextP = newElement;
 	return newMat;
+}
+
+
+BOOL containsPoints(int xval, int yval, Points* list)
+{
+	if(list == NULL)
+	{
+		return FALSE;
+	}
+	else
+	{
+		Points* currP = list;
+		while(currP != NULL && (currP->x != xval || currP->y != yval))
+		{
+			currP = currP->nextP;
+		}
+		if(currP == NULL)
+		{
+			return FALSE;
+		}
+		else
+		{
+			return TRUE;
+		}
+	}
 }
