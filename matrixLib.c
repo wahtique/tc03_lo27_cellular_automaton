@@ -885,7 +885,7 @@ BOOL isCellTrue(Matrix* m, int cellRow, int cellCol)
 	}
 	if(cellRow > m->rowCount || cellRow > m->colCount) /* if the cell is outside the Matrix */
 	{
-		return FALSE;
+		return FALSE; /* it's ok since we consider that extreme cells ar connected with logic-0 states */
 	}
 	currCol = m->cols;
 	while(currCol != NULL && currCol->colN < cellCol)
@@ -920,6 +920,63 @@ BOOL* decomposeRule(int rule)
 	}
 
 	return decompose;
+}
+
+BOOL xor(BOOL a, BOOL b)
+{
+	return((a == TRUE && b == FALSE) || (a == FALSE && b == TRUE));
+}
+
+BOOL applyRuleToCell(Matrix* m, int cellRow, int cellCol, BOOL* dRule)
+{
+	BOOL result = FALSE; /* I initialise my result at FALSE. It shouldn't change the ooverall result*/
+	/* and now I will hard code every cases */
+	if(dRule[0] == TRUE)
+	{
+		result = xor(result,isCellTrue(m,cellRow,cellCol));
+	}
+
+	if(dRule[1] == TRUE)
+	{
+		result = xor(result,isCellTrue(m,cellRow,cellCol+1));
+	}
+	
+	if(dRule[2] == TRUE)
+	{
+		result = xor(result,isCellTrue(m,cellRow+1,cellCol+1));
+	}
+	
+	if(dRule[3] == TRUE)
+	{
+		result = xor(result,isCellTrue(m,cellRow+1,cellCol));
+	}
+	
+	if(dRule[4] == TRUE)
+	{
+		result = xor(result,isCellTrue(m,cellRow+1,cellCol-1));
+	}
+	
+	if(dRule[5] == TRUE)
+	{
+		result = xor(result,isCellTrue(m,cellRow,cellCol-1));
+	}
+	
+	if(dRule[6] == TRUE)
+	{
+		result = xor(result,isCellTrue(m,cellRow-1,cellCol-1));
+	}
+	
+	if(dRule[7] == TRUE)
+	{
+		result = xor(result,isCellTrue(m,cellRow-1,cellCol));
+	}
+	
+	if(dRule[8] == TRUE)
+	{
+		result = xor(result,isCellTrue(m,cellRow-1,cellCol+1));
+	}
+	
+	return result;
 }
 /* ----------------------------- Points ----------------------------- */
 
