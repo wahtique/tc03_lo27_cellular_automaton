@@ -197,11 +197,11 @@ Matrix* removeRow(Matrix* m, int index)
 	if (isMatrixEmpty(m)!= TRUE && index < m->rowCount) /* we test if the row can be remove */
 	{
 		rowElement* rrow = m->rows;
-		while(rrow->rowN <=index)
+		while(rrow->rowN <index)
 		{
 			rrow = rrow->nextRow;
 		}
-		if (rrow->nextRow->rowN == index) /* test if the row exist*/
+		if (rrow->rowN == index) /* test if the row exist*/
 		{
 			if(isRowEmpty(rrow) != TRUE) /* test if there are one case or more*/
 			{
@@ -212,7 +212,7 @@ Matrix* removeRow(Matrix* m, int index)
 				{
 					tmpEle = tmpCol->col;
 					cellRemove = tmpEle;
-					while(tmpEle != NULL || tmpEle->nextRow->rowIndex <= index )
+					while(tmpEle != NULL || tmpEle->nextRow->rowIndex < index )
 					{
 						tmpEle = tmpEle->nextRow; 
 					}
