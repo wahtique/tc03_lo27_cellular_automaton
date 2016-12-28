@@ -108,14 +108,14 @@ Matrix* removeCol(Matrix* m, int index)
 		colElement* rcol = m->cols;
 		while(rcol->colN <index)
 		{
-			rrcol = rcol->nextCol;
+			rcol = rcol->nextCol;
 		}
 		if (rcol->colN == index) /* test if the row exist*/
 		{
 			if(isColEmpty(rcol) != TRUE) /* test if there are one case or more*/
 			{
 				cellElement* tmpEle= m->rows->row;	
-				colElement* tmpRow = m->rows;
+				rowElement* tmpRow = m->rows;
 				cellElement* cellRemove = m->rows->row;
 				if(rcol == m->cols) /* we test if the row at remove is the first row*/
 				{
