@@ -81,6 +81,13 @@ Function creating a new Matrix from its arrayMatrix representation
 Matrix* newMatrix(arrayMatrix* m);
 
 /*
+Free a Matrix
+@arg m : a pointer toward the Matrix we wanna free
+@result : nothing
+*/
+void freeMatrix(Matrix* m);
+
+/*
 Function displaying a Matrix given as argument
 @arg m : pointer to the matrix de display
 @return : nothing

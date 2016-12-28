@@ -760,6 +760,23 @@ Matrix* orRowSequenceOnMatrix(Matrix* m)
 {
 }*/
 
+
+void freeMatrix(Matrix* m)
+{
+	if(m != NULL)
+	{
+		if(isMatrixEmpty(m) != TRUE)
+		{
+			int i;
+			for (i = 1; i <= m->rowCount; ++i)
+			{
+				removeRow(m, i);
+			}
+				
+		}
+		free(m);
+	}
+}
 /* ----------------------------- applyrule ----------------------------- */
 
 
@@ -977,6 +994,11 @@ BOOL applyRuleToCell(Matrix* m, int cellRow, int cellCol, BOOL* dRule)
 	}
 	
 	return result;
+}
+
+Matrix* applyRules(Matrix* m, int rule, int times)
+{
+	return m;
 }
 /* ----------------------------- Points ----------------------------- */
 
