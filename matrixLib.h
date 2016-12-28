@@ -15,7 +15,7 @@ Date : 09/12/16
 
 /*
 Function to test if a given Row is Empty
-@arg row : the row element of the matrix
+@arg row : the row element of the Matrix
 @return : a boolean true if the row is Empty.
 */
 
@@ -23,18 +23,17 @@ BOOL isRowEmpty(rowElement* row);
 
 /*
 Function to add a new row in a Matrix
-@arg m : the matrix who receive the new row
+@arg m : the matrix which receives the new row
 @arg index: the index of the new row
-@return : the mdodify matrix.
+@return : pointer to the mdodified matrix.
 */
-
 Matrix* insertRow(Matrix* m, int index);
 
 /*
 Function to remove a given row in a Matrix
-@arg m : the matrix who the row will be remove
+@arg m : the Matrix from which we will remove a row
 @arg index: the index of the row
-@return : the mdodify matrix.
+@return : a pointer to the mdodified matrix.
 */
 
 Matrix* removeRow( Matrix* m, int index);
@@ -51,24 +50,19 @@ BOOL isColEmpty(colElement* col);
 
 /*
 Function to remove a given columm in a Matrix
-@arg m : the matrix who the columm will be remove
+@arg m : the Matrix conatining the colElement to remove
 @arg index: the index of the columm
-@return : the mdodify matrix.
+@return : pointer to the mdodified Matrix.
 */
-
-
 Matrix* removeCol( Matrix* m, int index);
 
 /*
 Function to add a new columm in a Matrix
-@arg m : the matrix who receive the new columm
-@arg index: the index of the new columm
-@return : the mdodify matrix.
+@arg m : the mMatrix receiving the new column
+@arg index : the index of the new columm
+@return : pointer to the mdodifyied matrix.
 */
-
 Matrix* insertCol(Matrix* m, int index);
-
-
 
 
 /* ----------------------------- MATRIX ----------------------------- */
@@ -95,9 +89,9 @@ Function displaying a Matrix given as argument
 void printMatrix(Matrix* m);
 
 /*
-Function verifying if a matrix is empty, which means the Matrix is NULL or it has no rows and no columns
-Having sparse matrices, any Matrix with more than zero columns and zero rows isnt empty
-@arg m : pointer to the matrix we want to check
+Function verifying if a Matrix is empty, which means the Matrix is NULL or it has no rows and no columns
+Having sparses matrices, any Matrix with more than zero columns and zero rows isnt empty
+@arg m : pointer to the Matrix we want to check
 @return : a boolean, TRUE if it is and FALSE if not
 */
 BOOL isMatrixEmpty(Matrix* m);
@@ -108,7 +102,6 @@ Function sayin if a matrix is square
 @return : a boolean
 */
 BOOL isMatrixSquare(Matrix* m);
-
 
 /*
 Function saying if two matrices are equals
@@ -170,7 +163,7 @@ Apply the rule(s) specified to the Matrix specified.
 @arg M : a pointer toward the Matrix on which we want to operate
 @arg rule : the rule we want to apply, must be between 1 ( do nothing ) and 511 ( every rules )
 @arg times : the number of times we want to apply it
-@return : a pointer toward the new Matrix obtained
+@return : a pointer toward the updated Matrix
 */
 Matrix* applyRules(Matrix* m, int rule, int times);
 
