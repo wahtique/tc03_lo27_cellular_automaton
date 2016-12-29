@@ -1383,3 +1383,33 @@ BOOL containsPoints(int xval, int yval, Points* list)
 		}
 	}
 }
+
+arrayMatrix* arrayMatrixFrom2DArray(BOOL** array)
+{
+	int nval, pval, i, j;
+	arrayMatrix* newMat = NULL;
+	Points* newlist = NULL; /* my list of points */
+
+	pval = sizeof(array[0])/sizeof(BOOL); /* number of columns */
+	nval = sizeof(array)/sizeof(array[0]); /* number of rows */
+
+	newMat = (arrayMatrix*)malloc(sizeof(arrayMatrix));
+	newMat->n = nval;
+	newMat->p = pval;
+
+	/* we wil traverse the whole array */
+	for(i = 0;i < nval;++i)
+	{
+		for(j=0;j<pval;++j)
+		{
+			if(array[i][j] == TRUE)
+			{
+				newlist = insertTailPoints(i+1,j+1,newlist);
+			}
+		}
+	}
+
+	newMat->list = newlist;
+
+	return newMat;
+}
