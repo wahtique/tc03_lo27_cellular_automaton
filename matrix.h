@@ -42,7 +42,7 @@ typedef struct pls
 }Points;
 
 /*
-a list if points, defined as a pointer toward the first element
+Simply chained list of Points, defined as a pointer toward the first element
 */
 typedef Points* listPoints;
 
@@ -77,7 +77,7 @@ typedef struct colEl
 }colElement;
 
 /*
-Our array based matrix representation.
+Our array based matrix representation. Not a two-dimensional array.
 	list : a linked list ( pointer toward the first element ) of the coordinates of the ones in our matrix
 	n : number of rows in the matrix
 	p : number of columns in the matrix
