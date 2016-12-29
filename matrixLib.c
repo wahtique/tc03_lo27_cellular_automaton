@@ -1,6 +1,6 @@
 /*
 File containing all the functions manipulating a matrix
-Author : William & Yann
+Author : William Veal Phan (william.veal@utbm.fr) & Yann Le Chevanton (yann.le-chevanton@utbm.fr)
 Date : 09/12/16
 */
 

@@ -1,6 +1,6 @@
 /*
 File containing the C code for the project
-Author : William 
+Author : William Veal Phan (william.veal@utbm.fr) & Yann Le Chevanton (yann.le-chevanton@utbm.fr)
 Creation date : 11/23/16
 */
 
