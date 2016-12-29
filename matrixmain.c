@@ -23,8 +23,9 @@ int main()
 {
 /* definition of variables*/
 arrayMatrix* m = (arrayMatrix*)malloc(sizeof(arrayMatrix));
+arrayMatrix* id = (arrayMatrix*)malloc(sizeof(arrayMatrix));
 Matrix* matrix = (Matrix*)malloc(sizeof(Matrix));
-Matrix* andmatrix = (Matrix*)malloc(sizeof(Matrix));
+Matrix* identite = (Matrix*)malloc(sizeof(Matrix));
 
 /*initialisation of the matrix*/
 
@@ -32,23 +33,30 @@ m->n = 5;
 m->p = 5;
 m->list = insertTailPoints(1, 1 , m->list);
 m->list = insertTailPoints(2, 1 , m->list);
-m->list = insertTailPoints(2, 2 , m->list);
+m->list = insertTailPoints(3, 2 , m->list);
+m->list = insertTailPoints(4, 2 , m->list);
+m->list = insertTailPoints(4, 5 , m->list);
 m->list = insertTailPoints(5, 5 , m->list);
+
+id->n = 5;
+id->p = 5;
+id->list = insertTailPoints(1, 1 , id->list);
+id->list = insertTailPoints(2, 2 , id->list);
+id->list = insertTailPoints(3, 3 , id->list);
+id->list = insertTailPoints(4, 4 , id->list);
+id->list = insertTailPoints(5, 5 , id->list);
 printf("Matrix Initialised\n");
-printArrayMatrix(m);
-
 /* Tested functions : */
-
+identite = newMatrix(id);
 matrix = newMatrix(m);
 
-andmatrix = orRowSequenceOnMatrix(matrix);
 
 /* Result */
 
-printf("The cell 2,4 is %i",isCellTrue(matrix,2,4));
+
 printMatrix(matrix);
-printf("Test And col Sequence:\n");
-printMatrix(andmatrix);
+printMatrix(identite);
+printMatrix(sumMatrix(matrix,identite));
 return 0;
 }
 

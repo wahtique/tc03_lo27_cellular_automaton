@@ -428,7 +428,8 @@ Matrix* sumMatrix(Matrix* a, Matrix* b)
 {
 	if (isMatrixSameSize(a,b) != TRUE)
 	{
-		return NULL; /* error, we cant operate on the matrices */
+		printf("Error not same size\n");
+		return a; /* error, we cant operate on the matrices */
 	}
 	else
 	{
@@ -436,8 +437,6 @@ Matrix* sumMatrix(Matrix* a, Matrix* b)
 		cellElement* cella = a->rows->row;
 		rowElement* rowb = b->rows;
 		cellElement* cellb = b->rows->row;
-
-		Points* newMat = (Points*)malloc(sizeof(Points));
 		arrayMatrix* newel = (arrayMatrix*)malloc(sizeof(arrayMatrix));
 
 		newel->n = a->rowCount; /* Definition of the size of the new matrix*/
@@ -445,30 +444,43 @@ Matrix* sumMatrix(Matrix* a, Matrix* b)
 			
 		while(rowa!= NULL || rowb != NULL)
 		{
+			cella = rowa->row;
+			cellb = rowb->row;
 			if(rowa->rowN == rowb->rowN)
 			{
-				while(cella->nextCol != NULL && cellb->nextCol != NULL)
+				
+				while(cella != NULL && cellb != NULL)
 				{
-					if (cella->colIndex >= cellb->colIndex)
+					if (cella->colIndex >cellb->colIndex)
 					{
-						newMat=insertTailPoints(cellb->colIndex, cellb->rowIndex, newMat);
-						cellb = cellb->nextCol;
+						newel->list=insertTailPoints(cellb->colIndex, cellb->rowIndex, newel->list);
+						cellb = cellb->nextRow;
 					}
 					else
 					{
-						if (cella->colIndex >= cellb->colIndex)
+						if (cella->colIndex == cellb->colIndex)
 						{
-							newMat = insertTailPoints(cellb->colIndex, cellb->rowIndex, newMat);
-							cellb = cellb->nextCol;
-							cella = cella-> nextCol;
+							newel->list=insertTailPoints(cellb->colIndex, cellb->rowIndex, newel->list);
+							cellb = cellb->nextRow;
+							cella = cella-> nextRow;
 						} 
 						else
 						{
-							insertTailPoints(cella->colIndex, cella->rowIndex, newMat);
-							cella = cella->nextCol;
+							newel->list=insertTailPoints(cella->colIndex, cella->rowIndex, newel->list);
+							cella = cella->nextRow;
 						}
 					}
-				}	
+				}
+				while(cella != NULL)
+				{
+					newel->list=insertTailPoints(cella->colIndex, cella->rowIndex, newel->list);
+					cella = cella->nextRow;
+				}
+				while(cellb != NULL)
+				{
+					newel->list=insertTailPoints(cellb->colIndex, cellb->rowIndex, newel->list);
+					cellb = cellb->nextRow;
+				}
 				rowa = rowa->nextRow;
 				rowb = rowb->nextRow;
 			}
@@ -477,16 +489,25 @@ Matrix* sumMatrix(Matrix* a, Matrix* b)
 				if(rowa->rowN < rowb->rowN)
 				{
 					rowa = rowa->nextRow;
+					while(cella != NULL)
+					{
+						newel->list=insertTailPoints(cella->colIndex, cella->rowIndex, newel->list);
+						cella = cella->nextRow;
+					}
 				}
 				else
 				{
 					rowb = rowb->nextRow;
+					while(cellb != NULL)
+					{
+						newel->list=insertTailPoints(cellb->colIndex, cellb->rowIndex, newel->list);
+						cellb = cellb->nextRow;
+					}
 				}
 
 			}
 	
 		}
-		newel->list = newMat;
 	return newMatrix(newel);
 	}
 }
@@ -500,37 +521,45 @@ Matrix* mulMatrix(Matrix* A, Matrix* B)
 	cellElement* rowCell = A->rows->row;
 	cellElement* colCell = B->cols->col;
 
-	Points* newMat = (Points*)malloc(sizeof(Points));
 	arrayMatrix* newel = (arrayMatrix*)malloc(sizeof(arrayMatrix));
 	if(A->colCount == B->rowCount )
 	{
 		newel->n = A->rowCount; /* Definition of the size of the new Matrix*/
 		newel->p = B->colCount;
-		while(row!= NULL)
+		while(row!= NULL) /* for each row of the matrix A*/
 		{
-			while(col!= NULL)
+			while(col!= NULL) /* For each columm*/
 			{
-				while( rowCell!=NULL && colCell!=NULL && rowCell->colIndex == colCell->rowIndex ) /* For 1 row and 1 columm*/
+				rowCell = row->row;
+				colCell = col->col;
+				while( rowCell != NULL && colCell != NULL) /* For 1 row and 1 columm*/
 				{
 					if (rowCell->colIndex == colCell->rowIndex)
 					{
-						newMat = insertTailPoints(rowCell->colIndex,  colCell->rowIndex, newMat);
-					}
-					if (rowCell->rowIndex > colCell->colIndex)
-					{
+						newel->list = insertTailPoints(col->colN,  row->rowN, newel->list);
 						colCell = colCell-> nextCol;
-					} 
-					else 
-					{
 						rowCell = rowCell-> nextRow;
+
+					}else
+					{
+						if (rowCell->rowIndex > colCell->colIndex)
+						{
+							colCell = colCell-> nextCol;
+							printf("ici\n");
+						} 
+						else 
+						{
+							rowCell = rowCell-> nextRow;
+							printf("là\n");
+						}
 					}
 				}
 			col = col->nextCol;	
 			}
+			row = row->nextRow;
+			col = B->cols;
 		}
-		row = row->nextRow;
 	}
-	newel->list = newMat;
 	return newMatrix(newel);	
 }
 
@@ -697,13 +726,14 @@ Matrix* andColSequenceOnMatrix(Matrix* m)
 		 	newMat->p = m->colCount -1; 
 		 	while(scol != NULL) /* we iterate until the last column*/
 		 	{
+
 		 		if (scol->colN == fcol->colN + 1) /* if scol and fcol are neighbours = if all our AND wont give us zeros*/
 		 		{
 		 			fcell = fcol->col; /* we set fcell as the first cell of fcol*/ 
 		 			scell =	scol->col; /* we set scell as the fist element of scol*/
-
-		 			while(scell != NULL && fcell != NULL) /* for each cell of the two columm we apply the boolean operation*/ 
+		 			while(scell != NULL && fcell != NULL) /* for each cell of the two columms we apply the boolean operation*/ 
 		 			{
+		 				printf("[%i, %i] [%i, %i]\n",fcell->rowIndex, fcell->colIndex , scell->rowIndex , scell->colIndex );
 		 				if(fcell->rowIndex == scell->rowIndex) /* if AND gives us a TRUE*/
 		 				{
 		 					newMat->list = insertTailPoints(fcell->rowIndex, fcell->colIndex , newMat->list); /* we add this coordanate to the new matrix*/
@@ -727,7 +757,7 @@ Matrix* andColSequenceOnMatrix(Matrix* m)
 		 				}
 		 			}/* if one of the cells is pointing to NULL then we know we are done with the columns anyway */
 				}
-		 		fcol = scol; /* we increment the two columms */
+		 		fcol = fcol->nextCol; /* we increment the two columms */
 		 		scol = scol->nextCol; /* and now, if scol is NULL then we stop */	
 		 	}	 
 		}
@@ -842,14 +872,14 @@ Matrix* andRowSequenceOnMatrix(Matrix* m)
 	if (isMatrixEmpty(m) != TRUE) /* If the matrix is Empty we do nothing*/
 	{
 	 	
-		if(m->rows != NULL && m->rows->nextRow != NULL) /* if there are at least 2 rowumns in our Matrix */
+		if(m->rows != NULL && m->rows->nextRow != NULL) /* if there are at least 2 row in our Matrix */
 		{
-			rowElement* frow = m->rows; /*we initialize a pointer to the first rowumm*/
-		 	rowElement* srow = m->rows->nextRow; /*we initialize a pointer to the second rowumm*/
-		 	cellElement* fcell = frow->row; /*we initialize a pointer to the first cell of the first rowumm*/
-		 	cellElement* scell = srow->row; /*we initialize a pointer to the first cell of the second rowumm*/
-		 	newMat->n = m->rowCount;
-		 	newMat->p = m->rowCount -1; 
+			rowElement* frow = m->rows; /*we initialize a pointer to the first col*/
+		 	rowElement* srow = m->rows->nextRow; /*we initialize a pointer to the second col*/
+		 	cellElement* fcell = frow->row; /*we initialize a pointer to the first cell of the first col*/
+		 	cellElement* scell = srow->row; /*we initialize a pointer to the first cell of the second col*/
+		 	newMat->n = m->rowCount-1;
+		 	newMat->p = m->rowCount; 
 		 	while(srow != NULL) /* we iterate until the last rowumn*/
 		 	{
 		 		if (srow->rowN == frow->rowN + 1) /* if srow and frow are neighbours = if all our AND wont give us zeros*/
@@ -857,7 +887,7 @@ Matrix* andRowSequenceOnMatrix(Matrix* m)
 		 			fcell = frow->row; /* we set fcell as the first cell of frow*/ 
 		 			scell =	srow->row; /* we set scell as the fist element of srow*/
 
-		 			while(scell != NULL && fcell != NULL) /* for each cell of the two rowumm we apply the boolean operation*/ 
+		 			while(scell != NULL && fcell != NULL) /* for each cell of the two col we apply the boolean operation*/ 
 		 			{
 		 				if(fcell->rowIndex == scell->rowIndex) /* if AND gives us a TRUE*/
 		 				{
@@ -882,8 +912,8 @@ Matrix* andRowSequenceOnMatrix(Matrix* m)
 		 				}
 		 			}
 		 		}
-		 	/* if one of the cells is pointing to NULL then we know we are done with the rowumns anyway */
-		 		frow = srow; /* we increment the two rowumms */
+		 		/* if one of the cells is pointing to NULL then we know we are done with the rowumns anyway */
+		 		frow = srow; /* we increment the two cols */
 		 		srow = srow->nextRow; /* and now, if srow is NULL then we stop */
 		 	}	 
 		}
@@ -902,7 +932,8 @@ Matrix* andRowSequenceOnMatrix(Matrix* m)
 	}
 	return newMatrix(newMat); 
 }
-/* à check*/
+
+
 Matrix* orRowSequenceOnMatrix(Matrix* m)
 {
 	arrayMatrix* newMat = (arrayMatrix*)malloc(sizeof(arrayMatrix)); /* we initialize a array of the new matrix*/
@@ -910,19 +941,19 @@ Matrix* orRowSequenceOnMatrix(Matrix* m)
 	{
 		if(m->rows != NULL && m->rows->nextRow != NULL) /* if there are at least 2 rowumns in our Matrix */
 		{
-			rowElement* frow = m->rows; /*we initialize a pointer to the first rowumm*/
-		 	rowElement* srow = m->rows->nextRow; /*we initialize a pointer to the second rowumm*/
-		 	cellElement* fcell = frow->row; /*we initialize a pointer to the first cell of the first rowumm*/
-		 	cellElement* scell = srow->row; /*we initialize a pointer to the first cell of the second rowumm*/
-		 	newMat->n = m->rowCount;
-		 	newMat->p = m->rowCount -1; 
+			rowElement* frow = m->rows; /*we initialize a pointer to the first col*/
+		 	rowElement* srow = m->rows->nextRow; /*we initialize a pointer to the second col*/
+		 	cellElement* fcell = frow->row; /*we initialize a pointer to the first cell of the first col*/
+		 	cellElement* scell = srow->row; /*we initialize a pointer to the first cell of the second col*/
+		 	newMat->n = m->rowCount-1;
+		 	newMat->p = m->colCount; 
 		 	while(srow != NULL) /* we iterate until the last rowumn*/
 		 	{
-		 		if (srow->rowN == frow->rowN + 1) /* we test if the rowumm n+1 exist*/
+		 		if (srow->rowN == frow->rowN + 1) /* we test if the col n+1 exist*/
 	 			{
-	 				fcell = frow->row; /* we give the value of the first cell of the first rowumm*/ 
-	 				scell =	srow->row; /* we give the value of the first cell of the second rowumm*/ 
-	 				while(scell != NULL && fcell != NULL) /* for each cell of the two rowumm we apply the bolean operation*/ 
+	 				fcell = frow->row; /* we give the value of the first cell of the first col*/ 
+	 				scell =	srow->row; /* we give the value of the first cell of the second col*/ 
+	 				while(scell != NULL && fcell != NULL) /* for each cell of the two col we apply the bolean operation*/ 
 	 				{
 	 					if (fcell->rowIndex == scell->rowIndex) /* we the if the condition is true*/
 	 					{
@@ -930,7 +961,7 @@ Matrix* orRowSequenceOnMatrix(Matrix* m)
 	 						fcell = fcell->nextRow; /* we incremante the two case*/
 	 						scell =	scell->nextRow;
 	 					}else{	
-	 						if(fcell->rowIndex < scell->rowIndex) /* if the the condition is not true we add and incremante the most little between the two rowumm*/
+	 						if(fcell->rowIndex < scell->rowIndex) /* if the the condition is not true we add and incremante the most little between the two col*/
 	 						{
 	 							newMat->list = insertTailPoints(fcell->rowIndex, fcell->colIndex , newMat->list);
 	 							fcell = fcell->nextRow;
@@ -943,7 +974,7 @@ Matrix* orRowSequenceOnMatrix(Matrix* m)
 	 						}
 	 					}
 	 				}
-	 			while(fcell != NULL) /* in the case where the first rowumm is longer to the second we continue to incrementa all of thier case*/
+	 			while(fcell != NULL) /* in the case where the first col is longer to the second we continue to incrementa all of thier case*/
 	 			{
 	 				newMat->list = insertTailPoints(fcell->rowIndex, fcell->colIndex , newMat->list);
 	 				fcell = fcell->nextRow;
@@ -954,13 +985,13 @@ Matrix* orRowSequenceOnMatrix(Matrix* m)
 	 				scell = scell->nextRow;
 	 			}
 	 		}else{
-	 				while(fcell != NULL ) /* if the second rowumm is not the next of the first wa add at the new matrix all the case of this rowumm*/
+	 				while(fcell != NULL ) /* if the second col is not the next of the first wa add at the new matrix all the case of this col*/
 	 				{
 	 					newMat->list = insertTailPoints(fcell->rowIndex, fcell->colIndex , newMat->list);
 	 					fcell = fcell->nextRow;
 	 				}
 	 			}
-	 		frow = srow; /* we incremante the two rowumm */
+	 		frow = srow; /* we incremante the two col */
 	 		srow = srow->nextRow;	
 		 	}
 		}else{
