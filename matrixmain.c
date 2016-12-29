@@ -14,6 +14,7 @@ Creation date : 11/23/16
 /* PROTOTYPES OF FUNCTIONS PERTAINING TO GRAPHICAL INTERFACE */
 
 void printMatrix(Matrix* matrix);
+void printArray(arrayMatrix* m);
 
 int main()
 {
@@ -29,7 +30,9 @@ m->p = 5;
 m->list = insertTailPoints(2, 1 , m->list);
 m->list = insertTailPoints(3, 1 , m->list);
 m->list = insertTailPoints(4, 2 , m->list);
-m->list = insertTailPoints(5, 5 , m->list);
+m->list = insertTailPoints(5, 4 , m->list);
+printf("Matrix Initialiser\n");
+printArray(m);
 
 /*Fonction tested:*/
 
@@ -44,23 +47,57 @@ void printMatrix(Matrix* matrix)
 {
 	int i;
 	int j;
-	rowElement* tmprow = matrix->rows;
-	cellElement* tmpcell = matrix->rows->row;	
-	printf("Matrix: \n");
-	for (i = 0; i < matrix->rowCount; ++i)
+	if (isMatrixEmpty(matrix) != TRUE)
 	{
-		for (j = 0; j < matrix->colCount; ++i)
+		rowElement* tmprow = matrix->rows;
+		cellElement* tmpcell = matrix->rows->row;	
+		printf("Matrix [%i, %i]: \n", matrix->rowCount , matrix->colCount);
+		for (i = 0; i < matrix->rowCount; ++i)
 		{
-			if(i==tmpcell->colIndex)
+			printf(" |");
+			if (i == tmprow->rowN)
 			{
-				printf("X");
-				tmpcell = tmpcell->nextRow;
+				for (j = 0; j < matrix->colCount; ++j)
+				{
+					if(j==tmpcell->colIndex)
+					{
+						printf("X");
+						if(tmpcell->nextRow != NULL)
+						{
+							tmpcell = tmpcell->nextRow;
+						}
+					}else{
+						printf("_");
+					}
+				}
 			}else{
-				printf("_");
+				for (j = 0; j < matrix->colCount; ++j)
+				{
+					printf("_");
+				}
+			}
+			printf("|\n");
+			if (tmprow->nextRow != NULL)
+			{
+				tmprow = tmprow->nextRow;
 			}
 		}
-		printf("|\n");
-		tmprow = tmprow->nextRow;
+	}else{
+		printf("Matrix Vide\n");
 	}
 printf("Fin Matrix\n");
+}
+
+void printArray(arrayMatrix* m)
+{
+	if(m->list !=NULL)
+	{
+		Points* plist = m->list; 
+		printf("Size matrix = [%i, %i] \n", m->n, m->p);
+		while(plist!=NULL)
+		{
+			printf("[%i,%i]\n",m->n,m->p);
+			plist =plist->nextP;
+		}
+	}
 }
