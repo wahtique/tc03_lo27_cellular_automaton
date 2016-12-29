@@ -4,17 +4,20 @@ Author : William
 Creation date : 11/23/16
 */
 
-/* INCLUDES */
+/* ------------------ INCLUDES ------------------ */
 
 #include <matrixLib.h>
 #include <stdio.h>
 #include <stdlib.h>
 
 
-/* PROTOTYPES OF FUNCTIONS PERTAINING TO GRAPHICAL INTERFACE */
+/* ------------------ PROTOTYPES ------------------  */
 
 void printMatrix(Matrix* matrix);
-void printArray(arrayMatrix* m);
+void printArrayMatrix(arrayMatrix* m);
+
+/* ------------------ MAIN ------------------ */
+
 
 int main()
 {
@@ -31,17 +34,23 @@ m->list = insertTailPoints(2, 1 , m->list);
 m->list = insertTailPoints(3, 1 , m->list);
 m->list = insertTailPoints(4, 2 , m->list);
 m->list = insertTailPoints(5, 4 , m->list);
-printf("Matrix Initialiser\n");
-printArray(m);
+printf("Matrix Initialised\n");
+printArrayMatrix(m);
 
-/*Fonction tested:*/
+/* Tested functions : */
 
 matrix = newMatrix(m);
 
-/*Result*/
+/* Result */
+
+printf("The cell 2,4 is %i",isCellTrue(matrix,2,4));
 printMatrix(matrix);
 return 0;
 }
+
+
+/* ------------------ INTERFACE FUNCTIONS ------------------ */
+
 
 void printMatrix(Matrix* matrix)
 {
@@ -51,53 +60,58 @@ void printMatrix(Matrix* matrix)
 	{
 		rowElement* tmprow = matrix->rows;
 		cellElement* tmpcell = matrix->rows->row;	
-		printf("Matrix [%i, %i]: \n", matrix->rowCount , matrix->colCount);
-		for (i = 0; i < matrix->rowCount; ++i)
+		printf("\nPrinting a Matrix of %i rows and %i columns : \n", matrix->rowCount , matrix->colCount);
+		for (i = 1; i <= matrix->rowCount; ++i)
 		{
 			printf(" |");
-			if (i == tmprow->rowN)
+			if (tmprow != NULL && i == tmprow->rowN)/* if the row we want to print isnt empty */
 			{
-				for (j = 0; j < matrix->colCount; ++j)
+				tmpcell = tmprow->row;
+				for (j = 1; j <=  matrix->colCount; ++j)
 				{
-					if(j==tmpcell->colIndex)
+					if(tmpcell != NULL && j==tmpcell->colIndex)
 					{
 						printf("X");
-						if(tmpcell->nextRow != NULL)
-						{
-							tmpcell = tmpcell->nextRow;
-						}
-					}else{
-						printf("_");
+						tmpcell = tmpcell->nextRow;
+					}
+					else
+					{
+						printf(".");
 					}
 				}
-			}else{
-				for (j = 0; j < matrix->colCount; ++j)
+				tmprow = tmprow->nextRow; /* if we printed this row then we can move the pointer to the next nonempty row */
+			}
+			else
+			{
+				for (j =1; j <= matrix->colCount; ++j)
 				{
-					printf("_");
+					printf(".");
 				}
 			}
 			printf("|\n");
-			if (tmprow->nextRow != NULL)
-			{
-				tmprow = tmprow->nextRow;
-			}
 		}
-	}else{
-		printf("Matrix Vide\n");
 	}
-printf("Fin Matrix\n");
+	else
+	{
+		printf("Error : Empty Matrix\n");
+	}
+printf("\n");
 }
 
-void printArray(arrayMatrix* m)
+void printArrayMatrix(arrayMatrix* m)
 {
 	if(m->list !=NULL)
 	{
 		Points* plist = m->list; 
-		printf("Size matrix = [%i, %i] \n", m->n, m->p);
+		printf("\nPrinting an arrayMatrix of %i rows and %i columns :  \n", m->n, m->p);
 		while(plist!=NULL)
 		{
-			printf("[%i,%i]\n",m->n,m->p);
+			printf("[%i,%i]\n",plist->y,plist->x);
 			plist =plist->nextP;
 		}
+	}
+	else
+	{
+		printf("Error : empty arrayMatrix");
 	}
 }
