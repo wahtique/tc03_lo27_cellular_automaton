@@ -33,8 +33,8 @@ m->n = 5;
 m->p = 5;
 m->list = insertTailPoints(1, 1 , m->list);
 m->list = insertTailPoints(2, 1 , m->list);
-m->list = insertTailPoints(3, 2 , m->list);
 m->list = insertTailPoints(4, 2 , m->list);
+m->list = insertTailPoints(3, 2 , m->list);
 m->list = insertTailPoints(4, 5 , m->list);
 m->list = insertTailPoints(5, 5 , m->list);
 

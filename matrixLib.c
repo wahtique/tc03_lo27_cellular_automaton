@@ -580,12 +580,12 @@ Matrix* newMatrix(arrayMatrix* m)
 
 	/* I insert the cell elements defined by ths listPoints in m */
 
-	if (pt == NULL) /* which means y list is empty. No one in the list. No ones in the Matrix*/
+	if (pt == NULL) /* which means my list is empty. No one in the list. No ones in the Matrix*/
 	{
 		return newMat; /* no ones in this Matrix, then I return an empty Matrix. */
 	}
 
-	while(pt != NULL) /* I will then advance in the list */
+	while(pt != NULL) /* If I have at least one element in m->list, I will start the traversal of the list */
 	{
 		/* my currCol and CurrRow initialized at the begining of the lists */
 		currCol = newMat->cols;
@@ -664,7 +664,7 @@ Matrix* newMatrix(arrayMatrix* m)
 				currRow=currRow->nextRow;
 			}
 		}
-		/* now currRow is pointing toward my the right row, and newCell is pointing toward the cellElement I want to insert in this row */
+		/* now currRow is pointing toward the right row, and newCell is pointing toward the cellElement I want to insert in this row */
 		currCell = currRow->row;
 		if(currCell == NULL) /* if the row is empty */
 		{
@@ -673,7 +673,7 @@ Matrix* newMatrix(arrayMatrix* m)
 		}
 		else/* if the row isnt empty, I will have currCell pointing toward the cell right before the newCell  */
 		{
-			if(currCell->rowIndex > newCell->colIndex) /* this means my newCell is the new first element on the row*/
+			if(currCell->colIndex > newCell->colIndex) /* this means my newCell is the new first element on the row*/
 			{
 				newCell->nextRow = currCell;
 				currRow->row = newCell;
