@@ -12,7 +12,7 @@ LIBSOURCEOFILE = $(LIBSOURCE:=.o)
 
 #Application-related macros
 TARGET = matrixmain.exe
-EXESOURCE = matrixmain
+EXESOURCE = matrixmain matrixLib
 EXESOURCECFILE = $(EXESOURCE:=.c)
 EXESOURCEOFILE = $(EXESOURCE:=.o)
 
