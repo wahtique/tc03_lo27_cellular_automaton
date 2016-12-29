@@ -103,14 +103,14 @@ Matrix* removeCol(Matrix* m, int index)
 		{
 			rcol = rcol->nextCol;
 		}
-		if (rcol->colN == index) /* test if the row exist*/
+		if (rcol->colN == index) /* test if the col exist*/
 		{
 			if(isColumnEmpty(rcol) != TRUE) /* test if there is at least one cell*/
 			{
 				cellElement* tmpEle= m->rows->row;	
 				rowElement* tmpRow = m->rows;
 				cellElement* cellRemove = m->rows->row;
-				if(rcol == m->cols) /* we test if the row to remove is the first row*/
+				if(rcol == m->cols) /* we test if the col to remove is the first col*/
 				{
 					while(tmpRow !=NULL) /* for each cell of the first row */
 					{
@@ -726,9 +726,9 @@ Matrix* andColSequenceOnMatrix(Matrix* m)
 		 					}
 		 				}
 		 			}/* if one of the cells is pointing to NULL then we know we are done with the columns anyway */
-		 			fcol = scol; /* we increment the two columms */
-		 			scol = scol->nextCol; /* and now, if scol is NULL then we stop */
-		 		}
+				}
+		 		fcol = scol; /* we increment the two columms */
+		 		scol = scol->nextCol; /* and now, if scol is NULL then we stop */	
 		 	}	 
 		}
 		else /* if my Matrix isnt empty but theres only at most one column containing TRUEs*/
@@ -880,10 +880,11 @@ Matrix* andRowSequenceOnMatrix(Matrix* m)
 		 						}
 		 					}
 		 				}
-		 			}/* if one of the cells is pointing to NULL then we know we are done with the rowumns anyway */
-		 			frow = srow; /* we increment the two rowumms */
-		 			srow = srow->nextRow; /* and now, if srow is NULL then we stop */
+		 			}
 		 		}
+		 	/* if one of the cells is pointing to NULL then we know we are done with the rowumns anyway */
+		 		frow = srow; /* we increment the two rowumms */
+		 		srow = srow->nextRow; /* and now, if srow is NULL then we stop */
 		 	}	 
 		}
 		else /* if my Matrix isnt empty but theres only at most one rowumn containing TRUEs*/

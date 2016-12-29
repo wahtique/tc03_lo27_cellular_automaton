@@ -24,16 +24,16 @@ int main()
 /* definition of variables*/
 arrayMatrix* m = (arrayMatrix*)malloc(sizeof(arrayMatrix));
 Matrix* matrix = (Matrix*)malloc(sizeof(Matrix));
-
+Matrix* andmatrix = (Matrix*)malloc(sizeof(Matrix));
 
 /*initialisation of the matrix*/
 
 m->n = 5;
 m->p = 5;
+m->list = insertTailPoints(1, 1 , m->list);
 m->list = insertTailPoints(2, 1 , m->list);
-m->list = insertTailPoints(3, 1 , m->list);
-m->list = insertTailPoints(4, 2 , m->list);
-m->list = insertTailPoints(5, 4 , m->list);
+m->list = insertTailPoints(2, 2 , m->list);
+m->list = insertTailPoints(5, 5 , m->list);
 printf("Matrix Initialised\n");
 printArrayMatrix(m);
 
@@ -41,10 +41,14 @@ printArrayMatrix(m);
 
 matrix = newMatrix(m);
 
+andmatrix = orRowSequenceOnMatrix(matrix);
+
 /* Result */
 
 printf("The cell 2,4 is %i",isCellTrue(matrix,2,4));
 printMatrix(matrix);
+printf("Test And col Sequence:\n");
+printMatrix(andmatrix);
 return 0;
 }
 
