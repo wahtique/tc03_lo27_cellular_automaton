@@ -1,8 +1,8 @@
 #my general makefile template
 CXX = gcc
 CFLAGS = -Wall -Werror -ansi -pedantic
-LIBSDIR = -L. -L/usr/lib
-INCLUDEDIR = -I. -I/usr/include
+LIBSDIR = -L. -L/usr/lib 
+INCLUDEDIR = -I. -I/usr/include 
 
 #Library-related macros
 LIBTARGET = libMatrix.so
