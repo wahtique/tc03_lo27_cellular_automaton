@@ -1,0 +1,102 @@
+// Matrix* removeRow(Matrix* m, int index)
+// {
+// 	if (isMatrixEmpty(m) != TRUE && index <= m->rowCount) /* we test if the row is part of the Matrix */
+// 	{
+// 		rowElement* rrow = m->rows;
+// 		while(rrow != NULL && rrow->rowN < index)
+// 		{
+// 			rrow = rrow->nextRow;
+// 		}
+// 		if(rrow != NULL && rrow->rowN == index) /* test if the row exist */
+// 		{
+// 			printf("removeRow : found the row %i \n", rrow->rowN);
+// 			if(isRowEmpty(rrow) != TRUE) /* test if there's at least one cell*/
+// 			{
+// 				cellElement* tmpEle= m->cols->col;	
+// 				colElement* tmpCol = m->cols;
+// 				cellElement* cellRemove = m->cols->col;
+// 				printf("not empty\n");
+// 				if(rrow == m->rows) /* we test if the row to remove is the first in the Matrix */
+// 				{
+// 					while(tmpCol !=NULL) /* for each cell of the first row */
+// 					{
+// 						if(tmpCol->col->rowIndex == index)
+// 						{
+// 							cellRemove = tmpCol->col;
+// 							tmpCol->col = cellRemove->nextCol;
+// 							printf("freeing the cell %i %i \n", cellRemove->rowIndex, cellRemove->colIndex);
+// 							free(cellRemove);
+// 							if (isColEmpty(tmpCol)) /* if we remove the last cell of a columm we remove the empty columm.*/
+// 							{
+// 								if(tmpCol->nextCol == NULL)
+// 								{
+// 									m = removeCol(m, tmpCol->colN);
+// 								}
+// 								else
+// 								{
+// 									tmpCol = tmpCol->nextCol;
+// 									m = removeCol(m, tmpCol->prevCol->colN);
+// 								}
+// 							}
+// 						}
+// 						else
+// 						{
+// 							tmpCol = tmpCol->nextCol;
+// 						}
+
+// 					}
+// 				}
+// 				else
+// 				{
+// 					while(tmpCol != NULL) /* we free each cell of the row without breaking the structure*/
+// 					{
+// 						tmpEle = tmpCol->col;
+// 						cellRemove = tmpEle;
+// 						while(tmpEle->nextCol != NULL && tmpEle->nextCol->rowIndex < index ) /* we stop right before the cell to remove*/
+// 						{
+// 							tmpEle = tmpEle->nextCol; 
+// 						}
+// 						if (tmpEle->nextCol->colIndex == index)
+// 						{
+// 							cellRemove = tmpEle->nextCol; /* pointer toward the element to remove*/
+// 							tmpEle->nextRow = cellRemove->nextRow; /* maintain the links */
+// 							free(cellRemove);
+// 						}
+// 						tmpCol = tmpCol->nextCol;
+// 						if (isColEmpty(tmpCol->prevCol)) /* if we remove the last cell of a columm we remove the empty columm.*/
+// 						{
+// 							if(tmpCol->nextCol == NULL)
+// 							{
+// 								m = removeCol(m, tmpCol->colN);
+// 							}
+// 							else
+// 							{
+// 								tmpCol = tmpCol->nextCol;
+// 								m = removeCol(m, tmpCol->prevCol->colN);
+// 							}
+// 						}
+// 					}
+// 				}
+// 			}
+// 			if (rrow->prevRow == NULL)
+// 			{
+// 				rrow->nextRow->prevRow = NULL;
+// 				m->rows = rrow->nextRow;
+// 			}
+// 			else
+// 			{
+// 				if (rrow->nextRow == NULL)
+// 				{
+// 					rrow->prevRow->nextRow = NULL;
+// 				}
+// 				else
+// 				{
+// 					rrow->nextRow->prevRow = rrow->prevRow;
+// 					rrow->prevRow->nextRow = rrow->nextRow;
+// 				}
+// 			}
+// 			free(rrow);
+// 		}
+// 	}
+// 	return m;
+// }

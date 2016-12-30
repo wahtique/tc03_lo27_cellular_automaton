@@ -26,6 +26,7 @@ arrayMatrix* m = (arrayMatrix*)malloc(sizeof(arrayMatrix));
 arrayMatrix* id = (arrayMatrix*)malloc(sizeof(arrayMatrix));
 Matrix* matrix;
 Matrix* identite;
+Matrix* summ;
 
 /*initialisation of the matrix*/
 
@@ -33,8 +34,8 @@ m->n = 5;
 m->p = 5;
 m->list = insertTailPoints(1, 1 , m->list);
 m->list = insertTailPoints(2, 1 , m->list);
-m->list = insertTailPoints(4, 2 , m->list);
 m->list = insertTailPoints(3, 4 , m->list);
+m->list = insertTailPoints(4, 2 , m->list);
 m->list = insertTailPoints(4, 5 , m->list);
 m->list = insertTailPoints(5, 5 , m->list);
 
@@ -46,18 +47,30 @@ id->list = insertTailPoints(3, 1 , id->list);
 id->list = insertTailPoints(4, 1 , id->list);
 id->list = insertTailPoints(5, 1 , id->list);
 printf("Matrix Initialised\n");
+
 /* Tested functions : */
 identite = newMatrix(id);
+printf("identite built\n");
 matrix = newMatrix(m);
-
+printf("matrix built\n");
+summ = sumMatrix(matrix,identite);
+printf("sum done\n");
 
 /* Result */
 
-
 printMatrix(matrix);
 printMatrix(identite);
-printMatrix(sumMatrix(matrix,identite));
-free(matrix);
+printMatrix(summ);
+
+/* Clean up */
+
+freeMatrix(matrix);
+printf("matrix freed \n");
+freeMatrix(identite);
+printf("identite freed \n");
+freeMatrix(summ);
+printf("summ freed");
+
 return 0;
 }
 
@@ -72,12 +85,12 @@ void printMatrix(Matrix* matrix)
 	if (isMatrixEmpty(matrix) != TRUE)
 	{
 		rowElement* tmprow = matrix->rows;
-		cellElement* tmpcell = matrix->rows->row;	
+		cellElement* tmpcell = NULL;	
 		printf("\nPrinting a Matrix of %i rows and %i columns : \n", matrix->rowCount , matrix->colCount);
-		for (i = 1; i <= matrix->rowCount; ++i)
+		for(i = 1; i <= matrix->rowCount; ++i)
 		{
 			printf(" |");
-			if (tmprow != NULL && i == tmprow->rowN)/* if the row we want to print isnt empty */
+			if(tmprow != NULL && i == tmprow->rowN)/* if the row we want to print isnt empty */
 			{
 				tmpcell = tmprow->row;
 				for (j = 1; j <=  matrix->colCount; ++j)
