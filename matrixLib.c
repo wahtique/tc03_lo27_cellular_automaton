@@ -61,7 +61,7 @@ Matrix* insertCol(Matrix* m, int index)
 		}
 		else /* which means newel will not be the new first */
 		{
-			while(tmp->nextCol != NULL && index > tmp->colN) /* while we are not at the end and we are sure we are still not after where the new element should be*/
+			while(tmp->nextCol != NULL && index > tmp->nextCol->colN) /* while we are not at the end and we are sure we are still not after where the new element should be*/
 			{
 				tmp=tmp->nextCol; /* we advance to the next */
 			}
@@ -226,7 +226,7 @@ Matrix* insertRow(Matrix* m, int index)
 		else /* which means newel will not be the new first */
 		{
 
-			while(tmp->nextRow != NULL && index > tmp->rowN) /* while we are not at the end and we are sure we are still not after where the new element should be*/
+			while(tmp->nextRow != NULL && index > tmp->nextRow->rowN) /* while we are not at the end and we are sure we are still not after where the new element should be*/
 			{
 				tmp=tmp->nextRow; /* we advance to the next */
 			}
