@@ -56,7 +56,7 @@ matrix = newMatrix(m);
 
 printMatrix(matrix);
 printMatrix(identite);
-printMatrix(sumMatrix(matrix,identite));
+printMatrix(removeCol(sumMatrix(matrix,identite), 2));
 free(matrix);
 return 0;
 }

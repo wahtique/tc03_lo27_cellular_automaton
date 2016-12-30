@@ -96,6 +96,7 @@ Matrix* insertCol(Matrix* m, int index)
 
 Matrix* removeCol(Matrix* m, int index)
 {
+
 	if (isMatrixEmpty(m)!= TRUE && index < m->colCount) /* we test if the col can be removed */
 	{
 		colElement* rcol = m->cols;
@@ -112,6 +113,7 @@ Matrix* removeCol(Matrix* m, int index)
 				cellElement* cellRemove = m->rows->row;
 				if(rcol == m->cols) /* we test if the col to remove is the first col*/
 				{
+
 					while(tmpRow !=NULL) /* for each cell of the first row */
 					{
 						cellRemove = tmpRow->row;
@@ -130,11 +132,11 @@ Matrix* removeCol(Matrix* m, int index)
 					{
 						tmpEle = tmpRow->row;
 						cellRemove = tmpEle;
-						while(tmpEle->nextCol != NULL || tmpEle->nextCol->colIndex < index ) /* we stop right before the cell to remove*/
+						while(tmpEle != NULL && tmpEle->colIndex < index ) /* we stop right before the cell to remove*/
 						{
 							tmpEle = tmpEle->nextCol; 
 						}
-						if (tmpEle->nextCol->colIndex == index)
+						if (tmpEle != NULL && tmpEle->nextCol->colIndex == index)
 						{
 							cellRemove= tmpEle->nextCol; /* we point toward the right cell*/
 							tmpEle->nextCol = tmpEle->nextCol->nextCol; /* we maintain the link between the cells */
@@ -172,6 +174,7 @@ Matrix* removeCol(Matrix* m, int index)
 			free(rcol);
 		}
 	}
+	printf("bug pas\n");
 	return m;
 }
 
