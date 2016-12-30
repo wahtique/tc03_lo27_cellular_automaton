@@ -63,29 +63,29 @@ printf("Les cols sont %i, %i, %i ", matrix->cols->colN, matrix->cols->nextCol->c
 printMatrix(identite);
 printMatrix(summ);
 
-removeRow(summ, 1);
-printMatrix(summ);
+/*removeRow(matrix, 1);
+printMatrix(matrix);
 
-removeRow(summ, 2);
-printMatrix(summ);
+removeRow(matrix, 2);
+printMatrix(matrix);
 
-removeRow(summ, 3);
-printMatrix(summ);
+removeRow(matrix, 3);
+printMatrix(matrix);
 
-removeRow(summ, 4);
-printMatrix(summ);
+removeRow(matrix, 4);
+printMatrix(matrix);
 
 
-removeRow(summ, 5);
-printMatrix(summ);
+removeRow(matrix, 5);
+printMatrix(matrix);*/
 
 /* Clean up */
 
-freeMatrix(matrix);
+freeMatrix(summ);
 printf("matrix freed \n");
 freeMatrix(identite);
 printf("identite freed \n");
-freeMatrix(summ);
+freeMatrix(matrix);
 printf("summ freed");
 return 0;
 }

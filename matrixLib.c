@@ -300,12 +300,13 @@ Matrix* removeRow(Matrix* m, int index)
 			}
 			printf("row links updated \n");
 			printf("currCol initialised at the col %i, with col = %i ii %i  z\n", currCol->colN, currCol->col->rowIndex, currCol->col->colIndex);
-			while( TRUE)
+			while( currCol != NULL)
 			{
 				printf("the while is ok \n");
 				printf("updating the col %i \n", currCol->colN);
 				if(currCol->col->rowIndex == index && currCol->col->nextCol == NULL)
 				{
+					printf("Premiere case à free test: %i\n",currCol->col->rowIndex );
 					/* which means the only element is in the row to remove */
 					if(currCol == m->cols) /* if it's the first col*/
 					{
@@ -333,6 +334,7 @@ Matrix* removeRow(Matrix* m, int index)
 					currCell = currCol->col;
 					while(currCell->nextCol != NULL && currCell->nextCol->rowIndex < index)
 					{
+						printf("Incremante currCell\n");
 						currCell = currCell->nextCol;
 					}
 					printf("\n index = %i\n", index );
