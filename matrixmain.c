@@ -33,11 +33,12 @@ Matrix* summ;
 m->n = 5;
 m->p = 5;
 m->list = insertTailPoints(1, 1 , m->list);
+m->list = insertTailPoints(1, 4 , m->list);
 m->list = insertTailPoints(2, 1 , m->list);
 m->list = insertTailPoints(3, 4 , m->list);
 m->list = insertTailPoints(4, 2 , m->list);
-m->list = insertTailPoints(4, 5 , m->list);
-m->list = insertTailPoints(5, 5 , m->list);
+m->list = insertTailPoints(4, 2 , m->list);
+m->list = insertTailPoints(5, 2 , m->list);
 
 id->n = 5;
 id->p = 5;
@@ -63,15 +64,15 @@ printf("Les cols sont %i, %i, %i ", matrix->cols->colN, matrix->cols->nextCol->c
 printMatrix(identite);
 printMatrix(summ);
 
+
 /* Clean up */
 
-freeMatrix(matrix);
+freeMatrix(summ);
 printf("matrix freed \n");
 freeMatrix(identite);
 printf("identite freed \n");
-freeMatrix(summ);
+freeMatrix(matrix);
 printf("summ freed");
-
 return 0;
 }
 
