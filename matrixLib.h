@@ -82,13 +82,6 @@ Free a Matrix
 void freeMatrix(Matrix* m);
 
 /*
-Function displaying a Matrix given as argument
-@arg m : pointer to the matrix de display
-@return : nothing
-*/
-void printMatrix(Matrix* m);
-
-/*
 Function verifying if a Matrix is empty, which means the Matrix is NULL or it has no rows and no columns
 Having sparses matrices, any Matrix with more than zero columns and zero rows isnt empty
 @arg m : pointer to the Matrix we want to check
@@ -244,7 +237,7 @@ A function to add a new cell with a value of 1 to a array representation
 @arg colindex : the columm index of the new cell
 @return : a array reprsentation of the new matrix
 */
-Points* insertTailPoints( int rowindex,  int colIndex, Points* list);
+Points* insertTailPoints(int rowindex, int colIndex, Points* list);
 
 /*
 Tells us if a list of Points contains the Points (x,y)
