@@ -21,11 +21,12 @@ BOOL isColEmpty(colElement* column)
 
 Matrix* insertCol(Matrix* m, int index)
 {
-	colElement* newel = (colElement*)malloc(sizeof(colElement)); /* we define a new columm element for add it to the matrix and a pointers to a columm */
+	colElement* newel = NULL;
 	colElement* tmp = m->cols;
 
-	if(tmp == NULL)
+	if(tmp == NULL) /* we are adding the first column */
 	{
+		newel = (colElement*)malloc(sizeof(colElement));
 		/*in this case, there are no elements, the new element is the new first. */
 		newel->colN = index;
 		/*the new first element of the list of cols is now the newel*/
@@ -42,6 +43,7 @@ Matrix* insertCol(Matrix* m, int index)
 		/* we search the position of the new columm with 3 cases : the new element is the first, in the middle of the matrix or the last */
 		if (tmp->colN > index) 
 		{
+			newel = (colElement*)malloc(sizeof(colElement));
 			/*in this case, the first element has an index greater than the index of the new element. The new element is the new first. */
 			/* we assign the index to the new element*/
 			newel->colN = index;
@@ -59,7 +61,6 @@ Matrix* insertCol(Matrix* m, int index)
 		}
 		else /* which means newel will not be the new first */
 		{
-
 			while(tmp->nextCol != NULL && index > tmp->colN) /* while we are not at the end and we are sure we are still not after where the new element should be*/
 			{
 				tmp=tmp->nextCol; /* we advance to the next */
@@ -69,6 +70,7 @@ Matrix* insertCol(Matrix* m, int index)
 			{
 				if (tmp->nextCol == NULL) /* if we are pointing toward the current last element*/
 				{
+					newel = (colElement*)malloc(sizeof(colElement));
 					newel->colN = index;
 					newel->nextCol = NULL; /* since it's the new last element */
 					newel->prevCol = tmp; /* same, new last. the old last become the penultimate element */
@@ -78,7 +80,8 @@ Matrix* insertCol(Matrix* m, int index)
 				else /* this means we have to insert newel between 2 other elements */
 				{
 					/*we start by updating the newel*/
-					newel->colN= index;
+					newel = (colElement*)malloc(sizeof(colElement));
+					newel->colN = index;
 					newel->nextCol = tmp->nextCol;
 					newel->prevCol = tmp;
 					newel->col = NULL;
@@ -182,11 +185,12 @@ BOOL isRowEmpty(rowElement* row)
 
 Matrix* insertRow(Matrix* m, int index)
 {
-	rowElement* newel = (rowElement*)malloc(sizeof(rowElement)); /* we define a new row element for add it to the matrix and a pointers to a row */
+	rowElement* newel = NULL; /* we define a new row element for add it to the matrix and a pointers to a row */
 	rowElement* tmp = m->rows;
 
 	if(tmp == NULL)
 	{
+		newel = (rowElement*)malloc(sizeof(rowElement));
 		/*in this case, there are no element, the new element is the new first. */
 		newel->rowN = index;
 		/*the new first element of the list of cols is now the newel*/
@@ -203,6 +207,7 @@ Matrix* insertRow(Matrix* m, int index)
 		/* we search the position of the new row with 3 cases : the new element is the first, in the middle of the matrix or the last */
 		if (tmp->rowN > index) 
 		{
+			newel = (rowElement*)malloc(sizeof(rowElement));
 			/*in this case, the first element has an index greater than the index of the new element. The new element is the new first. */
 			/* we assign the index to the new element*/
 			newel->rowN = index;
@@ -230,6 +235,7 @@ Matrix* insertRow(Matrix* m, int index)
 			{
 				if (tmp->nextRow == NULL) /* if we are pointing toward the current last element*/
 				{
+					newel = (rowElement*)malloc(sizeof(rowElement));
 					newel->rowN = index;
 					newel->nextRow = NULL; /* since it's the new last element */
 					newel->prevRow = tmp; /* same, new last. the old last become the penultimate element */
@@ -240,6 +246,7 @@ Matrix* insertRow(Matrix* m, int index)
 				{
 					
 					/*we start by updating the newel*/
+					newel = (rowElement*)malloc(sizeof(rowElement));
 					newel->rowN= index;
 					newel->nextRow = tmp->nextRow;
 					newel->prevRow = tmp;
@@ -291,15 +298,14 @@ Matrix* removeRow(Matrix* m, int index)
 			}
 			printf("row links updated \n");
 			printf("currCol initialised at the col %i, with col = %i %i \n", currCol->colN, currCol->col->rowIndex, currCol->col->colIndex);
-			/* we update the columns to ignore the cells in the row we want to remove */
-			while(currCol != NULL)
+			do
 			{
 				printf("the while is ok");
 				printf("updating the col %i", currCol->colN);
 
-				if(isColEmpty(currCol) || (currCol->col->rowIndex == index && currCol->col->nextCol == NULL))
+				if(currCol->col->rowIndex == index && currCol->col->nextCol == NULL)
 				{
-					/* which means either the col is empty or the only element is in the row to remove */
+					/* which means the only element is in the row to remove */
 					if(currCol == m->cols) /* if it's the first col*/
 					{
 						m->cols = currCol->nextCol;
@@ -338,8 +344,8 @@ Matrix* removeRow(Matrix* m, int index)
 					}
 				}
 				currCol = currCol->nextCol; 
-			}
-
+			}while(isColEmpty(currCol) == FALSE);
+			printf("afterwhile \n");
 			/* we have updated our columns. we now delete the row */
 			currCell = rrow->row;
 			while(currCell != NULL)
@@ -625,7 +631,7 @@ Matrix* newMatrix(arrayMatrix* m)
 
 	while(pt != NULL) /* If I have at least one element in m->list, I will start the traversal of the list */
 	{
-		/* my currCol and CurrRow initialized at the begining of the lists */
+		/* my currCol and currRow initialized at the begining of the lists */
 		currCol = newMat->cols;
 		currRow = newMat->rows;
 		/* I find the right column */
@@ -1058,7 +1064,7 @@ void freeMatrix(Matrix* m)
 		for (i = 1; i <= m->rowCount; ++i)
 		{
 			printf("freeMatrix : freeing the row %i \n", i);
-			removeRow(m, i);
+			m = removeRow(m, i);
 		}
 			
 	}
