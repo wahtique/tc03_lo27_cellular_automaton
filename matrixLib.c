@@ -426,29 +426,30 @@ BOOL equalsMatrix(Matrix* A, Matrix* B)
 
 Matrix* sumMatrix(Matrix* a, Matrix* b)
 {
-	if (isMatrixSameSize(a,b) != TRUE)
+
+	if (isMatrixSameSize(a,b) != TRUE || isMatrixEmpty(a) || isMatrixEmpty(b))
 	{
 		printf("Error not same size\n");
 		return a; /* error, we cant operate on the matrices */
 	}
 	else
 	{
+		arrayMatrix* newel = (arrayMatrix*)malloc(sizeof(arrayMatrix));
 		rowElement* rowa = a->rows;
 		cellElement* cella = a->rows->row;
 		rowElement* rowb = b->rows;
 		cellElement* cellb = b->rows->row;
-		arrayMatrix* newel = (arrayMatrix*)malloc(sizeof(arrayMatrix));
+		
 
 		newel->n = a->rowCount; /* Definition of the size of the new matrix*/
 		newel->p = b->colCount;
 			
-		while(rowa!= NULL || rowb != NULL)
+		while(rowa!= NULL && rowb != NULL)
 		{
 			cella = rowa->row;
 			cellb = rowb->row;
 			if(rowa->rowN == rowb->rowN)
 			{
-				
 				while(cella != NULL && cellb != NULL)
 				{
 					if (cella->colIndex >cellb->colIndex)
@@ -481,35 +482,61 @@ Matrix* sumMatrix(Matrix* a, Matrix* b)
 					newel->list=insertTailPoints(cellb->colIndex, cellb->rowIndex, newel->list);
 					cellb = cellb->nextRow;
 				}
-				rowa = rowa->nextRow;
+				
+				rowa = rowa->nextRow;	
 				rowb = rowb->nextRow;
 			}
 			else
 			{
 				if(rowa->rowN < rowb->rowN)
 				{
-					rowa = rowa->nextRow;
+					
 					while(cella != NULL)
 					{
 						newel->list=insertTailPoints(cella->colIndex, cella->rowIndex, newel->list);
 						cella = cella->nextRow;
 					}
+				rowa = rowa->nextRow;
 				}
 				else
 				{
-					rowb = rowb->nextRow;
+					
 					while(cellb != NULL)
 					{
 						newel->list=insertTailPoints(cellb->colIndex, cellb->rowIndex, newel->list);
 						cellb = cellb->nextRow;
 					}
+				rowb = rowb->nextRow;
 				}
 
 			}
 	
 		}
-	return newMatrix(newel);
+		while(rowa != NULL)
+		{
+
+			cella = rowa->row;
+			while(cella != NULL)
+			{
+				newel->list=insertTailPoints(cella->colIndex, cella->rowIndex, newel->list);
+				cella = cella->nextRow;
+			}
+		rowa = rowa->nextRow;
+		}
+		while(rowb != NULL)
+		{
+			
+			cellb = rowb->row;
+			while(cellb != NULL)
+			{
+				newel->list=insertTailPoints(cellb->colIndex, cellb->rowIndex, newel->list);
+				cellb = cellb->nextRow;
+			}
+		rowb = rowb->nextRow;
+		}
+		return newMatrix(newel);
 	}
+	
 }
 
 
@@ -545,12 +572,10 @@ Matrix* mulMatrix(Matrix* A, Matrix* B)
 						if (rowCell->rowIndex > colCell->colIndex)
 						{
 							colCell = colCell-> nextCol;
-							printf("ici\n");
 						} 
 						else 
 						{
 							rowCell = rowCell-> nextRow;
-							printf("là\n");
 						}
 					}
 				}
@@ -559,7 +584,9 @@ Matrix* mulMatrix(Matrix* A, Matrix* B)
 			row = row->nextRow;
 			col = B->cols;
 		}
+
 	}
+
 	return newMatrix(newel);	
 }
 

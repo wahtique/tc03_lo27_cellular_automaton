@@ -24,8 +24,8 @@ int main()
 /* definition of variables*/
 arrayMatrix* m = (arrayMatrix*)malloc(sizeof(arrayMatrix));
 arrayMatrix* id = (arrayMatrix*)malloc(sizeof(arrayMatrix));
-Matrix* matrix = (Matrix*)malloc(sizeof(Matrix));
-Matrix* identite = (Matrix*)malloc(sizeof(Matrix));
+Matrix* matrix;
+Matrix* identite;
 
 /*initialisation of the matrix*/
 
@@ -34,17 +34,17 @@ m->p = 5;
 m->list = insertTailPoints(1, 1 , m->list);
 m->list = insertTailPoints(2, 1 , m->list);
 m->list = insertTailPoints(4, 2 , m->list);
-m->list = insertTailPoints(3, 2 , m->list);
+m->list = insertTailPoints(3, 4 , m->list);
 m->list = insertTailPoints(4, 5 , m->list);
 m->list = insertTailPoints(5, 5 , m->list);
 
 id->n = 5;
 id->p = 5;
 id->list = insertTailPoints(1, 1 , id->list);
-id->list = insertTailPoints(2, 2 , id->list);
-id->list = insertTailPoints(3, 3 , id->list);
-id->list = insertTailPoints(4, 4 , id->list);
-id->list = insertTailPoints(5, 5 , id->list);
+id->list = insertTailPoints(2, 1 , id->list);
+id->list = insertTailPoints(3, 1 , id->list);
+id->list = insertTailPoints(4, 1 , id->list);
+id->list = insertTailPoints(5, 1 , id->list);
 printf("Matrix Initialised\n");
 /* Tested functions : */
 identite = newMatrix(id);
@@ -57,6 +57,7 @@ matrix = newMatrix(m);
 printMatrix(matrix);
 printMatrix(identite);
 printMatrix(sumMatrix(matrix,identite));
+free(matrix);
 return 0;
 }
 
