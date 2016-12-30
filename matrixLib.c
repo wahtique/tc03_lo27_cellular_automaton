@@ -99,12 +99,8 @@ Matrix* insertCol(Matrix* m, int index)
 
 Matrix* removeCol(Matrix* m, int index)
 {
-<<<<<<< HEAD
 
 	if (isMatrixEmpty(m)!= TRUE && index < m->colCount) /* we test if the col can be removed */
-=======
-	if (isMatrixEmpty(m)!= TRUE && index <= m->colCount) /* we test if the col can be removed */
->>>>>>> bc865f8fa2af4d3524b079729767772781ba5359
 	{
 		colElement* rcol = m->cols;
 		while(rcol != NULL && rcol->colN < index)
@@ -120,12 +116,7 @@ Matrix* removeCol(Matrix* m, int index)
 				cellElement* cellRemove = m->rows->row;
 				if(rcol == m->cols) /* we test if the col to remove is the first col*/
 				{
-<<<<<<< HEAD
-
 					while(tmpRow !=NULL) /* for each cell of the first row */
-=======
-					while(tmpRow !=NULL) /* for each cell of the first col */
->>>>>>> bc865f8fa2af4d3524b079729767772781ba5359
 					{
 						cellRemove = tmpRow->row;
 						tmpRow->row = cellRemove->nextRow;
@@ -142,19 +133,11 @@ Matrix* removeCol(Matrix* m, int index)
 					{
 						tmpEle = tmpRow->row;
 						cellRemove = tmpEle;
-<<<<<<< HEAD
 						while(tmpEle != NULL && tmpEle->colIndex < index ) /* we stop right before the cell to remove*/
-=======
-						while(tmpEle->nextRow != NULL && tmpEle->nextRow->colIndex < index ) /* we stop right before the cell to remove*/
->>>>>>> bc865f8fa2af4d3524b079729767772781ba5359
 						{
 							tmpEle = tmpEle->nextRow; 
 						}
-<<<<<<< HEAD
 						if (tmpEle != NULL && tmpEle->nextCol->colIndex == index)
-=======
-						if (tmpEle->nextRow->colIndex == index) /* if the tempEle is on the element right before a cell in the col to remove */
->>>>>>> bc865f8fa2af4d3524b079729767772781ba5359
 						{
 							cellRemove = tmpEle->nextRow; /* we point toward the right cell*/
 							tmpEle->nextCol = cellRemove->nextCol; /* we maintain the link between the cells */
@@ -296,8 +279,8 @@ Matrix* removeRow(Matrix* m, int index)
 		{
 			/* rrow is on the row we need to remove */
 			colElement* currCol = m->cols;
-			cellElement* currCell = NULL;
-			cellElement* cellToRemove  = NULL;
+			cellElement* currCell = m->cols->col;
+			cellElement* cellToRemove  = m->cols->col;
 			/* we found a row which is linked to other rows. We will update the links*/
 			if(rrow == m->rows)
 			{
@@ -316,12 +299,11 @@ Matrix* removeRow(Matrix* m, int index)
 				}
 			}
 			printf("row links updated \n");
-			printf("currCol initialised at the col %i, with col = %i %i \n", currCol->colN, currCol->col->rowIndex, currCol->col->colIndex);
-			do
+			printf("currCol initialised at the col %i, with col = %i ii %i  z\n", currCol->colN, currCol->col->rowIndex, currCol->col->colIndex);
+			while( TRUE)
 			{
-				printf("the while is ok");
-				printf("updating the col %i", currCol->colN);
-
+				printf("the while is ok \n");
+				printf("updating the col %i \n", currCol->colN);
 				if(currCol->col->rowIndex == index && currCol->col->nextCol == NULL)
 				{
 					/* which means the only element is in the row to remove */
@@ -347,23 +329,22 @@ Matrix* removeRow(Matrix* m, int index)
 						}
 					}
 				}
-				else /* the col will exist even after we delete the row  */
-				{
-					/* we point toward the cell right before the hypothetical cell which lso belongs to the row to delete */
+				else{
 					currCell = currCol->col;
 					while(currCell->nextCol != NULL && currCell->nextCol->rowIndex < index)
 					{
 						currCell = currCell->nextCol;
 					}
-					/* now either we stopped at the last cell or at a cell in the col */
-					if(currCell->nextCol->rowIndex == index)
+					printf("\n index = %i\n", index );
+					if(currCell->nextCol->rowIndex == index )
 					{
 						printf("we found a cell in the row to remove. Updating the cell %i %i \n", currCell->rowIndex, currCell->colIndex);
-						currCell->nextCol = currCell->nextCol->nextCol;
+						/*currCell->nextCol = currCell->nextCol->nextCol;*/
 					}
+					currCol = currCol->nextCol; 
 				}
-				currCol = currCol->nextCol; 
-			}while(isColEmpty(currCol) == FALSE);
+				break;
+			}
 			printf("afterwhile \n");
 			/* we have updated our columns. we now delete the row */
 			currCell = rrow->row;
