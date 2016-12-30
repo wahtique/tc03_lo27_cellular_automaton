@@ -59,6 +59,7 @@ printf("sum done\n");
 /* Result */
 
 printMatrix(matrix);
+printf("Les cols sont %i, %i, %i ", matrix->cols->colN, matrix->cols->nextCol->colN, matrix->cols->nextCol->nextCol->colN);
 printMatrix(identite);
 printMatrix(summ);
 
