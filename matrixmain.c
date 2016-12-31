@@ -72,7 +72,7 @@ printf("matrix freed \n");
 freeMatrix(identite);
 printf("identite freed \n");
 freeMatrix(summ);
-printf("summ freed");
+printf("summ freed\n");
 return 0;
 }
 
@@ -88,10 +88,15 @@ void printMatrix(Matrix* matrix)
 	{
 		rowElement* tmprow = matrix->rows;
 		cellElement* tmpcell = NULL;	
-		printf("\nPrinting a Matrix of %i rows and %i columns : \n", matrix->rowCount , matrix->colCount);
+		printf("\nPrinting a Matrix of %i rows and %i columns : \n ", matrix->rowCount , matrix->colCount);
+		for(i = 1;i<=matrix->rowCount;++i)
+		{
+			printf("-");
+		}
+		printf("\n");
 		for(i = 1; i <= matrix->rowCount; ++i)
 		{
-			printf(" |");
+			printf("|");
 			if(tmprow != NULL && i == tmprow->rowN)/* if the row we want to print isnt empty */
 			{
 				tmpcell = tmprow->row;
@@ -104,7 +109,7 @@ void printMatrix(Matrix* matrix)
 					}
 					else
 					{
-						printf(".");
+						printf(" ");
 					}
 				}
 				tmprow = tmprow->nextRow; /* if we printed this row then we can move the pointer to the next nonempty row */
@@ -118,6 +123,12 @@ void printMatrix(Matrix* matrix)
 			}
 			printf("|\n");
 		}
+		printf(" ");
+		for(i = 1;i<=matrix->rowCount;++i)
+		{
+			printf("-");
+		}
+		printf("\n");
 	}
 	else
 	{

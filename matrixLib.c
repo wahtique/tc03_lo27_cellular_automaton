@@ -99,84 +99,108 @@ Matrix* insertCol(Matrix* m, int index)
 
 Matrix* removeCol(Matrix* m, int index)
 {
-
-	if (isMatrixEmpty(m)!= TRUE && index < m->colCount) /* we test if the col can be removed */
+	if(isMatrixEmpty(m) != TRUE && index <= m->colCount && index > 0)
 	{
 		colElement* rcol = m->cols;
+
 		while(rcol != NULL && rcol->colN < index)
 		{
 			rcol = rcol->nextCol;
 		}
-		if(rcol != NULL && rcol->colN == index) /* test if we found the col to delete*/
+		if(rcol->colN == index)
 		{
-			if(isColEmpty(rcol) != TRUE) /* test if there is at least one cell*/
+			/* rcol is on the col we need to remove */
+			rowElement* currRow = m->rows;
+			cellElement* currCell = NULL;
+			cellElement* cellToRemove  = NULL;
+			/* we found a col which is linked to other cols. We will update the links*/
+			if(rcol == m->cols)
 			{
-				cellElement* tmpEle= m->rows->row;	
-				rowElement* tmpRow = m->rows;
-				cellElement* cellRemove = m->rows->row;
-				if(rcol == m->cols) /* we test if the col to remove is the first col*/
-				{
-					while(tmpRow !=NULL) /* for each cell of the first row */
-					{
-						cellRemove = tmpRow->row;
-						tmpRow->row = cellRemove->nextRow;
-						free(cellRemove); /* remove the good cell*/
-						if (tmpRow->row == NULL) /* if we remove the last cell of a columm we remove the empty columm.*/
-						{
-							removeRow(m, tmpRow->rowN);
-						}
-					}
-				}
-				else /* not the first col */
-				{
-					while(tmpRow != NULL) /* we free each cell of the col without breaking the structure*/
-					{
-						tmpEle = tmpRow->row;
-						cellRemove = tmpEle;
-						while(tmpEle != NULL && tmpEle->colIndex < index ) /* we stop right before the cell to remove*/
-						{
-							tmpEle = tmpEle->nextRow; 
-						}
-						if (tmpEle != NULL && tmpEle->nextCol->colIndex == index)
-						{
-							cellRemove = tmpEle->nextRow; /* we point toward the right cell*/
-							tmpEle->nextCol = cellRemove->nextCol; /* we maintain the link between the cells */
-							free(cellRemove); /* remove the right cell */
-						}
-						tmpRow = tmpRow->nextRow;
-						if (isRowEmpty(tmpRow->prevRow)) /* if we remove the last cell of a row we remove the empty row*/
-						{
-							removeRow(m, tmpRow->prevRow->rowN);
-						}
-					}
-				}
-			}
-			/* we've removed every cells in the row */
-			if (rcol->prevCol == NULL) /* We update the element before and after */
-			{
-				rcol->nextCol->prevCol = NULL;
-				m->cols = rcol->nextCol;
+				m->cols = rcol->nextCol;	
 			}
 			else
 			{
-				if (rcol->nextCol == NULL)
+				rcol->prevCol->nextCol = rcol->nextCol;
+			}
+			if(rcol->nextCol !=NULL)
+			{
+				rcol->nextCol->prevCol = rcol->prevCol;
+			}
+			while(currRow != NULL)
+			{
+				if(currRow->row->colIndex == index && (currRow->row->nextRow == NULL || currRow->row->colIndex == m->colCount))
 				{
-					rcol->prevCol->nextCol = NULL;
+					/* which means the only element is in the col to remove */
+					if(currRow == m->rows && currRow->nextRow == NULL)/* the only row in the Matrix */ 
+					{
+						free(currRow);
+						currRow = NULL;
+					}
+					else
+					{
+						if(currRow == m->rows) /* if it's the first row*/
+						{
+							m->rows = currRow->nextRow;
+							currRow=currRow->nextRow;
+							free(currRow->prevRow);
+							currRow->prevRow = NULL;
+						}
+						else
+						{
+							if(currRow->nextRow == NULL) /* last and not first */
+							{	
+								currRow->prevRow->nextRow = NULL;
+								free(currRow);
+								currRow = NULL;
+							}
+							else /* neither last nor first */
+							{
+								currRow->nextRow->prevRow = currRow->prevRow;
+								currRow=currRow->nextRow;
+								free(currRow->prevRow->nextRow);
+								currRow->prevRow->nextRow = currRow;
+							}
+						}						
+					}
 				}
-				else
+				else /* the row is still here after, we only need to update the pointers */
 				{
-					rcol->nextCol->prevCol = rcol->prevCol;
-					rcol->prevCol->nextCol = rcol->nextCol;
-				}
+					currCell = currRow->row;
+					if(currCell->colIndex == index) /* first but not last */
+					{
+						currRow->row = currCell->nextRow;
+						currRow = currRow->nextRow;
+					}
+					else
+					{
+						if(currCell->colIndex < index)
+						{
+							while(currCell->nextRow != NULL && currCell->nextRow->colIndex < index)
+							{
+								currCell = currCell->nextRow;
+							}
+							if(currCell->nextRow->colIndex == index )
+							{
+								currCell->nextRow = currCell->nextRow->nextRow; 
+							}							
+						}
+						currRow = currRow->nextRow;
+					}
+				}	
+			}
+			/* we have updated our rows. we now delete the col */
+			currCell = rcol->col;
+			while(currCell != NULL)
+			{
+				cellToRemove = currCell;
+				currCell = currCell->nextCol;
+				free(cellToRemove);
 			}
 			free(rcol);
 		}
 	}
-	printf("bug pas\n");
 	return m;
 }
-
-
 
 /* ----------------------------- ROWS ----------------------------- */
 
@@ -1073,8 +1097,7 @@ void freeMatrix(Matrix* m)
 		for (i = 1; i <= m->rowCount; ++i)
 		{
 			m = removeRow(m, i);
-		}
-			
+		}			
 	}
 	free(m);
 }
