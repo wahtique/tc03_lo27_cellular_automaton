@@ -264,124 +264,128 @@ Matrix* insertRow(Matrix* m, int index)
 	return m; 
 }
 
+
 Matrix* removeRow(Matrix* m, int index)
 {
-	if(isMatrixEmpty(m) != TRUE && index <= m->rowCount)
-	{
-		rowElement* rrow = m->rows;
+  if(isMatrixEmpty(m) != TRUE && index <= m->rowCount && index > 0)
+  {
+    rowElement* rrow = m->rows;
 
-		while(rrow != NULL && rrow->rowN < index)
-		{
-			rrow = rrow->nextRow;
-		}
+    while(rrow != NULL && rrow->rowN < index)
+    {
+      rrow = rrow->nextRow;
+    }
 
-<<<<<<< HEAD
-=======
-		if(rrow != NULL) {printf("removeRow : found row %i \n", rrow->rowN);}
+    if(rrow != NULL) {printf("removeRow : found row %i \n", rrow->rowN);}
 
->>>>>>> 238f1048774ec763341f1e5318d2f6ec4b5b7ef0
-		if(rrow->rowN == index)
-		{
-			/* rrow is on the row we need to remove */
-			colElement* currCol = m->cols;
-			cellElement* currCell = NULL;
-			cellElement* cellToRemove  = NULL;
-			/* we found a row which is linked to other rows. We will update the links*/
-			if(rrow == m->rows)
-				rrow->prevRow->nextRow = rrow->nextRow;
-			}
-			if(rrow->nextRow !=NULL)
-			{
-				rrow->nextRow->prevRow = rrow->prevRow;
-			}
+    if(rrow->rowN == index)
+    {
+      /* rrow is on the row we need to remove */
+      colElement* currCol = m->cols;
+      cellElement* currCell = NULL;
+      cellElement* cellToRemove  = NULL;
+      /* we found a row which is linked to other rows. We will update the links*/
+      if(rrow == m->rows)
+      {
+        m->rows = rrow->nextRow;  
+      }
+      else
+      {
+        rrow->prevRow->nextRow = rrow->nextRow;
+      }
+      if(rrow->nextRow !=NULL)
+      {
+        rrow->nextRow->prevRow = rrow->prevRow;
+      }
 
-			printf("row links updated \n");
-			printf("currCol initialised at the col %i, with col = %i ii %i  z\n", currCol->colN, currCol->col->rowIndex, currCol->col->colIndex);
-			while(currCol != NULL)
-			{
-				printf("updating the col %i \n", currCol->colN);
-				if(currCol->col->rowIndex == index && (currCol->col->nextCol == NULL || currCol->col->rowIndex == m->rowCount))
-				{
-					/* which means the only element is in the row to remove */
-					if(currCol == m->cols && currCol->nextCol == NULL)/* the only col in the Matrix */ 
-					{
-						free(currCol);
-						currCol = NULL;
-					}
-					else
-					{
-						if(currCol == m->cols) /* if it's the first col*/
-						{
-							m->cols = currCol->nextCol;
-							currCol=currCol->nextCol;
-							printf("first and will be empty : freeing^\n");
-							free(currCol->prevCol);
-							currCol->prevCol = NULL;
-						}
-						else
-						{
-							if(currCol->nextCol == NULL) /* last and not first */
-							{	
-								printf("last and will be empty : freeing\n");
-								currCol->prevCol->nextCol = NULL;
-								free(currCol);
-								currCol = NULL;
-							}
-							else /* neither last nor first */
-							{
-								printf("in between and will be empty : freeing\n");
-								currCol->nextCol->prevCol = currCol->prevCol;
-								currCol=currCol->nextCol;
-								free(currCol->prevCol->nextCol);
-								currCol->prevCol->nextCol = currCol;
-							}
-						}						
-					}
-				}
-				else /* the col is still here after, we only need to update the pointers */
-				{
-					currCell = currCol->col;
-					if(currCell->rowIndex == index) /* first but not last */
-					{
-						printf("first but not last cell. Rerouting col to %i %i \n",currCell->nextCol->rowIndex, currCell->nextCol->colIndex);
-						currCol->col = currCell->nextCol;
-						currCol = currCol->nextCol;
-					}
-					else
-					{
-						if(currCell->rowIndex < index)
-						{
-							while(currCell->nextCol != NULL && currCell->nextCol->rowIndex < index)
-							{
-								printf("in the while : currCell est sur %i %i ", currCell->rowIndex,currCell->colIndex);
-								currCell = currCell->nextCol;
-								printf("in the while, post re pointage : currCell est sur %i %i ", currCell->rowIndex,currCell->colIndex);
-							}
-							printf("the cell isnt the first. Found cell of rowIndex = %i\n", currCell->rowIndex);
-							if(currCell->nextCol->rowIndex == index )
-							{
-								printf("we found a cell in the row to remove. Updating the cell %i %i \n", currCell->rowIndex, currCell->colIndex);
-								currCell->nextCol = currCell->nextCol->nextCol; 
-							}							
-						}
-						currCol = currCol->nextCol;
-					}
-				}	
-			}
-			printf("afterwhile \n");
-			/* we have updated our columns. we now delete the row */
-			currCell = rrow->row;
-			while(currCell != NULL)
-			{
-				cellToRemove = currCell;
-				currCell = currCell->nextRow;
-				printf("freeing cell %i %i \n", cellToRemove->rowIndex, cellToRemove->colIndex);
-				free(cellToRemove);
-			}
-			free(rrow); 
-		}		
-	}
-	return m;
+      printf("row links updated \n");
+      printf("currCol initialised at the col %i, with col = %i ii %i  z\n", currCol->colN, currCol->col->rowIndex, currCol->col->colIndex);
+      while(currCol != NULL)
+      {
+        printf("updating the col %i \n", currCol->colN);
+        if(currCol->col->rowIndex == index && (currCol->col->nextCol == NULL || currCol->col->rowIndex == m->rowCount))
+        {
+          printf("Premiere case à free test: %i\n",currCol->col->rowIndex );
+          /* which means the only element is in the row to remove */
+          if(currCol == m->cols && currCol->nextCol == NULL)/* the only col in the Matrix */ 
+          {
+            free(currCol);
+            currCol = NULL;
+          }
+          else
+          {
+            if(currCol == m->cols) /* if it's the first col*/
+            {
+              m->cols = currCol->nextCol;
+              currCol=currCol->nextCol;
+              printf("first and will be empty : freeing^\n");
+              free(currCol->prevCol);
+              currCol->prevCol = NULL;
+            }
+            else
+            {
+              if(currCol->nextCol == NULL) /* last and not first */
+              {  
+                printf("last and will be empty : freeing\n");
+                currCol->prevCol->nextCol = NULL;
+                free(currCol);
+                currCol = NULL;
+              }
+              else /* neither last nor first */
+              {
+                printf("in between and will be empty : freeing\n");
+                currCol->nextCol->prevCol = currCol->prevCol;
+                currCol=currCol->nextCol;
+                free(currCol->prevCol->nextCol);
+                currCol->prevCol->nextCol = currCol;
+              }
+            }            
+          }
+        }
+        else /* the col is still here after, we only need to update the pointers */
+        {
+          currCell = currCol->col;
+          if(currCell->rowIndex == index) /* first but not last */
+          {
+            printf("first but not last cell. Rerouting col to %i %i \n",currCell->nextCol->rowIndex, currCell->nextCol->colIndex);
+            currCol->col = currCell->nextCol;
+            currCol = currCol->nextCol;
+          }
+          else
+          {
+            if(currCell->rowIndex < index)
+            {
+              while(currCell->nextCol != NULL && currCell->nextCol->rowIndex < index)
+              {
+                printf("in the while : currCell est sur %i %i ", currCell->rowIndex,currCell->colIndex);
+                currCell = currCell->nextCol;
+                printf("in the while, post re pointage : currCell est sur %i %i ", currCell->rowIndex,currCell->colIndex);
+              }
+              printf("the cell isnt the first. Found cell of rowIndex = %i\n", currCell->rowIndex);
+              if(currCell->nextCol->rowIndex == index )
+              {
+                printf("we found a cell in the row to remove. Updating the cell %i %i \n", currCell->rowIndex, currCell->colIndex);
+                currCell->nextCol = currCell->nextCol->nextCol; 
+              }              
+            }
+            currCol = currCol->nextCol;
+          }
+        }  
+      }
+      printf("afterwhile \n");
+      /* we have updated our columns. we now delete the row */
+		currCell = rrow->row;
+      while(currCell != NULL)
+      {
+        cellToRemove = currCell;
+        currCell = currCell->nextRow;
+        printf("freeing cell %i %i \n", cellToRemove->rowIndex, cellToRemove->colIndex);
+        free(cellToRemove);
+      }
+      free(rrow);
+    }
+  }
+  return m;
 }
 
 
@@ -779,44 +783,52 @@ Matrix* newMatrix(arrayMatrix* m)
 Matrix* andColSequenceOnMatrix(Matrix* m)
 {
 	arrayMatrix* newMat = (arrayMatrix*)malloc(sizeof(arrayMatrix)); /* we initialize a new arrayMatrix */
-	if (isMatrixEmpty(m) != TRUE) /* If the matrix is Empty we do nothing*/
+	if (isMatrixEmpty(m) != TRUE) /* If the matrix is Empty or containing false we do nothing*/
 	{
-	 	
+	 	printf("Matrix non vide\n");
 		if(m->cols != NULL && m->cols->nextCol != NULL) /* if there are at least 2 columns in our Matrix */
 		{
+			
 			colElement* fcol = m->cols; /*we initialize a pointer to the first columm*/
 		 	colElement* scol = m->cols->nextCol; /*we initialize a pointer to the second columm*/
 		 	cellElement* fcell = fcol->col; /*we initialize a pointer to the first cell of the first columm*/
 		 	cellElement* scell = scol->col; /*we initialize a pointer to the first cell of the second columm*/
 		 	newMat->n = m->rowCount;
-		 	newMat->p = m->colCount -1; 
+		 	newMat->p = m->colCount -1;
+		 	printf("Matrix à deux colonnes\n"); 
+		 	printf("set up done\n");
 		 	while(scol != NULL) /* we iterate until the last column*/
 		 	{
-
+		 		printf("Pour les colonnes : fcol = %i scol = %i .\n",fcol->colN, scol->colN );
 		 		if (scol->colN == fcol->colN + 1) /* if scol and fcol are neighbours = if all our AND wont give us zeros*/
 		 		{
+		 			printf(" colonnes voisines.\n");
 		 			fcell = fcol->col; /* we set fcell as the first cell of fcol*/ 
 		 			scell =	scol->col; /* we set scell as the fist element of scol*/
 		 			while(scell != NULL && fcell != NULL) /* for each cell of the two columms we apply the boolean operation*/ 
 		 			{
-		 				printf("[%i, %i] [%i, %i]\n",fcell->rowIndex, fcell->colIndex , scell->rowIndex , scell->colIndex );
+		 				printf("Cellules existantes: [%i, %i] [%i, %i]\n",fcell->rowIndex, fcell->colIndex , scell->rowIndex , scell->colIndex );
 		 				if(fcell->rowIndex == scell->rowIndex) /* if AND gives us a TRUE*/
 		 				{
+		 					printf("And ok\n");
 		 					newMat->list = insertTailPoints(fcell->rowIndex, fcell->colIndex , newMat->list); /* we add this coordanate to the new matrix*/
 		 					fcell = fcell->nextCol; /* we increment both of them */
 		 					scell =	scell->nextCol;
 		 				}
 		 				else /* if theyre not equals then we have to increment the one which is most behind */
 		 				{
+		 					printf("And not ok\n");
 		 					/* if fcell is the one most behind or if scell is already at the end of the column */
 		 					if(fcell->rowIndex < scell->rowIndex)
 		 					{
+		 						printf("Incremente premiere Col\n");
 		 						fcell = fcell->nextCol; 
 		 					}
 		 					else
 		 					{
 		 						if(scell->rowIndex < fcell->rowIndex) /* not sure if this condition is necessary */
 		 						{
+		 							printf("Incremente seconde\n");
 		 							scell = scell->nextCol;
 		 						}
 		 					}
@@ -824,11 +836,14 @@ Matrix* andColSequenceOnMatrix(Matrix* m)
 		 			}/* if one of the cells is pointing to NULL then we know we are done with the columns anyway */
 				}
 		 		fcol = fcol->nextCol; /* we increment the two columms */
-		 		scol = scol->nextCol; /* and now, if scol is NULL then we stop */	
-		 	}	 
+		 		scol = scol->nextCol; /* and now, if scol is NULL then we stop */
+		 		printf("Fin du while colonne incrementer\n");
+		 	}	
+		 	printf("Sorti du while\n"); 
 		}
-		else /* if my Matrix isnt empty but theres only at most one column containing TRUEs*/
+		else /* if my Matrix isnt empty but theres only at most one column or less containing TRUEs*/
 		{
+			printf("Matrice à une colonne ou composé de 0\n");
 			newMat->n = m->rowCount;
 			newMat->p = m->colCount;
 			newMat->list = NULL;
@@ -836,10 +851,12 @@ Matrix* andColSequenceOnMatrix(Matrix* m)
 	}
 	else /* if the matrix is empty */
 	{
+		printf("Matrix Vide.\n");
 	 	newMat->n = 0;
 	 	newMat->p = 0;
 	 	newMat->list = NULL;
 	}
+	printf("Done\n");
 	return newMatrix(newMat); 
 }
 
@@ -848,6 +865,7 @@ Matrix* orColSequenceOnMatrix(Matrix* m)
 	arrayMatrix* newMat = (arrayMatrix*)malloc(sizeof(arrayMatrix)); /* we initialize a new arrayMatrix*/
 	if (isMatrixEmpty(m)!= TRUE) /* If the matrix is Empty we do nothing*/
 	{
+		printf("Matrice non vide\n");
 		if(m->cols != NULL && m->cols->nextCol != NULL) /* if there are at least 2 columns in our Matrix */
 		{
 			colElement* fcol = m->cols; /*we initialize a pointer to the first columm*/
@@ -855,15 +873,19 @@ Matrix* orColSequenceOnMatrix(Matrix* m)
 		 	cellElement* fcell = fcol->col; /*we initialize a pointer to the first cell of the first columm*/
 		 	cellElement* scell = scol->col; /*we initialize a pointer to the first cell of the second columm*/
 		 	newMat->n = m->rowCount;
-		 	newMat->p = m->colCount -1; 
+		 	newMat->p = m->colCount -1;
+		 	printf("avec deux columm même\n"); 
 		 	while(scol != NULL) /* we iterate until the last column*/
 		 	{
+		 		printf("Pour les colonnes : fcol = %i scol = %i .\n",fcol->colN, scol->colN );
 		 		if (scol->colN == fcol->colN + 1) /* we test if the columm n+1 exist*/
 	 			{
+	 				printf("Deux colonnes voisines c'est pas beau ça?\n");
 	 				fcell = fcol->col; /* we give the value of the first cell of the first columm*/ 
 	 				scell =	scol->col; /* we give the value of the first cell of the second columm*/ 
 	 				while(scell != NULL && fcell != NULL) /* for each cell of the two columms we apply the boolean operation*/ 
 	 				{
+	 					printf("Cellules existantes: [%i, %i] [%i, %i]\n",fcell->rowIndex, fcell->colIndex , scell->rowIndex , scell->colIndex );
 	 					if (fcell->rowIndex == scell->rowIndex)
 	 					{
 	 						newMat->list = insertTailPoints(fcell->rowIndex, fcell->colIndex , newMat->list); /* we add this coordanate to the new matrix*/
@@ -912,9 +934,12 @@ Matrix* orColSequenceOnMatrix(Matrix* m)
 		}
 		else
 		{
+			printf("1 colonne?\n");
 			if (m->cols != NULL)
 			{
 				cellElement* tmp = m->cols->col;
+				newMat->n = m->rowCount;
+		 		newMat->p = m->colCount -1;
 				while( tmp != NULL)
 				{
 					newMat->list = insertTailPoints(tmp->rowIndex, tmp->colIndex , newMat->list);
@@ -937,17 +962,20 @@ Matrix* andRowSequenceOnMatrix(Matrix* m)
 	arrayMatrix* newMat = (arrayMatrix*)malloc(sizeof(arrayMatrix)); /* we initialize a new arrayMatrix */
 	if (isMatrixEmpty(m) != TRUE) /* If the matrix is Empty we do nothing*/
 	{
-	 	
+	 	printf("Matrice non vide\n");
 		if(m->rows != NULL && m->rows->nextRow != NULL) /* if there are at least 2 row in our Matrix */
 		{
+
 			rowElement* frow = m->rows; /*we initialize a pointer to the first col*/
 		 	rowElement* srow = m->rows->nextRow; /*we initialize a pointer to the second col*/
 		 	cellElement* fcell = frow->row; /*we initialize a pointer to the first cell of the first col*/
 		 	cellElement* scell = srow->row; /*we initialize a pointer to the first cell of the second col*/
 		 	newMat->n = m->rowCount-1;
 		 	newMat->p = m->rowCount; 
+		 	printf("Au moins deux lignes et init done\n");
 		 	while(srow != NULL) /* we iterate until the last rowumn*/
 		 	{
+		 		printf("Pour les lignes: %i , %i .\n",frow->rowN , srow->rowN );
 		 		if (srow->rowN == frow->rowN + 1) /* if srow and frow are neighbours = if all our AND wont give us zeros*/
 		 		{
 		 			fcell = frow->row; /* we set fcell as the first cell of frow*/ 
@@ -955,8 +983,10 @@ Matrix* andRowSequenceOnMatrix(Matrix* m)
 
 		 			while(scell != NULL && fcell != NULL) /* for each cell of the two col we apply the boolean operation*/ 
 		 			{
-		 				if(fcell->rowIndex == scell->rowIndex) /* if AND gives us a TRUE*/
+		 				printf("Pour les cell [%i , %i] [%i ,%i ]\n",fcell->rowIndex,fcell->colIndex,scell->rowIndex,scell->colIndex );
+		 				if(fcell->colIndex == scell->colIndex) /* if AND gives us a TRUE*/
 		 				{
+		 					printf("cell add\n");
 		 					newMat->list = insertTailPoints(fcell->rowIndex, fcell->colIndex , newMat->list); /* we add this coordanate to the new matrix*/
 		 					fcell = fcell->nextRow; /* we increment both of them */
 		 					scell =	scell->nextRow;
@@ -964,13 +994,13 @@ Matrix* andRowSequenceOnMatrix(Matrix* m)
 		 				else /* if theyre not equals then we have to increment the one which is most behind */
 		 				{
 		 					/* if fcell is the one most behind or if scell is already at the end of the rowumn */
-		 					if(fcell->rowIndex < scell->rowIndex)
+		 					if(fcell->colIndex < scell->colIndex)
 		 					{
 		 						fcell = fcell->nextRow; 
 		 					}
 		 					else
 		 					{
-		 						if(scell->rowIndex < fcell->rowIndex) /* not sure if this condition is necessary */
+		 						if(scell->colIndex < fcell->colIndex) /* not sure if this condition is necessary */
 		 						{
 		 							scell = scell->nextRow;
 		 						}
@@ -986,7 +1016,7 @@ Matrix* andRowSequenceOnMatrix(Matrix* m)
 		else /* if my Matrix isnt empty but theres only at most one rowumn containing TRUEs*/
 		{
 			newMat->n = m->rowCount;
-			newMat->p = m->rowCount;
+			newMat->p = m->colCount;
 			newMat->list = NULL;
 		}
 	}
