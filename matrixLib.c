@@ -266,13 +266,15 @@ Matrix* insertRow(Matrix* m, int index)
 
 Matrix* removeRow(Matrix* m, int index)
 {
-	if(isMatrixEmpty(m) != TRUE && index <= m->rowCount && index > 0)
+	if(isMatrixEmpty(m) != TRUE && index <= m->rowCount)
 	{
 		rowElement* rrow = m->rows;
 		while(rrow != NULL && rrow->rowN < index)
 		{
 			rrow = rrow->nextRow;
 		}
+
+		printf("removeRow : found row %i \n", rrow->rowN);
 		if(rrow->rowN == index)
 		{
 			/* rrow is on the row we need to remove */
@@ -280,8 +282,7 @@ Matrix* removeRow(Matrix* m, int index)
 			cellElement* currCell = m->cols->col;
 			cellElement* cellToRemove  = m->cols->col;
 			/* we found a row which is linked to other rows. We will update the links*/
-
-			while(isColEmpty(currCol) == FALSE)
+			if(rrow == m->rows)
 			{
 				m->rows = rrow->nextRow;
 			}
@@ -345,6 +346,10 @@ Matrix* removeRow(Matrix* m, int index)
 					printf("CurrCol incremant?\n");
 					currCol = currCol->nextCol; 
 				}
+				/*break;
+			}*/
+			printf("afterwhile \n");
+			/* we have updated our columns. we now delete the row */
 			currCell = rrow->row;
 			while(currCell != NULL)
 			{
