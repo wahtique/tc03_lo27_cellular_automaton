@@ -68,11 +68,11 @@ Matrix* insertCol(Matrix* m, int index);
 /* ----------------------------- MATRIX ----------------------------- */
 
 /*
-Function creating a new Matrix from its arrayMatrix representation
-@arg m : the arrayMatrix representation of our Matrix
+Function creating a new Matrix from its listMatrix representation
+@arg m : the listMatrix representation of our Matrix
 @return : a pointer to the new Matrix
 */
-Matrix* newMatrix(arrayMatrix* m);
+Matrix* newMatrix(listMatrix* m);
 
 /*
 Free a Matrix
@@ -222,14 +222,16 @@ Function saying if, given a Matrix, if the cell specified will gives a TRUE afte
 */
 BOOL applyRuleToCell(Matrix* m, int cellRow, int cellCol, BOOL* dRule);
 
-/* ----------------------------- arrayMatrix -----------------------------*/
+/* ----------------------------- listMatrix -----------------------------*/
 
 /*
-A function turning a two dimensional array into an arrayMatrix
+A function turning a two dimensional array into an listMatrix
 @arg array : a two dimensional array of booleans
-@return : a pointer toward an arrayMatrix
+@arg n : numbe rof rows
+@arg p : number of columns
+@return : a pointer toward a listMatrix
+listMatrix* listMatrixFrom2DArray(int nval, int pval, BOOL array[][pval]);
 */
-arrayMatrix* arrayMatrixFrom2DArray(BOOL** array);
 
 /*
 A function to add a new cell with a value of 1 to a array representation
