@@ -14,65 +14,56 @@ Creation date : 11/23/16
 /* ------------------ PROTOTYPES ------------------  */
 
 void printMatrix(Matrix* matrix);
-void printArrayMatrix(arrayMatrix* m);
-
+void printListMatrix(listMatrix* m);
+void printMatrixCoordinates(Matrix* m);
 /* ------------------ MAIN ------------------ */
 
 
 int main()
 {
-/* definition of variables*/
-arrayMatrix* m = (arrayMatrix*)malloc(sizeof(arrayMatrix));
-arrayMatrix* id = (arrayMatrix*)malloc(sizeof(arrayMatrix));
-Matrix* matrix;
-Matrix* identite;
-Matrix* summ;
+/* definition of variables*/	
 
-/*initialisation of the matrix*/
+listPoints t = NULL;
+listMatrix* tList = (listMatrix*)malloc(sizeof(listMatrix));
+Matrix* test = NULL;
+int r = 170;
 
-m->n = 5;
-m->p = 5;
-m->list = insertTailPoints(1, 1 , m->list);
-m->list = insertTailPoints(1, 4 , m->list);
-m->list = insertTailPoints(2, 1 , m->list);
-m->list = insertTailPoints(3, 4 , m->list);
-m->list = insertTailPoints(4, 2 , m->list);
-m->list = insertTailPoints(5, 2 , m->list);
+printf("\n2d arrays initialised\n");
 
-id->n = 5;
-id->p = 5;
-id->list = insertTailPoints(1, 1 , id->list);
-id->list = insertTailPoints(2, 1 , id->list);
-id->list = insertTailPoints(3, 1 , id->list);
-id->list = insertTailPoints(4, 1 , id->list);
-id->list = insertTailPoints(5, 1 , id->list);
-printf("Matrix Initialised\n");
+tList->n = 3;
+tList->p = 4;
+printf("dimensions ok \n");
+t = insertTailPoints(1,3,t);
+t = insertTailPoints(2,1,t);
+t = insertTailPoints(2,2,t);
+t = insertTailPoints(2,3,t);
+t = insertTailPoints(3,1,t);
+t = insertTailPoints(3,3,t);
+t = insertTailPoints(3,4,t);
+tList->list = t;
+
+printf("t affected to tList\n");
+
+
 
 /* Tested functions : */
-identite = newMatrix(id);
-printf("identite built\n");
-matrix = newMatrix(m);
-printf("matrix built\n");
-summ = sumMatrix(matrix,identite);
-printf("sum done\n");
-
-/* Result */
-
-printMatrix(matrix);
-printf("Les cols sont %i, %i, %i ", matrix->cols->colN, matrix->cols->nextCol->colN, matrix->cols->nextCol->nextCol->colN);
-printf("Les rows sont %i %i %i %i %i", matrix->rows->rowN,matrix->rows->nextRow->rowN, matrix->rows->nextRow->nextRow->rowN, matrix->rows->nextRow->nextRow->nextRow->rowN, matrix->rows->nextRow->nextRow->nextRow->nextRow->rowN);
-printMatrix(identite);
-printMatrix(summ);
+test = newMatrix(tList);
+printMatrix(test);
 
 
+/*Result*/
+r = 170;
+test = applyRules(test,r,1);
+
+printf("Applied rule %i \n", r);
+printMatrix(test);
+/*
+testCell = applyRuleToCell(test,3,4,decomposeRule(170));
+printf("test on cell 3 4 = %i", testCell);*/
 /* Clean up */
 
-freeMatrix(matrix);
-printf("matrix freed \n");
-freeMatrix(identite);
-printf("identite freed \n");
-freeMatrix(summ);
-printf("summ freed\n");
+freeMatrix(test);
+
 return 0;
 }
 
@@ -118,7 +109,7 @@ void printMatrix(Matrix* matrix)
 			{
 				for (j =1; j <= matrix->colCount; ++j)
 				{
-					printf(".");
+					printf(" ");
 				}
 			}
 			printf("|\n");
@@ -137,12 +128,12 @@ void printMatrix(Matrix* matrix)
 printf("\n");
 }
 
-void printArrayMatrix(arrayMatrix* m)
+void printLisMatrix(listMatrix* m)
 {
 	if(m->list !=NULL)
 	{
 		Points* plist = m->list; 
-		printf("\nPrinting an arrayMatrix of %i rows and %i columns :  \n", m->n, m->p);
+		printf("\nPrinting a listMatrix of %i rows and %i columns :  \n", m->n, m->p);
 		while(plist!=NULL)
 		{
 			printf("[%i,%i]\n",plist->y,plist->x);
@@ -151,6 +142,23 @@ void printArrayMatrix(arrayMatrix* m)
 	}
 	else
 	{
-		printf("Error : empty arrayMatrix");
+		printf("Error : empty listMatrix");
+	}
+}
+
+void printMatrixCoordinates(Matrix* m)
+{
+	rowElement* currRow =m->rows;
+	cellElement* currCell =NULL;
+	while(currRow != NULL)
+	{
+		currCell = currRow->row;
+		while(currCell != NULL)
+		{
+			printf("(%i,%i) ", currCell->rowIndex, currCell->colIndex);
+			currCell = currCell->nextRow;
+		}
+		printf("\n");
+		currRow = currRow->nextRow;
 	}
 }

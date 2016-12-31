@@ -77,7 +77,7 @@ typedef struct colEl
 }colElement;
 
 /*
-Our array based matrix representation. Not a two-dimensional array.
+Our list based matrix representation. Not a two-dimensional array.
 	list : a linked list ( pointer toward the first element ) of the coordinates of the ones in our matrix
 	n : number of rows in the matrix
 	p : number of columns in the matrix
@@ -86,7 +86,7 @@ typedef struct
 {
 	listPoints list;
 	int n,p;
-}arrayMatrix;
+}listMatrix;
 
 /*
 THE Matrix structure

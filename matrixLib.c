@@ -492,7 +492,7 @@ Matrix* sumMatrix(Matrix* a, Matrix* b)
 		rowElement* rowb = b->rows;
 		cellElement* cellb = NULL;
 		
-		arrayMatrix* newel = (arrayMatrix*)malloc(sizeof(arrayMatrix));
+		listMatrix* newel = (listMatrix*)malloc(sizeof(listMatrix));
 		newel->n = a->rowCount; /* Definition of the size of the new matrix*/
 		newel->p = b->colCount;
 		newel->list = NULL;
@@ -598,7 +598,7 @@ Matrix* mulMatrix(Matrix* A, Matrix* B)
 	cellElement* rowCell = A->rows->row;
 	cellElement* colCell = B->cols->col;
 
-	arrayMatrix* newel = (arrayMatrix*)malloc(sizeof(arrayMatrix));
+	listMatrix* newel = (listMatrix*)malloc(sizeof(listMatrix));
 	if(A->colCount == B->rowCount )
 	{
 		newel->n = A->rowCount; /* Definition of the size of the new Matrix*/
@@ -640,7 +640,7 @@ Matrix* mulMatrix(Matrix* A, Matrix* B)
 	return newMatrix(newel);	
 }
 
-Matrix* newMatrix(arrayMatrix* m)
+Matrix* newMatrix(listMatrix* m)
 {
 	Points* pt = m->list; /* the Points pointer toward the Points I am going to insert */
 	Points* ptToFree = NULL; /* a pointer I use to free my Points list element by element */
@@ -701,7 +701,7 @@ Matrix* newMatrix(arrayMatrix* m)
 		{
 			/* either first, last, or in between */
 			currCell = currCol->col;
-			if(currCell->rowIndex > newCell->colIndex) /* my newCell is the first */
+			if(currCell->rowIndex > newCell->rowIndex) /* my newCell is the first */
 			{
 				newCell->nextCol = currCell;
 				currCol->col = newCell;
@@ -787,7 +787,7 @@ Matrix* newMatrix(arrayMatrix* m)
 
 Matrix* andColSequenceOnMatrix(Matrix* m)
 {
-	arrayMatrix* newMat = (arrayMatrix*)malloc(sizeof(arrayMatrix)); /* we initialize a new arrayMatrix */
+	listMatrix* newMat = (listMatrix*)malloc(sizeof(listMatrix)); /* we initialize a new listMatrix */
 	if (isMatrixEmpty(m) != TRUE) /* If the matrix is Empty we do nothing*/
 	{
 	 	
@@ -854,7 +854,7 @@ Matrix* andColSequenceOnMatrix(Matrix* m)
 
 Matrix* orColSequenceOnMatrix(Matrix* m)
 {
-	arrayMatrix* newMat = (arrayMatrix*)malloc(sizeof(arrayMatrix)); /* we initialize a new arrayMatrix*/
+	listMatrix* newMat = (listMatrix*)malloc(sizeof(listMatrix)); /* we initialize a new listMatrix*/
 	if (isMatrixEmpty(m)!= TRUE) /* If the matrix is Empty we do nothing*/
 	{
 		if(m->cols != NULL && m->cols->nextCol != NULL) /* if there are at least 2 columns in our Matrix */
@@ -943,7 +943,7 @@ Matrix* orColSequenceOnMatrix(Matrix* m)
 
 Matrix* andRowSequenceOnMatrix(Matrix* m)
 {
-	arrayMatrix* newMat = (arrayMatrix*)malloc(sizeof(arrayMatrix)); /* we initialize a new arrayMatrix */
+	listMatrix* newMat = (listMatrix*)malloc(sizeof(listMatrix)); /* we initialize a new listMatrix */
 	if (isMatrixEmpty(m) != TRUE) /* If the matrix is Empty we do nothing*/
 	{
 	 	
@@ -1011,7 +1011,7 @@ Matrix* andRowSequenceOnMatrix(Matrix* m)
 
 Matrix* orRowSequenceOnMatrix(Matrix* m)
 {
-	arrayMatrix* newMat = (arrayMatrix*)malloc(sizeof(arrayMatrix)); /* we initialize a array of the new matrix*/
+	listMatrix* newMat = (listMatrix*)malloc(sizeof(listMatrix)); /* we initialize a array of the new matrix*/
 	if (isMatrixEmpty(m)!= TRUE) /* If the matrix is Empty we do nothing*/
 	{
 		if(m->rows != NULL && m->rows->nextRow != NULL) /* if there are at least 2 rowumns in our Matrix */
@@ -1117,6 +1117,7 @@ void transRight(Matrix* m)
 			if(currCol->colN == m->colCount) /* if we are pointing to the last column (the rightest) which is also the rightest possible */
 			{
 				m = removeCol(m, currCol->colN);
+				currCol = NULL;
 			}
 			else 
 			{
@@ -1201,6 +1202,7 @@ void transDown(Matrix* m)
 			if(currRow->rowN == m->rowCount)
 			{
 				m = removeRow(m, currRow->rowN);
+				currRow = NULL;
 			}
 			else 
 			{
@@ -1226,7 +1228,7 @@ BOOL isCellTrue(Matrix* m, int cellRow, int cellCol)
 	{
 		return FALSE;
 	}
-	if(cellRow > m->rowCount || cellRow > m->colCount) /* if the cell is outside the Matrix */
+	if(cellRow > m->rowCount || cellRow > m->colCount || cellRow < 1 || cellCol < 1) /* if the cell is outside the Matrix */
 	{
 		return FALSE; /* it's ok since we consider that extreme cells ar connected with logic-0 states */
 	}
@@ -1340,7 +1342,7 @@ Matrix* applyRules(Matrix* m, int rule, int times)
 		rowElement* currRow = NULL;
 		cellElement* currCell = NULL; /* the pointer we will use to travel in the Matrix */
 		Points* listTrues = NULL; /* our new list of points. Only a pointer for now */
-		arrayMatrix* newMat = NULL;
+		listMatrix* newMat = NULL;
 		Matrix* tempMat = m;
 		for(i=1;i<=times;++i) /* we apply the rule times times */
 		{
@@ -1371,14 +1373,14 @@ Matrix* applyRules(Matrix* m, int rule, int times)
 					transUp(m);
 					break;
 				case 256 :
-					transUp(m);
 					transRight(m);
+					transUp(m);
 					break;			
 				/* the default case means we are using a complex rule */
 				default :	
 					dRule = decomposeRule(rule); /* we decompose our complex rule */
 					currRow = m->rows; /* initiate a row pointer to the first row */
-					newMat = (arrayMatrix*)malloc(sizeof(arrayMatrix));
+					newMat = (listMatrix*)malloc(sizeof(listMatrix));
 					newMat->n = m->rowCount;
 					newMat->p = m->colCount;
 					tempMat = m; /* to be on the safe side of things */
@@ -1392,7 +1394,7 @@ Matrix* applyRules(Matrix* m, int rule, int times)
 							/* if the rule return TRUE then we add the point to the list */
 							if(applyRuleToCell(m,currCell->rowIndex, currCell->colIndex,dRule))
 							{
-								listTrues = insertTailPoints(currCell->colIndex, currCell->rowIndex, listTrues);
+								listTrues = insertTailPoints(currCell->rowIndex, currCell->colIndex, listTrues);
 							}
 
 							/* now comes the tricky part : 
@@ -1413,7 +1415,7 @@ Matrix* applyRules(Matrix* m, int rule, int times)
 											if(containsPoints(currCell->colIndex + l, currCell->rowIndex + k, listTrues) == FALSE)
 											{
 												/* if it doesnt contains it we add it */
-												listTrues = insertTailPoints(currCell->colIndex + l, currCell->rowIndex + k, listTrues);
+												listTrues = insertTailPoints(currCell->rowIndex + k, currCell->colIndex + l, listTrues);
 											}
 										}
 									}
@@ -1426,7 +1428,7 @@ Matrix* applyRules(Matrix* m, int rule, int times)
 						/* and once at the end of the row we go to the next */
 						currRow = currRow->nextRow;
 					}
-					/* now that we have a coplete list, we will complet our new arrayMatrix */
+					/* now that we have a coplete list, we will complet our new listMatrix */
 					newMat->list = listTrues;
 					/* and to be homogenous with the behaviour of the reste of the function, we will update the input Matrix
 					by freeing it and creating a new one */
@@ -1487,20 +1489,17 @@ BOOL containsPoints(int xval, int yval, Points* list)
 	}
 }
 
-arrayMatrix* arrayMatrixFrom2DArray(BOOL** array)
+/*
+
+listMatrix* listMatrixFrom2DArray(int nval, int pval,BOOL array[][pval])
 {
 	int nval, pval, i, j;
-	arrayMatrix* newMat = NULL;
-	Points* newlist = NULL; /* my list of points */
-
-	pval = sizeof(array[0])/sizeof(BOOL); /* number of columns */
-	nval = sizeof(array)/sizeof(array[0]); /* number of rows */
-
-	newMat = (arrayMatrix*)malloc(sizeof(arrayMatrix));
+	listMatrix* newMat = NULL;
+	Points* newlist = NULL; my list of points 
+	newMat = (listMatrix*)malloc(sizeof(listMatrix));
 	newMat->n = nval;
 	newMat->p = pval;
 
-	/* we wil traverse the whole array */
 	for(i = 0;i < nval;++i)
 	{
 		for(j=0;j<pval;++j)
@@ -1516,3 +1515,4 @@ arrayMatrix* arrayMatrixFrom2DArray(BOOL** array)
 
 	return newMat;
 }
+*/
