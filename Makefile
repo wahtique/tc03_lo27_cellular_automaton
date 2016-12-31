@@ -1,6 +1,7 @@
 #my general makefile template
 CXX = gcc
-CFLAGS = -Wall -Werror -ansi -pedanticLIBSDIR = -L. -L/usr/lib 
+CFLAGS = -Wall -Werror -ansi -pedantic
+LIBSDIR = -L. -L/usr/lib 
 INCLUDEDIR = -I. -I/usr/include 
 
 #Library-related macros

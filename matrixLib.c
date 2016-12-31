@@ -266,88 +266,111 @@ Matrix* insertRow(Matrix* m, int index)
 
 Matrix* removeRow(Matrix* m, int index)
 {
-	if(isMatrixEmpty(m) != TRUE && index <= m->rowCount)
+	if(isMatrixEmpty(m) != TRUE && index <= m->rowCount && index > 0)
 	{
 		rowElement* rrow = m->rows;
+
 		while(rrow != NULL && rrow->rowN < index)
 		{
 			rrow = rrow->nextRow;
 		}
 
-		printf("removeRow : found row %i \n", rrow->rowN);
+		if(rrow != NULL) {printf("removeRow : found row %i \n", rrow->rowN);}
+
 		if(rrow->rowN == index)
 		{
 			/* rrow is on the row we need to remove */
 			colElement* currCol = m->cols;
-			cellElement* currCell = m->cols->col;
-			cellElement* cellToRemove  = m->cols->col;
+			cellElement* currCell = NULL;
+			cellElement* cellToRemove  = NULL;
 			/* we found a row which is linked to other rows. We will update the links*/
 			if(rrow == m->rows)
 			{
-				m->rows = rrow->nextRow;
+				m->rows = rrow->nextRow;	
 			}
 			else
 			{
-				if(rrow->nextRow == NULL)
-				{
-					rrow->prevRow->nextRow = NULL;
-				}
-				else
-				{
-					rrow->prevRow->nextRow = rrow->nextRow;
-					rrow->nextRow->prevRow = rrow->prevRow;
-				}
+				rrow->prevRow->nextRow = rrow->nextRow;
 			}
+			if(rrow->nextRow !=NULL)
+			{
+				rrow->nextRow->prevRow = rrow->prevRow;
+			}
+
 			printf("row links updated \n");
 			printf("currCol initialised at the col %i, with col = %i ii %i  z\n", currCol->colN, currCol->col->rowIndex, currCol->col->colIndex);
-			/*while( currCol != NULL)
-			{*/
-				printf("the while is ok \n");
+			while(currCol != NULL)
+			{
 				printf("updating the col %i \n", currCol->colN);
-				if(currCol->col->rowIndex == index && currCol->col->nextCol == NULL)
+				if(currCol->col->rowIndex == index && (currCol->col->nextCol == NULL || currCol->col->rowIndex == m->rowCount))
 				{
 					printf("Premiere case à free test: %i\n",currCol->col->rowIndex );
 					/* which means the only element is in the row to remove */
-					if(currCol == m->cols) /* if it's the first col*/
+					if(currCol == m->cols && currCol->nextCol == NULL)/* the only col in the Matrix */ 
 					{
-						m->cols = currCol->nextCol;
-						printf("first and will be empty : freeing^\n");
 						free(currCol);
+						currCol = NULL;
 					}
 					else
 					{
-						if(currCol->nextCol == NULL) /* last and not first */
-						{	
-							printf("last and will be empty : freeing\n");
-							free(currCol);
-						}
-						else /* neither last nor first */
+						if(currCol == m->cols) /* if it's the first col*/
 						{
-							currCol->nextCol->prevCol = currCol->prevCol;
-							currCol->prevCol->nextCol = currCol->nextCol;
-							printf("in between and will be empty : freeing\n");
-							free(currCol);
+							m->cols = currCol->nextCol;
+							currCol=currCol->nextCol;
+							printf("first and will be empty : freeing^\n");
+							free(currCol->prevCol);
+							currCol->prevCol = NULL;
 						}
+						else
+						{
+							if(currCol->nextCol == NULL) /* last and not first */
+							{	
+								printf("last and will be empty : freeing\n");
+								currCol->prevCol->nextCol = NULL;
+								free(currCol);
+								currCol = NULL;
+							}
+							else /* neither last nor first */
+							{
+								printf("in between and will be empty : freeing\n");
+								currCol->nextCol->prevCol = currCol->prevCol;
+								currCol=currCol->nextCol;
+								free(currCol->prevCol->nextCol);
+								currCol->prevCol->nextCol = currCol;
+							}
+						}						
 					}
 				}
-				else{
+				else /* the col is still here after, we only need to update the pointers */
+				{
 					currCell = currCol->col;
-					while(currCell->nextCol != NULL && currCell->nextCol->rowIndex < index)
+					if(currCell->rowIndex == index) /* first but not last */
 					{
-						printf("Incremante currCell\n");
-						currCell = currCell->nextCol;
+						printf("first but not last cell. Rerouting col to %i %i \n",currCell->nextCol->rowIndex, currCell->nextCol->colIndex);
+						currCol->col = currCell->nextCol;
+						currCol = currCol->nextCol;
 					}
-					printf("\n index = %i\n", index );
-					/*if(currCell->nextCol->rowIndex == index )
+					else
 					{
-						printf("we found a cell in the row to remove. Updating the cell %i %i \n", currCell->rowIndex, currCell->colIndex);
-						currCell->nextCol = currCell->nextCol->nextCol; 
-					}*/
-					printf("CurrCol incremant?\n");
-					currCol = currCol->nextCol; 
-				}
-				/*break;
-			}*/
+						if(currCell->rowIndex < index)
+						{
+							while(currCell->nextCol != NULL && currCell->nextCol->rowIndex < index)
+							{
+								printf("in the while : currCell est sur %i %i ", currCell->rowIndex,currCell->colIndex);
+								currCell = currCell->nextCol;
+								printf("in the while, post re pointage : currCell est sur %i %i ", currCell->rowIndex,currCell->colIndex);
+							}
+							printf("the cell isnt the first. Found cell of rowIndex = %i\n", currCell->rowIndex);
+							if(currCell->nextCol->rowIndex == index )
+							{
+								printf("we found a cell in the row to remove. Updating the cell %i %i \n", currCell->rowIndex, currCell->colIndex);
+								currCell->nextCol = currCell->nextCol->nextCol; 
+							}							
+						}
+						currCol = currCol->nextCol;
+					}
+				}	
+			}
 			printf("afterwhile \n");
 			/* we have updated our columns. we now delete the row */
 			currCell = rrow->row;
@@ -355,6 +378,7 @@ Matrix* removeRow(Matrix* m, int index)
 			{
 				cellToRemove = currCell;
 				currCell = currCell->nextRow;
+				printf("freeing cell %i %i \n", cellToRemove->rowIndex, cellToRemove->colIndex);
 				free(cellToRemove);
 			}
 			free(rrow);
