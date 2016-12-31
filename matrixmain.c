@@ -37,7 +37,6 @@ m->list = insertTailPoints(1, 4 , m->list);
 m->list = insertTailPoints(2, 1 , m->list);
 m->list = insertTailPoints(3, 4 , m->list);
 m->list = insertTailPoints(4, 2 , m->list);
-m->list = insertTailPoints(4, 2 , m->list);
 m->list = insertTailPoints(5, 2 , m->list);
 
 id->n = 5;
@@ -61,17 +60,18 @@ printf("sum done\n");
 
 printMatrix(matrix);
 printf("Les cols sont %i, %i, %i ", matrix->cols->colN, matrix->cols->nextCol->colN, matrix->cols->nextCol->nextCol->colN);
+printf("Les rows sont %i %i %i %i %i", matrix->rows->rowN,matrix->rows->nextRow->rowN, matrix->rows->nextRow->nextRow->rowN, matrix->rows->nextRow->nextRow->nextRow->rowN, matrix->rows->nextRow->nextRow->nextRow->nextRow->rowN);
 printMatrix(identite);
 printMatrix(summ);
 
 printMatrix(andColSequenceOnMatrix(summ));
 /* Clean up */
 
-freeMatrix(summ);
+freeMatrix(matrix);
 printf("matrix freed \n");
 freeMatrix(identite);
 printf("identite freed \n");
-freeMatrix(matrix);
+freeMatrix(summ);
 printf("summ freed");
 return 0;
 }
