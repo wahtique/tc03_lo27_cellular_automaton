@@ -64,7 +64,7 @@ printf("Les cols sont %i, %i, %i ", matrix->cols->colN, matrix->cols->nextCol->c
 printMatrix(identite);
 printMatrix(summ);
 
-
+printMatrix(andColSequenceOnMatrix(summ));
 /* Clean up */
 
 freeMatrix(summ);
