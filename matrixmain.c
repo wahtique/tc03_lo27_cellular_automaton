@@ -9,72 +9,77 @@ Creation date : 11/23/16
 #include <matrixLib.h>
 #include <stdio.h>
 #include <stdlib.h>
-
+#include <string.h>
 
 /* ------------------ PROTOTYPES ------------------  */
 
+/*
+print a matrix
+@arg matrix : pointer to the Matrix we want to print
+@result : nothing
+*/
 void printMatrix(Matrix* matrix);
+
+/*
+print a listMatrix
+@arg m : pointer to the listMatrix we want to print
+@result : nothing
+*/
 void printListMatrix(listMatrix* m);
+
+/*
+print the coordinates of the cells of a Matrix
+@arg matrix : pointer to the Matrix we want to print
+@result : nothing
+*/
 void printMatrixCoordinates(Matrix* m);
 /* ------------------ MAIN ------------------ */
 
 
-int main()
+int main(int argc, char* argv[])
 {
-/* definition of variables*/
-listMatrix* m = (listMatrix*)malloc(sizeof(listMatrix));
-listMatrix* id = (listMatrix*)malloc(sizeof(listMatrix));
-Matrix* matrix = (Matrix*)malloc(sizeof(listMatrix));
-Matrix* identite = (Matrix*)malloc(sizeof(listMatrix));
-Matrix* summ = (Matrix*)malloc(sizeof(listMatrix));
+	if(argc==2 && strcmp(argv[1],"demo")==0)
+	{
+		/* declaration of our variables */
 
-/*initialisation of the matrix*/
+		listMatrix* lexp1 = (listMatrix*)malloc(sizeof(listMatrix));
+		/*
+		listMatrix* lexp2 = (listMatrix*)malloc(sizeof(lisMatrix));
+		listMatrix* lexp3 = (listMatrix*)malloc(sizeof(lisMatrix));
+		*/
+		Matrix* exp1 = NULL;
+		/*
+		Matrix* exp2 = NULL;
+		Matrix* exp3 = NULL;
+		*/
+		printf("\nThis is a demo : we will use our library to compute the examples of applyRule shown in the project descriptive :\n");
+		/* first example */
+		lexp1->list = NULL;
+		lexp1->n = 3;
+		lexp1->p = 4;
+		lexp1->list = insertTailPoints(1,2,lexp1->list);
+		lexp1->list = insertTailPoints(1,4,lexp1->list);
+		lexp1->list = insertTailPoints(2,1,lexp1->list);
+		lexp1->list = insertTailPoints(2,3,lexp1->list);
+		lexp1->list = insertTailPoints(3,2,lexp1->list);
+		exp1 = newMatrix(lexp1);
+		printf("\nFirst example : \n");
+		printMatrix(exp1);
+		printf("\n We apply the rule 128 once:\n");
+		exp1 = applyRules(exp1,128,1);
+		printMatrix(exp1);
+		return 0;
 
-m->n = 5;
-m->p = 5;
-m->list = insertTailPoints(1, 1 , m->list);
-m->list = insertTailPoints(1, 4 , m->list);
-m->list = insertTailPoints(2, 1 , m->list);
-m->list = insertTailPoints(3, 5 , m->list);
-m->list = insertTailPoints(5, 2 , m->list);
-m->list = insertTailPoints(4, 2 , m->list);
-m->list = insertTailPoints(4, 3 , m->list);
-m->list = insertTailPoints(2, 3 , m->list);
-m->list = insertTailPoints(4, 1 , m->list);
-m->list = insertTailPoints(3, 2 , m->list);
-m->list = insertTailPoints(2, 2 , m->list);
-m->list = insertTailPoints(1, 5 , m->list);
+	}
 
-id->n = 5;
-id->p = 5;
-id->list = insertTailPoints(1, 1 , id->list);
-id->list = insertTailPoints(2, 2 , id->list);
-id->list = insertTailPoints(3, 3 , id->list);
-id->list = insertTailPoints(4, 4 , id->list);
-id->list = insertTailPoints(5, 5 , id->list);
-printf("Matrix Initialised\n");
-
-/* definition of variables*/
-matrix = newMatrix(m);
-identite = newMatrix(id);
-printMatrix(matrix);
-printMatrix(identite);
-summ = mulMatrix(matrix , identite);	
-
-
-printMatrix(summ);
-
-
-/* Clean up */
-
-freeMatrix(matrix);
-printf("matrix freed \n");
-freeMatrix(identite);
-printf("identite freed \n");
-freeMatrix(summ);
-printf("summ freed \n");
-printf("Done\n");
-return 0;
+	/* help display */
+	if(argc==2 && strcmp(argv[1],"help")==0)
+	{
+		printf("\nhello\n");
+		return 0;
+	}
+	printf("\nWRONG ARGUMENT : try \"help\" argument\n");
+	return 0;
 }
 
 

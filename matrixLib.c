@@ -1356,31 +1356,32 @@ Matrix* applyRules(Matrix* m, int rule, int times)
 			{	
 				/* we start with cases corresponding to elementary rules */
 				case 2 :
-					transRight(m);
+					transLeft(m);
 					break;
 				case 4 :
-					transRight(m);
-					transDown(m);
+					transUp(m);
+					transLeft(m);
 					break;
 				case 8 :
-					transDown(m);
+					transUp(m);
 					break;
 				case 16:
-					transLeft(m);
-					transDown(m);
-					break;
-				case 32 :
-					transLeft(m);
-					break;
-				case 64 :
-					transLeft(m);
-					break;
-				case 128 :
-					transUp(m);
-					break;
-				case 256 :
 					transRight(m);
 					transUp(m);
+					break;
+				case 32 :
+					transRight(m);
+					break;
+				case 64 :
+					transDown(m);
+					transRight(m);
+					break;
+				case 128 :
+					transDown(m);
+					break;
+				case 256 :
+					transLeft(m);
+					transDown(m);
 					break;			
 				/* the default case means we are using a complex rule */
 				default :	
