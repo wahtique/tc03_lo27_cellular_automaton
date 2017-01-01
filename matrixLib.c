@@ -179,7 +179,7 @@ Matrix* removeCol(Matrix* m, int index)
 							{
 								currCell = currCell->nextRow;
 							}
-							if(currCell->nextRow->colIndex == index )
+							if(currCell->nextRow != NULL && currCell->nextRow->colIndex == index )
 							{
 								currCell->nextRow = currCell->nextRow->nextRow; 
 							}							
@@ -314,10 +314,11 @@ Matrix* removeRow(Matrix* m, int index)
 			{
 				rrow->prevRow->nextRow = rrow->nextRow;
 			}
-			if(rrow->nextRow !=NULL)
+			if(rrow->nextRow != NULL)
 			{
 				rrow->nextRow->prevRow = rrow->prevRow;
 			}
+			/* we start by updating the columns */
 			while(currCol != NULL)
 			{
 				if(currCol->col->rowIndex == index && (currCol->col->nextCol == NULL || currCol->col->rowIndex == m->rowCount))
@@ -325,7 +326,7 @@ Matrix* removeRow(Matrix* m, int index)
 					/* which means the only element is in the row to remove */
 					if(currCol == m->cols && currCol->nextCol == NULL)/* the only col in the Matrix */ 
 					{
-						free(currCol);
+						free(m->cols);
 						currCol = NULL;
 					}
 					else
@@ -342,7 +343,8 @@ Matrix* removeRow(Matrix* m, int index)
 							if(currCol->nextCol == NULL) /* last and not first */
 							{	
 								currCol->prevCol->nextCol = NULL;
-								free(currCol);
+								currCol = currCol->prevCol;
+								free(currCol->nextCol);
 								currCol = NULL;
 							}
 							else /* neither last nor first */
@@ -371,7 +373,7 @@ Matrix* removeRow(Matrix* m, int index)
 							{
 								currCell = currCell->nextCol;
 							}
-							if(currCell->nextCol->rowIndex == index )
+							if(currCell->nextCol != NULL && currCell->nextCol->rowIndex == index )
 							{
 								currCell->nextCol = currCell->nextCol->nextCol; 
 							}							
@@ -1122,20 +1124,25 @@ void transRight(Matrix* m)
 		{
 			if(currCol->colN == m->colCount) /* if we are pointing to the last column (the rightest) which is also the rightest possible */
 			{
-				m = removeCol(m, currCol->colN);
 				currCol = NULL;
+				m = removeCol(m, m->colCount);
 			}
-			else 
+			else
 			{
-				currCol->colN += 1;
-				currCell = currCol->col;
-				while(currCell != NULL)
-				{
-					currCell->colIndex += 1; 
-					currCell = currCell->nextCol;
-				}
 				currCol = currCol->nextCol;
+			}			
+		}
+		currCol = m->cols;
+		while(currCol != NULL)
+		{
+			currCol->colN += 1;
+			currCell = currCol->col;
+			while(currCell != NULL)
+			{
+				currCell->colIndex += 1; 
+				currCell = currCell->nextCol;
 			}
+			currCol = currCol->nextCol;
 		}
 	}
 }
@@ -1203,24 +1210,31 @@ void transDown(Matrix* m)
 	cellElement* currCell = NULL;
 	if(isMatrixEmpty(m) == FALSE)
 	{
+		/* we start by removing the last row */
 		while(currRow != NULL)
 		{
 			if(currRow->rowN == m->rowCount)
 			{
-				m = removeRow(m, currRow->rowN);
+				m = removeRow(m, m->rowCount);
 				currRow = NULL;
+				
 			}
-			else 
+			else
 			{
-				currRow->rowN += 1;
-				currCell = currRow->row;
-				while(currCell != NULL)
-				{
-					currCell->rowIndex += 1; 
-					currCell = currCell->nextRow;
-				}
 				currRow = currRow->nextRow;
 			}
+		}
+		currRow = m->rows;
+		while(currRow != NULL)
+		{
+			currRow->rowN += 1;
+			currCell = currRow->row;
+			while(currCell != NULL)
+			{
+				currCell->rowIndex += 1; 
+				currCell = currCell->nextRow;
+			}
+			currRow = currRow->nextRow;
 		}
 	}
 }
