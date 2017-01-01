@@ -22,11 +22,11 @@ void printMatrixCoordinates(Matrix* m);
 int main()
 {
 /* definition of variables*/
-arrayMatrix* m = (arrayMatrix*)malloc(sizeof(arrayMatrix));
-arrayMatrix* id = (arrayMatrix*)malloc(sizeof(arrayMatrix));
-Matrix* matrix;
-Matrix* identite;
-Matrix* summ;
+listMatrix* m = (listMatrix*)malloc(sizeof(listMatrix));
+listMatrix* id = (listMatrix*)malloc(sizeof(listMatrix));
+Matrix* matrix = (Matrix*)malloc(sizeof(listMatrix));
+Matrix* identite = (Matrix*)malloc(sizeof(listMatrix));
+Matrix* summ = (Matrix*)malloc(sizeof(listMatrix));
 
 /*initialisation of the matrix*/
 
@@ -43,47 +43,28 @@ m->list = insertTailPoints(2, 3 , m->list);
 m->list = insertTailPoints(4, 1 , m->list);
 m->list = insertTailPoints(3, 2 , m->list);
 m->list = insertTailPoints(2, 2 , m->list);
-m->list = insertTailPoints(2, 5 , m->list);
+m->list = insertTailPoints(1, 5 , m->list);
 
 id->n = 5;
 id->p = 5;
 id->list = insertTailPoints(1, 1 , id->list);
-id->list = insertTailPoints(2, 1 , id->list);
-id->list = insertTailPoints(3, 1 , id->list);
-id->list = insertTailPoints(4, 1 , id->list);
-id->list = insertTailPoints(5, 1 , id->list);
+id->list = insertTailPoints(2, 2 , id->list);
+id->list = insertTailPoints(3, 3 , id->list);
+id->list = insertTailPoints(4, 4 , id->list);
+id->list = insertTailPoints(5, 5 , id->list);
 printf("Matrix Initialised\n");
 
-/* definition of variables*/	
-
-
-listPoints t = NULL;
-listMatrix* tList = (listMatrix*)malloc(sizeof(listMatrix));
-Matrix* test = NULL;
-int r = 170;
-
-printf("\n2d arrays initialised\n");
-
-tList->n = 3;
-tList->p = 4;
-printf("dimensions ok \n");
-t = insertTailPoints(1,3,t);
-t = insertTailPoints(2,1,t);
-t = insertTailPoints(2,2,t);
-t = insertTailPoints(2,3,t);
-t = insertTailPoints(3,1,t);
-t = insertTailPoints(3,3,t);
-t = insertTailPoints(3,4,t);
-tList->list = t;
-
-
+/* definition of variables*/
+matrix = newMatrix(m);
+identite = newMatrix(id);
 printMatrix(matrix);
 printMatrix(identite);
+summ = mulMatrix(matrix , identite);	
+
+
 printMatrix(summ);
 
-printMatrix(orColSequenceOnMatrix(matrix));
-printMatrix(orColSequenceOnMatrix(identite));
-printMatrix(orColSequenceOnMatrix(summ));
+
 /* Clean up */
 
 freeMatrix(matrix);
@@ -93,29 +74,6 @@ printf("identite freed \n");
 freeMatrix(summ);
 printf("summ freed \n");
 printf("Done\n");
-printf("t affected to tList\n");
-
-
-
-/* Tested functions : */
-test = newMatrix(tList);
-printMatrix(test);
-
-
-/*Result*/
-r = 170;
-test = applyRules(test,r,1);
-
-printf("Applied rule %i \n", r);
-printMatrix(test);
-/*
-testCell = applyRuleToCell(test,3,4,decomposeRule(170));
-printf("test on cell 3 4 = %i", testCell);*/
-/* Clean up */
-
-freeMatrix(test);
-
->>>>>>> 81d78077b938511b0f2c74463dffd0b6e4b97282
 return 0;
 }
 
