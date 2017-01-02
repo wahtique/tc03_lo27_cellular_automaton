@@ -9,6 +9,7 @@ Date : 09/12/16
 #include <stdlib.h> 
 #include <matrixLib.h>
 #include <math.h>
+#include <time.h>
 
 /* ----------------------------- CELLS ----------------------------- */
 
@@ -786,8 +787,10 @@ Matrix* newMatrix(listMatrix* m)
 		ptToFree = pt;
 		pt = pt->nextP;
 		free(ptToFree);
+		m->list = NULL;
 	}	
 	/* I now have included all the Points in my list in newMat */
+	free(m);
 	return newMat;
 }
 
@@ -1108,8 +1111,41 @@ void freeMatrix(Matrix* m)
 		}			
 	}
 	free(m);
+	m = NULL;
 }
 
+Matrix* randMatrix(int rowc, int colc, int seed)
+{
+	if(rowc > 0 && colc > 0 && seed >= 0)
+	{
+		listMatrix* lm = (listMatrix*)malloc(sizeof(listMatrix));
+		Matrix* m = NULL;
+		int i,j,r;
+		r = 0;
+		srand(seed);
+		lm->n = rowc;
+		lm->p = colc;
+		lm->list = NULL;
+
+		for(i=1;i<=rowc;++i)
+		{
+			for(j=1;j<=colc;++j)
+			{
+
+				r = rand()%2;
+				if(r == 1)
+				{
+					lm->list = insertTailPoints(i,j,lm->list);
+				}
+			}
+		}
+
+		m = newMatrix(lm);
+
+		return m;
+	}
+	 return NULL;
+}
 
 /* ----------------------------- applyrule ----------------------------- */
 
@@ -1275,7 +1311,7 @@ BOOL isCellTrue(Matrix* m, int cellRow, int cellCol)
 
 BOOL* decomposeRule(int rule)
 {
-	static BOOL decompose[8];
+	static BOOL decompose[9];
 	int i;
 
 	for(i=8;i>=0;--i)
@@ -1355,15 +1391,15 @@ BOOL applyRuleToCell(Matrix* m, int cellRow, int cellCol, BOOL* dRule)
 Matrix* applyRules(Matrix* m, int rule, int times)
 {
 	
-	if(isMatrixEmpty(m) == FALSE || rule < 2 || rule > 507) /* if it's empty we do nothing. if the rule doesnt exist we do nothing either. Rule 1 do nothing.*/
+	if(isMatrixEmpty(m) == FALSE || rule < 2 || rule > 511) /* if it's empty we do nothing. if the rule doesnt exist we do nothing either. Rule 1 do nothing.*/
 	{
 		int i,k,l;
 		BOOL* dRule;
 		rowElement* currRow = NULL;
 		cellElement* currCell = NULL; /* the pointer we will use to travel in the Matrix */
-		Points* listTrues = NULL; /* our new list of points. Only a pointer for now */
 		listMatrix* newMat = NULL;
-		Matrix* tempMat = m;
+		listPoints listTrues = NULL;
+		Matrix* tempMat = NULL;
 		for(i=1;i<=times;++i) /* we apply the rule times times */
 		{
 			switch(rule)
@@ -1398,14 +1434,14 @@ Matrix* applyRules(Matrix* m, int rule, int times)
 					transDown(m);
 					break;			
 				/* the default case means we are using a complex rule */
-				default :	
+				default :
+					newMat = (listMatrix*)malloc(sizeof(listMatrix));
+					listTrues = NULL;	
 					dRule = decomposeRule(rule); /* we decompose our complex rule */
 					currRow = m->rows; /* initiate a row pointer to the first row */
-					newMat = (listMatrix*)malloc(sizeof(listMatrix));
 					newMat->n = m->rowCount;
 					newMat->p = m->colCount;
 					tempMat = m; /* to be on the safe side of things */
-
 					while(currRow != NULL)
 					{
 						currCell = currRow->row; /* we begin our traversal of the row */
@@ -1417,13 +1453,11 @@ Matrix* applyRules(Matrix* m, int rule, int times)
 							{
 								listTrues = insertTailPoints(currCell->rowIndex, currCell->colIndex, listTrues);
 							}
-
 							/* now comes the tricky part : 
 							we know : a TRUE in a cell in the output iff there was at least one TRUE in the vicinity of this cell in the input.
 							Thus, we will check every 8 cells in the vicinity of our current cell.
 							If it's a TRUE, we wont test it since it will be done later with currCell.
 							If it's a FALSE, then we can test it. */
-
 							for(k=-1;k<2;++k) /* for the row before thru right after */
 							{
 								for(l=-1;l<2;++l) /* column -1 to column +1 */
@@ -1442,7 +1476,6 @@ Matrix* applyRules(Matrix* m, int rule, int times)
 									}
 								}
 							}
-
 							/* now that we have tested this cell and its vicinity, we can now move to the next */
 							currCell = currCell->nextRow;
 						}
@@ -1455,6 +1488,7 @@ Matrix* applyRules(Matrix* m, int rule, int times)
 					by freeing it and creating a new one */
 					freeMatrix(tempMat);
 					m = newMatrix(newMat);
+					newMat = NULL;
 			}/* end of the switch */
 		}/* end of the for on times */
 	}

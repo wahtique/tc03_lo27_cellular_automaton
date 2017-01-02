@@ -22,7 +22,7 @@ EXESOURCEOFILE = $(EXESOURCE:=.o)
 #Running the program
 run: $(TARGET)
 	@echo "\n Executing the executable " $(TARGET)
-	./$(TARGET) demo
+	./$(TARGET)
 
 #Generating the executable
 $(TARGET): $(EXESOURCEOFILE) $(LIBTARGET)

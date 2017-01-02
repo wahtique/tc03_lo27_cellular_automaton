@@ -148,6 +148,15 @@ Function applying an AND operation on the rows of a Matrix, two by two
 */
 Matrix* orRowSequenceOnMatrix(Matrix* m);
 
+/*
+create a random Matrix of rowc rows, colc columns
+@arg rowc : number of rows
+@arg colc : number of columns
+@arg seed : seed of our Matrix
+@result : a pointer toward the new Matrix created
+*/
+Matrix* randMatrix(int rowc, int colc, int seed);
+
 /* ----------------------------- APPLYRULE ---------------------------- */
 
 /*
