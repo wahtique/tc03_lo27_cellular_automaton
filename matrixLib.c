@@ -808,6 +808,7 @@ Matrix* andColSequenceOnMatrix(Matrix* m)
 		 	colElement* scol = m->cols->nextCol; /*we initialize a pointer to the second columm*/
 		 	cellElement* fcell = fcol->col; /*we initialize a pointer to the first cell of the first columm*/
 		 	cellElement* scell = scol->col; /*we initialize a pointer to the first cell of the second columm*/
+		 	newMat->list = NULL;
 		 	newMat->n = m->rowCount;
 		 	newMat->p = m->colCount -1;
 		 	while(scol != NULL) /* we iterate until the last column*/
@@ -874,6 +875,7 @@ Matrix* orColSequenceOnMatrix(Matrix* m)
 		 	cellElement* scell = scol->col; /*we initialize a pointer to the first cell of the second columm*/
 		 	newMat->n = m->rowCount;
 		 	newMat->p = m->colCount -1;
+		 	newMat->list = NULL;
 		 	while(scol != NULL) /* we iterate until the last column*/
 		 	{
 		 		if (scol->colN == fcol->colN + 1) /* we test if the columm n+1 exist*/
@@ -966,6 +968,7 @@ Matrix* andRowSequenceOnMatrix(Matrix* m)
 		 	cellElement* scell = srow->row; /*we initialize a pointer to the first cell of the second col*/
 		 	newMat->n = m->rowCount-1;
 		 	newMat->p = m->rowCount; 
+		 	newMat->list = NULL;
 		 	while(srow != NULL) /* we iterate until the last rowumn*/
 		 	{
 		 		if (srow->rowN == frow->rowN + 1) /* if srow and frow are neighbours = if all our AND wont give us zeros*/
@@ -1032,7 +1035,8 @@ Matrix* orRowSequenceOnMatrix(Matrix* m)
 		 	cellElement* fcell = frow->row; /*we initialize a pointer to the first cell of the first col*/
 		 	cellElement* scell = srow->row; /*we initialize a pointer to the first cell of the second col*/
 		 	newMat->n = m->rowCount-1;
-		 	newMat->p = m->colCount; 
+		 	newMat->p = m->colCount;
+		 	newMat->list = NULL; 
 		 	while(srow != NULL) /* we iterate until the last rowumn*/
 		 	{
 		 		if (srow->rowN == frow->rowN + 1) /* we test if the col n+1 exist*/
