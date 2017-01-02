@@ -601,8 +601,9 @@ Matrix* mulMatrix(Matrix* A, Matrix* B)
 	colElement* col = B->cols ;
 	cellElement* rowCell = A->rows->row;
 	cellElement* colCell = B->cols->col;
-
 	listMatrix* newel = (listMatrix*)malloc(sizeof(listMatrix));
+
+	newel->list = NULL; 
 	if(A->colCount == B->rowCount )
 	{
 		newel->n = A->rowCount; /* Definition of the size of the new Matrix*/
