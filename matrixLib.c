@@ -788,9 +788,9 @@ Matrix* newMatrix(listMatrix* m)
 		ptToFree = pt;
 		pt = pt->nextP;
 		free(ptToFree);
-		m->list = NULL;
 	}	
 	/* I now have included all the Points in my list in newMat */
+	m->list = NULL;
 	free(m);
 	return newMat;
 }
@@ -1354,7 +1354,6 @@ BOOL applyRuleToCell(Matrix* m, int cellRow, int cellCol, BOOL* dRule)
 	{
 		result = xor(result,isCellTrue(m,cellRow,cellCol+1));
 	}
-	
 	if(dRule[2] == TRUE)
 	{
 		result = xor(result,isCellTrue(m,cellRow+1,cellCol+1));
@@ -1395,8 +1394,7 @@ BOOL applyRuleToCell(Matrix* m, int cellRow, int cellCol, BOOL* dRule)
 
 Matrix* applyRules(Matrix* m, int rule, int times)
 {
-	
-	if(isMatrixEmpty(m) == FALSE || rule < 2 || rule > 511) /* if it's empty we do nothing. if the rule doesnt exist we do nothing either. Rule 1 do nothing.*/
+	if(isMatrixEmpty(m) == FALSE && rule >= 2 && rule <= 511) /* if it's empty we do nothing. if the rule doesnt exist we do nothing either. Rule 1 do nothing.*/
 	{
 		int i,k,l;
 		BOOL* dRule;
